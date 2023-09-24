@@ -241,17 +241,27 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
       (openBlock(true), createElementBlock(
         Fragment,
         null,
-        renderList($setup.crumbs, (crumb) => {
-          var _a2, _b;
+        renderList($setup.crumbs, (crumb, i) => {
+          var _a2, _b, _c, _d;
           return openBlock(), createElementBlock(
             "li",
             {
               key: crumb.path,
-              class: normalizeClass(["vue-breadcrumbs-nav__crumb", (_a2 = $props.classes) == null ? void 0 : _a2.CRUMB])
+              class: normalizeClass([
+                "vue-breadcrumbs-nav__crumb",
+                (_a2 = $props.classes) == null ? void 0 : _a2.CRUMB,
+                i === $setup.crumbs.length - 1 && "vue-breadcrumbs-nav__crumb--is-current",
+                i === $setup.crumbs.length - 1 && ((_b = $props.classes) == null ? void 0 : _b["CRUMB--IS-CURRENT"])
+              ])
             },
             [
               createBaseVNode("span", {
-                class: normalizeClass(["vue-breadcrumbs-nav__crumb-label", (_b = $props.classes) == null ? void 0 : _b.CRUMB_LABEL]),
+                class: normalizeClass([
+                  "vue-breadcrumbs-nav__crumb-label",
+                  (_c = $props.classes) == null ? void 0 : _c.CRUMB__LABEL,
+                  i === $setup.crumbs.length - 1 && "vue-breadcrumbs-nav__crumb-label--is-current",
+                  i === $setup.crumbs.length - 1 && ((_d = $props.classes) == null ? void 0 : _d["CRUMB__LABEL--IS-CURRENT"])
+                ]),
                 onClick: ($event) => $setup.handleSelect(crumb.path)
               }, toDisplayString(crumb.label), 11, _hoisted_1),
               crumb.children.length ? (openBlock(), createBlock($setup["NavDivider"], {
