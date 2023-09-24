@@ -1,175 +1,69 @@
 {
-  "recipes": [
+  "label": "Recipes",
+  "id": "recipes",
+  "children": [
     {
-      "name": "Breakfast",
-      "subcategories": [
+      "id": "breakfast",
+      "label": "Breakfast",
+      "children": [
         {
-          "name": "Eggs",
-          "recipes": [
-            {
-              "name": "Scrambled Eggs",
-              "ingredients": [
-                "2 eggs",
-                "1/4 cup milk",
-                "Salt and pepper to taste"
-              ],
-              "instructions": "..."
-            },
-            {
-              "name": "Omelette",
-              "ingredients": [
-                "3 eggs",
-                "1/4 cup diced bell peppers",
-                "1/4 cup diced onions",
-                "Salt and pepper to taste"
-              ],
-              "instructions": "..."
-            }
+          "id": "eggs",
+          "label": "Eggs",
+          "children": [
+            { "id": "scrambled-eggs", "label": "Scrambled Eggs" },
+            { "id": "omelette", "label": "Omelette" }
           ]
         },
         {
-          "name": "Pancakes",
-          "recipes": [
-            {
-              "name": "Classic Pancakes",
-              "ingredients": [
-                "1 cup all-purpose flour",
-                "2 tbsp sugar",
-                "1 tsp baking powder",
-                "1/2 tsp baking soda",
-                "1 cup buttermilk"
-              ],
-              "instructions": "..."
-            },
-            {
-              "name": "Blueberry Pancakes",
-              "ingredients": [
-                "1 cup all-purpose flour",
-                "2 tbsp sugar",
-                "1 tsp baking powder",
-                "1/2 tsp baking soda",
-                "1 cup buttermilk",
-                "1/2 cup blueberries"
-              ],
-              "instructions": "..."
-            }
+          "id": "pancakes",
+          "label": "Pancakes",
+          "children": [
+            { "id": "classic-pancakes", "label": "Classic Pancakes" },
+            { "id": "blueberry-pancakes", "label": "Blueberry Pancakes" }
           ]
         }
       ]
     },
     {
-      "name": "Lunch",
-      "subcategories": [
+      "id": "lunch",
+      "label": "Lunch",
+      "children": [
         {
-          "name": "Sandwiches",
-          "recipes": [
-            {
-              "name": "BLT Sandwich",
-              "ingredients": [
-                "2 slices of bread",
-                "2 slices of bacon",
-                "Lettuce",
-                "Tomato slices",
-                "Mayonnaise"
-              ],
-              "instructions": "..."
-            },
-            {
-              "name": "Turkey Club Sandwich",
-              "ingredients": [
-                "3 slices of bread",
-                "Sliced turkey",
-                "Bacon",
-                "Lettuce",
-                "Tomato slices",
-                "Mayonnaise"
-              ],
-              "instructions": "..."
-            }
+          "id": "sandwiches",
+          "label": "Sandwiches",
+          "children": [
+            { "id": "blt-sandwich", "label": "BLT Sandwich" },
+            { "id": "turkey-club-sandwich", "label": "Turkey Club Sandwich" }
           ]
         },
         {
-          "name": "Salads",
-          "recipes": [
-            {
-              "name": "Caesar Salad",
-              "ingredients": [
-                "Romaine lettuce",
-                "Croutons",
-                "Parmesan cheese",
-                "Caesar dressing"
-              ],
-              "instructions": "..."
-            },
-            {
-              "name": "Greek Salad",
-              "ingredients": [
-                "Cucumbers",
-                "Tomatoes",
-                "Kalamata olives",
-                "Feta cheese",
-                "Greek dressing"
-              ],
-              "instructions": "..."
-            }
+          "id": "salads",
+          "label": "Salads",
+          "children": [
+            { "is": "caesar-salad", "label": "Caesar Salad" },
+            { "is": "greek-salad", "label": "Greek Salad" }
           ]
         }
       ]
     },
     {
-      "name": "Dinner",
-      "subcategories": [
+      "id": "dinner",
+      "label": "Dinner",
+      "children": [
         {
-          "name": "Pasta",
-          "recipes": [
-            {
-              "name": "Spaghetti Carbonara",
-              "ingredients": [
-                "Spaghetti",
-                "Eggs",
-                "Pancetta or bacon",
-                "Parmesan cheese",
-                "Black pepper"
-              ],
-              "instructions": "..."
-            },
-            {
-              "name": "Vegetable Alfredo",
-              "ingredients": [
-                "Fettuccine",
-                "Alfredo sauce",
-                "Assorted vegetables",
-                "Parmesan cheese"
-              ],
-              "instructions": "..."
-            }
+          "id": "pasta",
+          "label": "Pasta",
+          "children": [
+            { "id": "spaghetti-carbonara", "label": "Spaghetti Carbonara" },
+            { "id": "vegetable-alfredo", "label": "Vegetable Alfredo" }
           ]
         },
         {
-          "name": "Steak",
-          "recipes": [
-            {
-              "name": "Ribeye Steak",
-              "ingredients": [
-                "Ribeye steak",
-                "Salt",
-                "Black pepper",
-                "Olive oil",
-                "Garlic"
-              ],
-              "instructions": "..."
-            },
-            {
-              "name": "Filet Mignon",
-              "ingredients": [
-                "Filet mignon steak",
-                "Salt",
-                "Black pepper",
-                "Butter",
-                "Thyme"
-              ],
-              "instructions": "..."
-            }
+          "id": "steak",
+          "label": "Steak",
+          "children": [
+            { "id": "ribeye-steak", "label": "Ribeye Steak" },
+            { "id": "filet-mignon", "label": "Filet Mignon" }
           ]
         }
       ]
