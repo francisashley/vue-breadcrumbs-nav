@@ -1,6 +1,6 @@
 {
   "name": "vue-breadcrumbs-nav",
-  "version": "0.4.0",
+  "version": "0.0.1",
   "type": "module",
   "description": "A breadcrumbs navigation component built in Vue 3.",
   "author": "Francis Ashley",

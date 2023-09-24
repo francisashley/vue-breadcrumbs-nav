@@ -40,8 +40,8 @@
           "id": "salads",
           "label": "Salads",
           "children": [
-            { "is": "caesar-salad", "label": "Caesar Salad" },
-            { "is": "greek-salad", "label": "Greek Salad" }
+            { "id": "caesar-salad", "label": "Caesar Salad" },
+            { "id": "greek-salad", "label": "Greek Salad" }
           ]
         }
       ]
