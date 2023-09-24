@@ -1,4 +1,4 @@
-import { aq as defineComponent, ar as openBlock, as as createElementBlock, at as createBaseVNode, au as ref, av as directive, aw as createBlock, ax as withDirectives, ay as Fragment, az as renderList, aA as toDisplayString, aB as createCommentVNode, aC as computed, aD as resolveComponent, aE as withCtx, aF as createVNode } from "./vendor-e6905e3b.js";
+import { aq as defineComponent, ar as openBlock, as as createElementBlock, at as createBaseVNode, au as ref, av as directive, aw as createBlock, ax as normalizeClass, ay as withDirectives, az as Fragment, aA as renderList, aB as toDisplayString, aC as createCommentVNode, aD as computed, aE as resolveComponent, aF as withCtx, aG as createVNode } from "./vendor-1d87a4e8.js";
 const _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -19,7 +19,7 @@ const _hoisted_1$3 = {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
 };
-const _hoisted_2$3 = /* @__PURE__ */ createBaseVNode(
+const _hoisted_2$1 = /* @__PURE__ */ createBaseVNode(
   "path",
   {
     d: "M16 12L10 18V6L16 12Z",
@@ -29,11 +29,11 @@ const _hoisted_2$3 = /* @__PURE__ */ createBaseVNode(
   -1
   /* HOISTED */
 );
-const _hoisted_3$2 = [
-  _hoisted_2$3
+const _hoisted_3$1 = [
+  _hoisted_2$1
 ];
 function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("svg", _hoisted_1$3, _hoisted_3$2);
+  return openBlock(), createElementBlock("svg", _hoisted_1$3, _hoisted_3$1);
 }
 _sfc_main$4.__file = "src/components/icons/arrow-down-r.vue";
 const ArrowDownR = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$4], ["__file", "/home/runner/work/vue-breadcrumbs-nav/vue-breadcrumbs-nav/src/components/icons/arrow-down-r.vue"]]);
@@ -50,7 +50,7 @@ const _hoisted_1$2 = {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
 };
-const _hoisted_2$2 = /* @__PURE__ */ createBaseVNode(
+const _hoisted_2 = /* @__PURE__ */ createBaseVNode(
   "path",
   {
     d: "M12 16L6 10H18L12 16Z",
@@ -60,11 +60,11 @@ const _hoisted_2$2 = /* @__PURE__ */ createBaseVNode(
   -1
   /* HOISTED */
 );
-const _hoisted_3$1 = [
-  _hoisted_2$2
+const _hoisted_3 = [
+  _hoisted_2
 ];
 function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("svg", _hoisted_1$2, _hoisted_3$1);
+  return openBlock(), createElementBlock("svg", _hoisted_1$2, _hoisted_3);
 }
 _sfc_main$3.__file = "src/components/icons/arrow-down-s.vue";
 const ArrowDownS = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$3], ["__file", "/home/runner/work/vue-breadcrumbs-nav/vue-breadcrumbs-nav/src/components/icons/arrow-down-s.vue"]]);
@@ -72,7 +72,8 @@ const VueBreadcrumbsNavDivider_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$2 = /* @__PURE__ */ defineComponent({
   __name: "VueBreadcrumbsNavDivider",
   props: {
-    items: { type: Array, required: true }
+    items: { type: Array, required: true },
+    classes: { type: Object, required: false }
   },
   emits: ["select"],
   setup(__props, { expose: __expose, emit }) {
@@ -95,44 +96,83 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
     return __returned__;
   }
 });
-const _hoisted_1$1 = { class: "vue-breadcrumbs-nav-divider" };
-const _hoisted_2$1 = {
-  key: 0,
-  class: "vue-breadcrumbs-nav-divider__dropdown-menu"
-};
-const _hoisted_3 = ["onClick"];
+const _hoisted_1$1 = ["onClick"];
 function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$1, [
-    createBaseVNode("button", {
-      class: "vue-breadcrumbs-nav-divider__dropdown-button",
-      onClick: $setup.handleOpenDropdown
-    }, [
-      $setup.showDropdown ? (openBlock(), createBlock($setup["ArrowDownS"], {
-        key: 0,
-        class: "vue-breadcrumbs-nav-divider__dropdown-icon vue-breadcrumbs-nav-divider__dropdown-icon--open"
-      })) : (openBlock(), createBlock($setup["ArrowDownR"], {
-        key: 1,
-        class: "vue-breadcrumbs-nav-divider__dropdown-icon vue-breadcrumbs-nav-divider__dropdown-icon--closed"
-      }))
-    ]),
-    $setup.showDropdown && $props.items.length ? withDirectives((openBlock(), createElementBlock("ul", _hoisted_2$1, [
-      (openBlock(true), createElementBlock(
-        Fragment,
-        null,
-        renderList($props.items, (item) => {
-          return openBlock(), createElementBlock("li", {
-            class: "vue-breadcrumbs-nav-divider__dropdown-menu-item",
-            onClick: ($event) => $setup.handleSelect(item.path),
-            key: item.path
-          }, toDisplayString(item.label), 9, _hoisted_3);
-        }),
-        128
-        /* KEYED_FRAGMENT */
-      ))
-    ])), [
-      [$setup["vOnClickaway"], $setup.handleClickOutside]
-    ]) : createCommentVNode("v-if", true)
-  ]);
+  var _a, _b, _c, _d, _e, _f, _g;
+  return openBlock(), createElementBlock(
+    "div",
+    {
+      class: normalizeClass(["vue-breadcrumbs-nav-divider", (_a = $props.classes) == null ? void 0 : _a.DIVIDER])
+    },
+    [
+      createBaseVNode(
+        "button",
+        {
+          class: normalizeClass([
+            "vue-breadcrumbs-nav-divider__dropdown-button",
+            (_b = $props.classes) == null ? void 0 : _b["DIVIDER__DROPDOWN-BUTTON"]
+          ]),
+          onClick: $setup.handleOpenDropdown
+        },
+        [
+          $setup.showDropdown ? (openBlock(), createBlock($setup["ArrowDownS"], {
+            key: 0,
+            class: normalizeClass([
+              "vue-breadcrumbs-nav-divider__dropdown-icon",
+              "vue-breadcrumbs-nav-divider__dropdown-icon--open",
+              (_c = $props.classes) == null ? void 0 : _c["DIVIDER__DROPDOWN-ICON"],
+              (_d = $props.classes) == null ? void 0 : _d["DIVIDER__DROPDOWN-ICON--OPEN"]
+            ])
+          }, null, 8, ["class"])) : (openBlock(), createBlock($setup["ArrowDownR"], {
+            key: 1,
+            class: normalizeClass([
+              "vue-breadcrumbs-nav-divider__dropdown-icon",
+              "vue-breadcrumbs-nav-divider__dropdown-icon--open",
+              (_e = $props.classes) == null ? void 0 : _e["DIVIDER__DROPDOWN-ICON"],
+              (_f = $props.classes) == null ? void 0 : _f["DIVIDER__DROPDOWN-ICON--CLOSED"]
+            ])
+          }, null, 8, ["class"]))
+        ],
+        2
+        /* CLASS */
+      ),
+      $setup.showDropdown && $props.items.length ? withDirectives((openBlock(), createElementBlock(
+        "ul",
+        {
+          key: 0,
+          class: normalizeClass([
+            "vue-breadcrumbs-nav-divider__dropdown-menu",
+            (_g = $props.classes) == null ? void 0 : _g["DIVIDER__DROPDOWN-MENU"]
+          ])
+        },
+        [
+          (openBlock(true), createElementBlock(
+            Fragment,
+            null,
+            renderList($props.items, (item) => {
+              var _a2;
+              return openBlock(), createElementBlock("li", {
+                class: normalizeClass([
+                  "vue-breadcrumbs-nav-divider__dropdown-menu-item",
+                  (_a2 = $props.classes) == null ? void 0 : _a2["DIVIDER__DROPDOWN-MENU-ITEM"]
+                ]),
+                onClick: ($event) => $setup.handleSelect(item.path),
+                key: item.path
+              }, toDisplayString(item.label), 11, _hoisted_1$1);
+            }),
+            128
+            /* KEYED_FRAGMENT */
+          ))
+        ],
+        2
+        /* CLASS */
+      )), [
+        [$setup["vOnClickaway"], $setup.handleClickOutside]
+      ]) : createCommentVNode("v-if", true)
+    ],
+    2
+    /* CLASS */
+  );
 }
 _sfc_main$2.__file = "src/components/VueBreadcrumbsNavDivider.vue";
 const NavDivider = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2], ["__file", "/home/runner/work/vue-breadcrumbs-nav/vue-breadcrumbs-nav/src/components/VueBreadcrumbsNavDivider.vue"]]);
@@ -160,7 +200,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "VueBreadcrumbsNav",
   props: {
     data: { type: Object, required: true },
-    modelValue: { type: String, required: true }
+    modelValue: { type: String, required: true },
+    classes: { type: Object, required: false }
   },
   emits: ["input", "update:modelValue"],
   setup(__props, { expose: __expose, emit }) {
@@ -188,33 +229,49 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     return __returned__;
   }
 });
-const _hoisted_1 = { class: "vue-breadcrumbs-nav" };
-const _hoisted_2 = ["onClick"];
+const _hoisted_1 = ["onClick"];
 function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("ul", _hoisted_1, [
-    (openBlock(true), createElementBlock(
-      Fragment,
-      null,
-      renderList($setup.crumbs, (crumb) => {
-        return openBlock(), createElementBlock("li", {
-          key: crumb.path,
-          class: "vue-breadcrumbs-nav__crumb"
-        }, [
-          createBaseVNode("span", {
-            class: "vue-breadcrumbs-nav__crumb-label",
-            onClick: ($event) => $setup.handleSelect(crumb.path)
-          }, toDisplayString(crumb.label), 9, _hoisted_2),
-          crumb.children.length ? (openBlock(), createBlock($setup["NavDivider"], {
-            key: 0,
-            items: crumb.children,
-            onSelect: _cache[0] || (_cache[0] = ($event) => $setup.handleSelect($event))
-          }, null, 8, ["items"])) : createCommentVNode("v-if", true)
-        ]);
-      }),
-      128
-      /* KEYED_FRAGMENT */
-    ))
-  ]);
+  var _a;
+  return openBlock(), createElementBlock(
+    "ul",
+    {
+      class: normalizeClass(["vue-breadcrumbs-nav", (_a = $props.classes) == null ? void 0 : _a.NAV])
+    },
+    [
+      (openBlock(true), createElementBlock(
+        Fragment,
+        null,
+        renderList($setup.crumbs, (crumb) => {
+          var _a2, _b;
+          return openBlock(), createElementBlock(
+            "li",
+            {
+              key: crumb.path,
+              class: normalizeClass(["vue-breadcrumbs-nav__crumb", (_a2 = $props.classes) == null ? void 0 : _a2.CRUMB])
+            },
+            [
+              createBaseVNode("span", {
+                class: normalizeClass(["vue-breadcrumbs-nav__crumb-label", (_b = $props.classes) == null ? void 0 : _b.CRUMB_LABEL]),
+                onClick: ($event) => $setup.handleSelect(crumb.path)
+              }, toDisplayString(crumb.label), 11, _hoisted_1),
+              crumb.children.length ? (openBlock(), createBlock($setup["NavDivider"], {
+                key: 0,
+                items: crumb.children,
+                classes: $props.classes,
+                onSelect: _cache[0] || (_cache[0] = ($event) => $setup.handleSelect($event))
+              }, null, 8, ["items", "classes"])) : createCommentVNode("v-if", true)
+            ],
+            2
+            /* CLASS */
+          );
+        }),
+        128
+        /* KEYED_FRAGMENT */
+      ))
+    ],
+    2
+    /* CLASS */
+  );
 }
 _sfc_main$1.__file = "src/components/VueBreadcrumbsNav.vue";
 const VueBreadcrumbsNav = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1], ["__file", "/home/runner/work/vue-breadcrumbs-nav/vue-breadcrumbs-nav/src/components/VueBreadcrumbsNav.vue"]]);
