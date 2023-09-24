@@ -9,6 +9,7 @@ import { ref } from "vue";
 import VueBreadcrumbsNav from "./components/VueBreadcrumbsNav.vue";
 import baseData from "./fixtures/data.json";
 import { Node } from "./interfaces/tree";
+
 const data: Node = baseData as any; // eslint-disable-line
 const activePath = ref("recipes/lunch/sandwiches");
 </script>
