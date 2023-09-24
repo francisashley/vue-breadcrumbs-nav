@@ -1,6 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/francisashley/vue-breadcrumbs-nav/main/logo.png" alt="Logo" style="max-width: 400px;">
-  <br/>
+  <h1>Vue Breadcrumbs Nav</h1>
   <em>A breadcrumbs navigation component built in Vue 3.</em>
   <br/>
   <a href="https://francisashley.github.io/vue-breadcrumbs-nav/">Documentation</a>
@@ -20,7 +19,7 @@ yarn add vue-breadcrumbs-nav
 
 ```vue
 <template>
-  <vue-breadcrumbs-nav :data="..." v-model="activePath" />
+  <vue-breadcrumbs-nav :data="data" v-model="activePath" />
 </template>
 
 <script lang="ts">
