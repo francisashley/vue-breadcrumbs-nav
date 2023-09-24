@@ -1,26 +1,45 @@
 <template>
-  <div class="vue-breadcrumbs-nav-divider">
+  <div :class="['vue-breadcrumbs-nav-divider', classes?.DIVIDER]">
     <button
-      class="vue-breadcrumbs-nav-divider__dropdown-button"
+      :class="[
+        'vue-breadcrumbs-nav-divider__dropdown-button',
+        classes?.['DIVIDER__DROPDOWN-BUTTON'],
+      ]"
       @click="handleOpenDropdown"
     >
       <arrow-down-s
         v-if="showDropdown"
-        class="vue-breadcrumbs-nav-divider__dropdown-icon vue-breadcrumbs-nav-divider__dropdown-icon--open"
+        :class="[
+          'vue-breadcrumbs-nav-divider__dropdown-icon',
+          'vue-breadcrumbs-nav-divider__dropdown-icon--open',
+          classes?.['DIVIDER__DROPDOWN-ICON'],
+          classes?.['DIVIDER__DROPDOWN-ICON--OPEN'],
+        ]"
       />
       <arrow-down-r
         v-else
-        class="vue-breadcrumbs-nav-divider__dropdown-icon vue-breadcrumbs-nav-divider__dropdown-icon--closed"
+        :class="[
+          'vue-breadcrumbs-nav-divider__dropdown-icon',
+          'vue-breadcrumbs-nav-divider__dropdown-icon--open',
+          classes?.['DIVIDER__DROPDOWN-ICON'],
+          classes?.['DIVIDER__DROPDOWN-ICON--CLOSED'],
+        ]"
       />
     </button>
     <ul
       v-if="showDropdown && items.length"
-      class="vue-breadcrumbs-nav-divider__dropdown-menu"
+      :class="[
+        'vue-breadcrumbs-nav-divider__dropdown-menu',
+        classes?.['DIVIDER__DROPDOWN-MENU'],
+      ]"
       v-on-clickaway="handleClickOutside"
     >
       <li
         v-for="item in items"
-        class="vue-breadcrumbs-nav-divider__dropdown-menu-item"
+        :class="[
+          'vue-breadcrumbs-nav-divider__dropdown-menu-item',
+          classes?.['DIVIDER__DROPDOWN-MENU-ITEM'],
+        ]"
         @click="handleSelect(item.path)"
         :key="item.path"
       >
@@ -35,11 +54,13 @@ import { ref } from "vue";
 import ArrowDownR from "./icons/arrow-down-r.vue";
 import ArrowDownS from "./icons/arrow-down-s.vue";
 import { directive as vOnClickaway } from "vue3-click-away";
+import { InlineClass } from "./VueBreadcrumbsNav.vue";
 
 const showDropdown = ref(false);
 
 defineProps<{
   items: { path: string; label: string }[];
+  classes?: Partial<Record<InlineClass, string>>;
 }>();
 
 const emit = defineEmits(["select"]);

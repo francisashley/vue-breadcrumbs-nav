@@ -1,12 +1,12 @@
 <template>
-  <ul class="vue-breadcrumbs-nav">
+  <ul :class="['vue-breadcrumbs-nav', classes?.NAV]">
     <li
       v-for="crumb in crumbs"
       :key="crumb.path"
-      class="vue-breadcrumbs-nav__crumb"
+      :class="['vue-breadcrumbs-nav__crumb', classes?.CRUMB]"
     >
       <span
-        class="vue-breadcrumbs-nav__crumb-label"
+        :class="['vue-breadcrumbs-nav__crumb-label', classes?.CRUMB_LABEL]"
         @click="handleSelect(crumb.path)"
       >
         {{ crumb.label }}
@@ -15,6 +15,7 @@
       <NavDivider
         v-if="crumb.children.length"
         :items="crumb.children"
+        :classes="classes"
         @select="handleSelect($event)"
       />
     </li>
@@ -27,11 +28,24 @@ import NavDivider from "./VueBreadcrumbsNavDivider.vue";
 import { getBreadcrumbs, getFlatTree } from "../utils/tree.utils";
 import type { Node } from "../interfaces/tree";
 
+export type InlineClass =
+  | "NAV"
+  | "CRUMB"
+  | "CRUMB_LABEL"
+  | "DIVIDER"
+  | "DIVIDER__DROPDOWN-BUTTON"
+  | "DIVIDER__DROPDOWN-ICON"
+  | "DIVIDER__DROPDOWN-ICON--OPEN"
+  | "DIVIDER__DROPDOWN-ICON--CLOSED"
+  | "DIVIDER__DROPDOWN-MENU"
+  | "DIVIDER__DROPDOWN-MENU-ITEM";
+
 const showDropdown = ref("");
 
 const props = defineProps<{
   data: Node;
   modelValue: string;
+  classes?: Partial<Record<InlineClass, string>>;
 }>();
 
 const emit = defineEmits(["input", "update:modelValue"]);

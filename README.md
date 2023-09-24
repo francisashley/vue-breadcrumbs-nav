@@ -50,5 +50,41 @@ const data = {
 </script>
 ```
 
+## Styling
+
+Add custom classes:
+
+```
+<vue-breadcrumbs-nav
+  :classes="{
+    "NAV": "...",
+    "CRUMB": "...",
+    "CRUMB_LABEL": "...",
+    "DIVIDER": "...",
+    "DIVIDER__DROPDOWN-BUTTON": "...",
+    "DIVIDER__DROPDOWN-ICON": "",
+    "DIVIDER__DROPDOWN-ICON--OPEN": "",
+    "DIVIDER__DROPDOWN-ICON--CLOSED": "",
+    "DIVIDER__DROPDOWN-MENU": "",
+    "DIVIDER__DROPDOWN-MENU-ITEM": "",
+  }"
+/>
+```
+
+Or style default classes:
+
+```
+.vue-breadcrumbs-nav
+.vue-breadcrumbs-nav__crumb
+.vue-breadcrumbs-nav__crumb-label
+.vue-breadcrumbs-nav-divider
+.vue-breadcrumbs-nav-divider__dropdown-button
+.vue-breadcrumbs-nav-divider__dropdown-icon
+.vue-breadcrumbs-nav-divider__dropdown-icon--open
+.vue-breadcrumbs-nav-divider__dropdown-icon--closed
+.vue-breadcrumbs-nav-divider__dropdown-menu
+.vue-breadcrumbs-nav-divider__dropdown-menu-item
+```
+
 ## License
 MIT
