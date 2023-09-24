@@ -1,0 +1,61 @@
+{
+  "name": "vue-breadcrumbs-nav",
+  "version": "0.4.0",
+  "type": "module",
+  "description": "A breadcrumbs navigation component built in Vue 3.",
+  "author": "Francis Ashley",
+  "license": "MIT",
+  "files": [
+    "./dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/vue-breadcrumbs-nav.js",
+      "require": "./dist/vue-breadcrumbs-nav.umd.cjs"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vue-tsc --emitDeclarationOnly",
+    "types": "vue-tsc",
+    "preview": "vite preview",
+    "story:dev": "histoire dev",
+    "story:build": "histoire build && touch ./docs/.nojekyll",
+    "story:preview": "histoire preview",
+    "prebuild": "rimraf ./dist",
+    "prepublishOnly": "yarn build",
+    "lint": "eslint src --ext .ts,.vue"
+  },
+  "dependencies": {
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@histoire/plugin-vue": "^0.17.1",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/eslint-config-typescript": "^11.0.3",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "histoire": "^0.17.0",
+    "natural-orderby": "^2.0.3",
+    "prettier": "^3.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.66.1",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
+    "vitest": "^0.34.3",
+    "vue-eslint-parser": "^9.3.1",
+    "vue-tsc": "^1.8.5",
+    "vue3-click-away": "^1.2.4"
+  },
+  "resolutions": {
+    "jackspeak": "2.1.1",
+    "flexsearch": "0.7.21"
+  }
+}
