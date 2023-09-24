@@ -23,10 +23,12 @@ yarn add vue-breadcrumbs-nav
 </template>
 
 <script lang="ts">
-import VueBreadCrumbsNav from 'vue-breadcrumbs-nav'
+import { VueBreadcrumbsNav } from 'vue-breadcrumbs-nav'
 import 'vue-breadcrumbs-nav/style.css'
-import ref from 'vue'
+import { ref } from 'vue'
+
 const activePath = ref('recipes/breakfast/pancakes')
+
 const data = {
   "label": "Recipes",
   "id": "recipes",
