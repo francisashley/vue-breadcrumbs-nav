@@ -1,12 +1,23 @@
 <template>
   <ul :class="['vue-breadcrumbs-nav', classes?.NAV]">
     <li
-      v-for="crumb in crumbs"
+      v-for="(crumb, i) in crumbs"
       :key="crumb.path"
-      :class="['vue-breadcrumbs-nav__crumb', classes?.CRUMB]"
+      :class="[
+        'vue-breadcrumbs-nav__crumb',
+        classes?.CRUMB,
+        i === crumbs.length - 1 && 'vue-breadcrumbs-nav__crumb--is-current',
+        i === crumbs.length - 1 && classes?.['CRUMB--IS-CURRENT'],
+      ]"
     >
       <span
-        :class="['vue-breadcrumbs-nav__crumb-label', classes?.CRUMB_LABEL]"
+        :class="[
+          'vue-breadcrumbs-nav__crumb-label',
+          classes?.CRUMB__LABEL,
+          i === crumbs.length - 1 &&
+            'vue-breadcrumbs-nav__crumb-label--is-current',
+          i === crumbs.length - 1 && classes?.['CRUMB__LABEL--IS-CURRENT'],
+        ]"
         @click="handleSelect(crumb.path)"
       >
         {{ crumb.label }}
@@ -31,7 +42,9 @@ import type { Node } from "../interfaces/tree";
 export type InlineClass =
   | "NAV"
   | "CRUMB"
-  | "CRUMB_LABEL"
+  | "CRUMB--IS-CURRENT"
+  | "CRUMB__LABEL"
+  | "CRUMB__LABEL--IS-CURRENT"
   | "DIVIDER"
   | "DIVIDER__DROPDOWN-BUTTON"
   | "DIVIDER__DROPDOWN-ICON"

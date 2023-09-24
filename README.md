@@ -61,7 +61,9 @@ Add custom classes:
   :classes="{
     "NAV": "...",
     "CRUMB": "...",
-    "CRUMB_LABEL": "...",
+    "CRUMB--IS-CURRENT": "...",
+    "CRUMB__LABEL": "...",
+    "CRUMB__LABEL--IS-CURRENT": "...",
     "DIVIDER": "...",
     "DIVIDER__DROPDOWN-BUTTON": "...",
     "DIVIDER__DROPDOWN-ICON": "",
@@ -69,6 +71,7 @@ Add custom classes:
     "DIVIDER__DROPDOWN-ICON--CLOSED": "",
     "DIVIDER__DROPDOWN-MENU": "",
     "DIVIDER__DROPDOWN-MENU-ITEM": "",
+    "DIVIDER__DROPDOWN-MENU-ITEM--IS-CURRENT": "",
   }"
 />
 ```
@@ -86,6 +89,7 @@ Or style default classes:
 .vue-breadcrumbs-nav-divider__dropdown-icon--closed
 .vue-breadcrumbs-nav-divider__dropdown-menu
 .vue-breadcrumbs-nav-divider__dropdown-menu-item
+.vue-breadcrumbs-nav-divider__dropdown-menu-item--is-current
 ```
 
 ## License
