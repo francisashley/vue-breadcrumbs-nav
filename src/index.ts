@@ -1,3 +1,3 @@
-import VueBreadcrumbsNav from "./components/VueBreadcrumbsNav.vue";
+import VueBreadcrumbsNav from "./components/BreadcrumbsNav.vue";
 
 export { VueBreadcrumbsNav };

@@ -54,42 +54,19 @@ const data = {
 
 ## Styling
 
-Add custom classes:
-
 ```
-<vue-breadcrumbs-nav
-  :classes="{
-    "NAV": "...",
-    "CRUMB": "...",
-    "CRUMB--IS-CURRENT": "...",
-    "CRUMB__LABEL": "...",
-    "CRUMB__LABEL--IS-CURRENT": "...",
-    "DIVIDER": "...",
-    "DIVIDER__DROPDOWN-BUTTON": "...",
-    "DIVIDER__DROPDOWN-ICON": "",
-    "DIVIDER__DROPDOWN-ICON--OPEN": "",
-    "DIVIDER__DROPDOWN-ICON--CLOSED": "",
-    "DIVIDER__DROPDOWN-MENU": "",
-    "DIVIDER__DROPDOWN-MENU-ITEM": "",
-    "DIVIDER__DROPDOWN-MENU-ITEM--IS-CURRENT": "",
-  }"
-/>
-```
-
-Or style default classes:
-
-```
-.vue-breadcrumbs-nav
-.vue-breadcrumbs-nav__crumb
-.vue-breadcrumbs-nav__crumb-label
-.vue-breadcrumbs-nav-divider
-.vue-breadcrumbs-nav-divider__dropdown-button
-.vue-breadcrumbs-nav-divider__dropdown-icon
-.vue-breadcrumbs-nav-divider__dropdown-icon--open
-.vue-breadcrumbs-nav-divider__dropdown-icon--closed
-.vue-breadcrumbs-nav-divider__dropdown-menu
-.vue-breadcrumbs-nav-divider__dropdown-menu-item
-.vue-breadcrumbs-nav-divider__dropdown-menu-item--is-current
+.vbn
+.vbn-crumb
+.vbn-crumb--is-open
+.vbn-crumb__label
+.vbn-crumb__divider
+.vbn-crumb__divider-icon
+.vbn-dropdown
+.vbn-dropdown__button
+.vbn-dropdown__button--is-open
+.vbn-dropdown__menu
+.vbn-dropdown__menu-item
+.vbn-dropdown__menu-item--active
 ```
 
 ## License
