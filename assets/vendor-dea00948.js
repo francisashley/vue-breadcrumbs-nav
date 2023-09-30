@@ -1,3 +1,4 @@
+const style$1 = "";
 function makeMap$1(str, expectsLowerCase) {
   const map2 = /* @__PURE__ */ Object.create(null);
   const list = str.split(",");
@@ -148,12 +149,12 @@ function normalizeClass$1(value) {
 function normalizeProps(props) {
   if (!props)
     return null;
-  let { class: klass, style } = props;
+  let { class: klass, style: style2 } = props;
   if (klass && !isString$2(klass)) {
     props.class = normalizeClass$1(klass);
   }
-  if (style) {
-    props.style = normalizeStyle$1(style);
+  if (style2) {
+    props.style = normalizeStyle$1(style2);
   }
   return props;
 }
@@ -3277,7 +3278,7 @@ function renderList$1(source, renderItem, cache2, index) {
   }
   return ret;
 }
-function renderSlot(slots, name, props = {}, fallback, noSlotted) {
+function renderSlot$1(slots, name, props = {}, fallback, noSlotted) {
   if (currentRenderingInstance$1.isCE || currentRenderingInstance$1.parent && isAsyncWrapper$1(currentRenderingInstance$1.parent) && currentRenderingInstance$1.parent.isCE) {
     if (name !== "default")
       props.name = name;
@@ -3294,7 +3295,7 @@ function renderSlot(slots, name, props = {}, fallback, noSlotted) {
     slot._d = false;
   }
   openBlock$1();
-  const validSlotContent = slot && ensureValidVNode(slot(props));
+  const validSlotContent = slot && ensureValidVNode$1(slot(props));
   const rendered = createBlock$1(
     Fragment$1,
     {
@@ -3313,13 +3314,13 @@ function renderSlot(slots, name, props = {}, fallback, noSlotted) {
   }
   return rendered;
 }
-function ensureValidVNode(vnodes) {
+function ensureValidVNode$1(vnodes) {
   return vnodes.some((child) => {
     if (!isVNode$1(child))
       return true;
     if (child.type === Comment$1)
       return false;
-    if (child.type === Fragment$1 && !ensureValidVNode(child.children))
+    if (child.type === Fragment$1 && !ensureValidVNode$1(child.children))
       return false;
     return true;
   }) ? vnodes : null;
@@ -6458,15 +6459,15 @@ function _createVNode$1(type, props = null, children = null, patchFlag = 0, dyna
   }
   if (props) {
     props = guardReactiveProps$1(props);
-    let { class: klass, style } = props;
+    let { class: klass, style: style2 } = props;
     if (klass && !isString$2(klass)) {
       props.class = normalizeClass$1(klass);
     }
-    if (isObject$1(style)) {
-      if (isProxy$1(style) && !isArray$2(style)) {
-        style = extend$1({}, style);
+    if (isObject$1(style2)) {
+      if (isProxy$1(style2) && !isArray$2(style2)) {
+        style2 = extend$1({}, style2);
       }
-      props.style = normalizeStyle$1(style);
+      props.style = normalizeStyle$1(style2);
     }
   }
   const shapeFlag = isString$2(type) ? 1 : isSuspense$1(type) ? 128 : isTeleport$1(type) ? 64 : isObject$1(type) ? 4 : isFunction$2(type) ? 2 : 0;
@@ -7344,38 +7345,38 @@ function patchClass$1(el2, value, isSVG) {
   }
 }
 function patchStyle$1(el2, prev, next) {
-  const style = el2.style;
+  const style2 = el2.style;
   const isCssString = isString$2(next);
   if (next && !isCssString) {
     if (prev && !isString$2(prev)) {
       for (const key in prev) {
         if (next[key] == null) {
-          setStyle$1(style, key, "");
+          setStyle$1(style2, key, "");
         }
       }
     }
     for (const key in next) {
-      setStyle$1(style, key, next[key]);
+      setStyle$1(style2, key, next[key]);
     }
   } else {
-    const currentDisplay = style.display;
+    const currentDisplay = style2.display;
     if (isCssString) {
       if (prev !== next) {
-        style.cssText = next;
+        style2.cssText = next;
       }
     } else if (prev) {
       el2.removeAttribute("style");
     }
     if ("_vod" in el2) {
-      style.display = currentDisplay;
+      style2.display = currentDisplay;
     }
   }
 }
 const semicolonRE$1 = /[^\\];\s*$/;
 const importantRE$1 = /\s*!important$/;
-function setStyle$1(style, name, val) {
+function setStyle$1(style2, name, val) {
   if (isArray$2(val)) {
-    val.forEach((v2) => setStyle$1(style, name, v2));
+    val.forEach((v2) => setStyle$1(style2, name, v2));
   } else {
     if (val == null)
       val = "";
@@ -7387,36 +7388,36 @@ function setStyle$1(style, name, val) {
       }
     }
     if (name.startsWith("--")) {
-      style.setProperty(name, val);
+      style2.setProperty(name, val);
     } else {
-      const prefixed = autoPrefix$1(style, name);
+      const prefixed = autoPrefix$1(style2, name);
       if (importantRE$1.test(val)) {
-        style.setProperty(
+        style2.setProperty(
           hyphenate$1(prefixed),
           val.replace(importantRE$1, ""),
           "important"
         );
       } else {
-        style[prefixed] = val;
+        style2[prefixed] = val;
       }
     }
   }
 }
 const prefixes$1 = ["Webkit", "Moz", "ms"];
 const prefixCache$1 = {};
-function autoPrefix$1(style, rawName) {
+function autoPrefix$1(style2, rawName) {
   const cached = prefixCache$1[rawName];
   if (cached) {
     return cached;
   }
   let name = camelize$1(rawName);
-  if (name !== "filter" && name in style) {
+  if (name !== "filter" && name in style2) {
     return prefixCache$1[rawName] = name;
   }
   name = capitalize$1(name);
   for (let i2 = 0; i2 < prefixes$1.length; i2++) {
     const prefixed = prefixes$1[i2] + name;
-    if (prefixed in style) {
+    if (prefixed in style2) {
       return prefixCache$1[rawName] = prefixed;
     }
   }
@@ -7663,9 +7664,9 @@ function setVarsOnVNode(vnode, vars) {
 }
 function setVarsOnNode(el2, vars) {
   if (el2.nodeType === 1) {
-    const style = el2.style;
+    const style2 = el2.style;
     for (const key in vars) {
-      style.setProperty(`--${key}`, vars[key]);
+      style2.setProperty(`--${key}`, vars[key]);
     }
   }
 }
@@ -7965,9 +7966,9 @@ const TransitionGroupImpl = {
       forceReflow();
       movedChildren.forEach((c2) => {
         const el2 = c2.el;
-        const style = el2.style;
+        const style2 = el2.style;
         addTransitionClass(el2, moveClass);
-        style.transform = style.webkitTransform = style.transitionDuration = "";
+        style2.transform = style2.webkitTransform = style2.transitionDuration = "";
         const cb = el2._moveCb = (e2) => {
           if (e2 && e2.target !== el2) {
             return;
@@ -10853,7 +10854,7 @@ function assign$1(to2, from) {
     }
   }
 }
-const config$1 = {
+const config$2 = {
   disabled: false,
   distance: 5,
   skidding: 0,
@@ -10901,16 +10902,16 @@ const config$1 = {
   }
 };
 function getDefaultConfig(theme, key) {
-  let themeConfig = config$1.themes[theme] || {};
+  let themeConfig = config$2.themes[theme] || {};
   let value;
   do {
     value = themeConfig[key];
     if (typeof value === "undefined") {
       if (themeConfig.$extend) {
-        themeConfig = config$1.themes[themeConfig.$extend] || {};
+        themeConfig = config$2.themes[themeConfig.$extend] || {};
       } else {
         themeConfig = null;
-        value = config$1[key];
+        value = config$2[key];
       }
     } else {
       themeConfig = null;
@@ -10920,11 +10921,11 @@ function getDefaultConfig(theme, key) {
 }
 function getThemeClasses(theme) {
   const result = [theme];
-  let themeConfig = config$1.themes[theme] || {};
+  let themeConfig = config$2.themes[theme] || {};
   do {
     if (themeConfig.$extend && !themeConfig.$resetCss) {
       result.push(themeConfig.$extend);
-      themeConfig = config$1.themes[themeConfig.$extend] || {};
+      themeConfig = config$2.themes[themeConfig.$extend] || {};
     } else {
       themeConfig = null;
     }
@@ -10933,11 +10934,11 @@ function getThemeClasses(theme) {
 }
 function getAllParentThemes(theme) {
   const result = [theme];
-  let themeConfig = config$1.themes[theme] || {};
+  let themeConfig = config$2.themes[theme] || {};
   do {
     if (themeConfig.$extend) {
       result.push(themeConfig.$extend);
-      themeConfig = config$1.themes[themeConfig.$extend] || {};
+      themeConfig = config$2.themes[themeConfig.$extend] || {};
     } else {
       themeConfig = null;
     }
@@ -11937,7 +11938,7 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
       "v-popper--shown": _ctx.slotData.isShown
     }])
   }, [
-    renderSlot(_ctx.$slots, "default", normalizeProps(guardReactiveProps$1(_ctx.slotData)))
+    renderSlot$1(_ctx.$slots, "default", normalizeProps(guardReactiveProps$1(_ctx.slotData)))
   ], 2);
 }
 var Popper$1 = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$3]]);
@@ -12145,7 +12146,7 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
       createBaseVNode$1("div", _hoisted_2$1, [
         _ctx.mounted ? (openBlock$1(), createElementBlock$1(Fragment$1, { key: 0 }, [
           createBaseVNode$1("div", null, [
-            renderSlot(_ctx.$slots, "default")
+            renderSlot$1(_ctx.$slots, "default")
           ]),
           _ctx.handleResize ? (openBlock$1(), createBlock$1(_component_ResizeObserver, {
             key: 0,
@@ -12234,7 +12235,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
       classes,
       result
     }) => [
-      renderSlot(_ctx.$slots, "default", {
+      renderSlot$1(_ctx.$slots, "default", {
         shown: isShown,
         show,
         hide
@@ -12254,7 +12255,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
         onResize
       }, {
         default: withCtx$1(() => [
-          renderSlot(_ctx.$slots, "popper", {
+          renderSlot$1(_ctx.$slots, "popper", {
             shown: isShown,
             hide
           })
@@ -12616,7 +12617,7 @@ function install(app, options2 = {}) {
   if (app.$_vTooltipInstalled)
     return;
   app.$_vTooltipInstalled = true;
-  assign$1(config$1, options2);
+  assign$1(config$2, options2);
   app.directive("tooltip", PrivateVTooltip);
   app.directive("close-popper", PrivateVClosePopper);
   app.component("VTooltip", _sfc_main$1);
@@ -12626,7 +12627,7 @@ function install(app, options2 = {}) {
 const plugin = {
   version: "2.0.0-beta.19",
   install,
-  options: config$1
+  options: config$2
 };
 function makeMap(str, expectsLowerCase) {
   const map2 = /* @__PURE__ */ Object.create(null);
@@ -16075,6 +16076,53 @@ function renderList(source, renderItem, cache2, index) {
   }
   return ret;
 }
+function renderSlot(slots, name, props = {}, fallback, noSlotted) {
+  if (currentRenderingInstance.isCE || currentRenderingInstance.parent && isAsyncWrapper(currentRenderingInstance.parent) && currentRenderingInstance.parent.isCE) {
+    if (name !== "default")
+      props.name = name;
+    return createVNode("slot", props, fallback && fallback());
+  }
+  let slot = slots[name];
+  if (slot && slot.length > 1) {
+    warn$1(
+      `SSR-optimized slot function detected in a non-SSR-optimized render function. You need to mark this component with $dynamic-slots in the parent template.`
+    );
+    slot = () => [];
+  }
+  if (slot && slot._c) {
+    slot._d = false;
+  }
+  openBlock();
+  const validSlotContent = slot && ensureValidVNode(slot(props));
+  const rendered = createBlock(
+    Fragment,
+    {
+      key: props.key || // slot content array of a dynamic conditional slot may have a branch
+      // key attached in the `createSlots` helper, respect that
+      validSlotContent && validSlotContent.key || `_${name}`
+    },
+    validSlotContent || (fallback ? fallback() : []),
+    validSlotContent && slots._ === 1 ? 64 : -2
+  );
+  if (!noSlotted && rendered.scopeId) {
+    rendered.slotScopeIds = [rendered.scopeId + "-s"];
+  }
+  if (slot && slot._c) {
+    slot._d = true;
+  }
+  return rendered;
+}
+function ensureValidVNode(vnodes) {
+  return vnodes.some((child) => {
+    if (!isVNode(child))
+      return true;
+    if (child.type === Comment)
+      return false;
+    if (child.type === Fragment && !ensureValidVNode(child.children))
+      return false;
+    return true;
+  }) ? vnodes : null;
+}
 const getPublicInstance = (i2) => {
   if (!i2)
     return null;
@@ -19216,15 +19264,15 @@ function _createVNode(type, props = null, children = null, patchFlag = 0, dynami
   }
   if (props) {
     props = guardReactiveProps(props);
-    let { class: klass, style } = props;
+    let { class: klass, style: style2 } = props;
     if (klass && !isString$1(klass)) {
       props.class = normalizeClass(klass);
     }
-    if (isObject(style)) {
-      if (isProxy(style) && !isArray$1(style)) {
-        style = extend({}, style);
+    if (isObject(style2)) {
+      if (isProxy(style2) && !isArray$1(style2)) {
+        style2 = extend({}, style2);
       }
-      props.style = normalizeStyle(style);
+      props.style = normalizeStyle(style2);
     }
   }
   const shapeFlag = isString$1(type) ? 1 : isSuspense(type) ? 128 : isTeleport(type) ? 64 : isObject(type) ? 4 : isFunction$1(type) ? 2 : 0;
@@ -20097,38 +20145,38 @@ function patchClass(el2, value, isSVG) {
   }
 }
 function patchStyle(el2, prev, next) {
-  const style = el2.style;
+  const style2 = el2.style;
   const isCssString = isString$1(next);
   if (next && !isCssString) {
     if (prev && !isString$1(prev)) {
       for (const key in prev) {
         if (next[key] == null) {
-          setStyle(style, key, "");
+          setStyle(style2, key, "");
         }
       }
     }
     for (const key in next) {
-      setStyle(style, key, next[key]);
+      setStyle(style2, key, next[key]);
     }
   } else {
-    const currentDisplay = style.display;
+    const currentDisplay = style2.display;
     if (isCssString) {
       if (prev !== next) {
-        style.cssText = next;
+        style2.cssText = next;
       }
     } else if (prev) {
       el2.removeAttribute("style");
     }
     if ("_vod" in el2) {
-      style.display = currentDisplay;
+      style2.display = currentDisplay;
     }
   }
 }
 const semicolonRE = /[^\\];\s*$/;
 const importantRE = /\s*!important$/;
-function setStyle(style, name, val) {
+function setStyle(style2, name, val) {
   if (isArray$1(val)) {
-    val.forEach((v2) => setStyle(style, name, v2));
+    val.forEach((v2) => setStyle(style2, name, v2));
   } else {
     if (val == null)
       val = "";
@@ -20140,36 +20188,36 @@ function setStyle(style, name, val) {
       }
     }
     if (name.startsWith("--")) {
-      style.setProperty(name, val);
+      style2.setProperty(name, val);
     } else {
-      const prefixed = autoPrefix(style, name);
+      const prefixed = autoPrefix(style2, name);
       if (importantRE.test(val)) {
-        style.setProperty(
+        style2.setProperty(
           hyphenate(prefixed),
           val.replace(importantRE, ""),
           "important"
         );
       } else {
-        style[prefixed] = val;
+        style2[prefixed] = val;
       }
     }
   }
 }
 const prefixes = ["Webkit", "Moz", "ms"];
 const prefixCache = {};
-function autoPrefix(style, rawName) {
+function autoPrefix(style2, rawName) {
   const cached = prefixCache[rawName];
   if (cached) {
     return cached;
   }
   let name = camelize(rawName);
-  if (name !== "filter" && name in style) {
+  if (name !== "filter" && name in style2) {
     return prefixCache[rawName] = name;
   }
   name = capitalize(name);
   for (let i2 = 0; i2 < prefixes.length; i2++) {
     const prefixed = prefixes[i2] + name;
-    if (prefixed in style) {
+    if (prefixed in style2) {
       return prefixCache[rawName] = prefixed;
     }
   }
@@ -20687,6 +20735,7 @@ function initDev() {
 {
   initDev();
 }
+const style = "";
 const matchName = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const iconDefaults = Object.freeze({
   left: 0,
@@ -22053,7 +22102,7 @@ const countKey = cachePrefix + "-count";
 const versionKey = cachePrefix + "-version";
 const hour = 36e5;
 const cacheExpiration = 168;
-const config = {
+const config$1 = {
   local: true,
   session: true
 };
@@ -22075,7 +22124,7 @@ function getGlobal(key) {
     }
   } catch (err) {
   }
-  config[key] = false;
+  config$1[key] = false;
   return null;
 }
 function setCount(storage2, key, value) {
@@ -22170,7 +22219,7 @@ const loadCache = () => {
     } catch (err) {
     }
   }
-  for (const key in config) {
+  for (const key in config$1) {
     load(key);
   }
 };
@@ -22179,7 +22228,7 @@ const storeCache = (provider, data) => {
     loadCache();
   }
   function store(key) {
-    if (!config[key]) {
+    if (!config$1[key]) {
       return false;
     }
     const func = getGlobal(key);
@@ -22306,7 +22355,7 @@ let customisationAliases = {};
 const render = (icon, props) => {
   const customisations = mergeCustomisations(defaults, props);
   const componentProps = { ...svgDefaults };
-  let style = typeof props.style === "object" && !(props.style instanceof Array) ? { ...props.style } : {};
+  let style2 = typeof props.style === "object" && !(props.style instanceof Array) ? { ...props.style } : {};
   for (let key in props) {
     const value = props[key];
     if (value === void 0) {
@@ -22333,7 +22382,7 @@ const render = (icon, props) => {
         }
         break;
       case "color":
-        style.color = value;
+        style2.color = value;
         break;
       case "rotate":
         if (typeof value === "string") {
@@ -22364,8 +22413,8 @@ const render = (icon, props) => {
   for (let key in item.attributes) {
     componentProps[key] = item.attributes[key];
   }
-  if (item.inline && style.verticalAlign === void 0 && style["vertical-align"] === void 0) {
-    style.verticalAlign = "-0.125em";
+  if (item.inline && style2.verticalAlign === void 0 && style2["vertical-align"] === void 0) {
+    style2.verticalAlign = "-0.125em";
   }
   let localCounter = 0;
   let id2 = props.id;
@@ -22373,8 +22422,8 @@ const render = (icon, props) => {
     id2 = id2.replace(/-/g, "_");
   }
   componentProps["innerHTML"] = replaceIDs(item.body, id2 ? () => id2 + "ID" + localCounter++ : "iconifyVue");
-  if (Object.keys(style).length > 0) {
-    componentProps["style"] = style;
+  if (Object.keys(style2).length > 0) {
+    componentProps["style"] = style2;
   }
   return h$3("svg", componentProps);
 };
@@ -22517,2590 +22566,11 @@ const Icon = defineComponent$1({
     return render(icon.data, newProps);
   }
 });
-/*!
-  * vue-router v4.2.4
-  * (c) 2023 Eduardo San Martin Morote
-  * @license MIT
-  */
-const isBrowser = typeof window !== "undefined";
-function isESModule(obj) {
-  return obj.__esModule || obj[Symbol.toStringTag] === "Module";
-}
-const assign = Object.assign;
-function applyToParams(fn2, params) {
-  const newParams = {};
-  for (const key in params) {
-    const value = params[key];
-    newParams[key] = isArray(value) ? value.map(fn2) : fn2(value);
-  }
-  return newParams;
-}
-const noop$1 = () => {
-};
-const isArray = Array.isArray;
-function warn(msg) {
-  const args = Array.from(arguments).slice(1);
-  console.warn.apply(console, ["[Vue Router warn]: " + msg].concat(args));
-}
-const TRAILING_SLASH_RE = /\/$/;
-const removeTrailingSlash = (path) => path.replace(TRAILING_SLASH_RE, "");
-function parseURL(parseQuery2, location2, currentLocation = "/") {
-  let path, query = {}, searchString = "", hash2 = "";
-  const hashPos = location2.indexOf("#");
-  let searchPos = location2.indexOf("?");
-  if (hashPos < searchPos && hashPos >= 0) {
-    searchPos = -1;
-  }
-  if (searchPos > -1) {
-    path = location2.slice(0, searchPos);
-    searchString = location2.slice(searchPos + 1, hashPos > -1 ? hashPos : location2.length);
-    query = parseQuery2(searchString);
-  }
-  if (hashPos > -1) {
-    path = path || location2.slice(0, hashPos);
-    hash2 = location2.slice(hashPos, location2.length);
-  }
-  path = resolveRelativePath(path != null ? path : location2, currentLocation);
-  return {
-    fullPath: path + (searchString && "?") + searchString + hash2,
-    path,
-    query,
-    hash: hash2
-  };
-}
-function stringifyURL(stringifyQuery2, location2) {
-  const query = location2.query ? stringifyQuery2(location2.query) : "";
-  return location2.path + (query && "?") + query + (location2.hash || "");
-}
-function stripBase(pathname, base) {
-  if (!base || !pathname.toLowerCase().startsWith(base.toLowerCase()))
-    return pathname;
-  return pathname.slice(base.length) || "/";
-}
-function isSameRouteLocation(stringifyQuery2, a2, b2) {
-  const aLastIndex = a2.matched.length - 1;
-  const bLastIndex = b2.matched.length - 1;
-  return aLastIndex > -1 && aLastIndex === bLastIndex && isSameRouteRecord(a2.matched[aLastIndex], b2.matched[bLastIndex]) && isSameRouteLocationParams(a2.params, b2.params) && stringifyQuery2(a2.query) === stringifyQuery2(b2.query) && a2.hash === b2.hash;
-}
-function isSameRouteRecord(a2, b2) {
-  return (a2.aliasOf || a2) === (b2.aliasOf || b2);
-}
-function isSameRouteLocationParams(a2, b2) {
-  if (Object.keys(a2).length !== Object.keys(b2).length)
-    return false;
-  for (const key in a2) {
-    if (!isSameRouteLocationParamsValue(a2[key], b2[key]))
-      return false;
-  }
-  return true;
-}
-function isSameRouteLocationParamsValue(a2, b2) {
-  return isArray(a2) ? isEquivalentArray(a2, b2) : isArray(b2) ? isEquivalentArray(b2, a2) : a2 === b2;
-}
-function isEquivalentArray(a2, b2) {
-  return isArray(b2) ? a2.length === b2.length && a2.every((value, i2) => value === b2[i2]) : a2.length === 1 && a2[0] === b2;
-}
-function resolveRelativePath(to2, from) {
-  if (to2.startsWith("/"))
-    return to2;
-  if (!from.startsWith("/")) {
-    warn(`Cannot resolve a relative location without an absolute path. Trying to resolve "${to2}" from "${from}". It should look like "/${from}".`);
-    return to2;
-  }
-  if (!to2)
-    return from;
-  const fromSegments = from.split("/");
-  const toSegments = to2.split("/");
-  const lastToSegment = toSegments[toSegments.length - 1];
-  if (lastToSegment === ".." || lastToSegment === ".") {
-    toSegments.push("");
-  }
-  let position = fromSegments.length - 1;
-  let toPosition;
-  let segment;
-  for (toPosition = 0; toPosition < toSegments.length; toPosition++) {
-    segment = toSegments[toPosition];
-    if (segment === ".")
-      continue;
-    if (segment === "..") {
-      if (position > 1)
-        position--;
-    } else
-      break;
-  }
-  return fromSegments.slice(0, position).join("/") + "/" + toSegments.slice(toPosition - (toPosition === toSegments.length ? 1 : 0)).join("/");
-}
-var NavigationType;
-(function(NavigationType2) {
-  NavigationType2["pop"] = "pop";
-  NavigationType2["push"] = "push";
-})(NavigationType || (NavigationType = {}));
-var NavigationDirection;
-(function(NavigationDirection2) {
-  NavigationDirection2["back"] = "back";
-  NavigationDirection2["forward"] = "forward";
-  NavigationDirection2["unknown"] = "";
-})(NavigationDirection || (NavigationDirection = {}));
-function normalizeBase(base) {
-  if (!base) {
-    if (isBrowser) {
-      const baseEl = document.querySelector("base");
-      base = baseEl && baseEl.getAttribute("href") || "/";
-      base = base.replace(/^\w+:\/\/[^\/]+/, "");
-    } else {
-      base = "/";
-    }
-  }
-  if (base[0] !== "/" && base[0] !== "#")
-    base = "/" + base;
-  return removeTrailingSlash(base);
-}
-const BEFORE_HASH_RE = /^[^#]+#/;
-function createHref(base, location2) {
-  return base.replace(BEFORE_HASH_RE, "#") + location2;
-}
-function getElementPosition(el2, offset2) {
-  const docRect = document.documentElement.getBoundingClientRect();
-  const elRect = el2.getBoundingClientRect();
-  return {
-    behavior: offset2.behavior,
-    left: elRect.left - docRect.left - (offset2.left || 0),
-    top: elRect.top - docRect.top - (offset2.top || 0)
-  };
-}
-const computeScrollPosition = () => ({
-  left: window.pageXOffset,
-  top: window.pageYOffset
-});
-function scrollToPosition(position) {
-  let scrollToOptions;
-  if ("el" in position) {
-    const positionEl = position.el;
-    const isIdSelector = typeof positionEl === "string" && positionEl.startsWith("#");
-    if (typeof position.el === "string") {
-      if (!isIdSelector || !document.getElementById(position.el.slice(1))) {
-        try {
-          const foundEl = document.querySelector(position.el);
-          if (isIdSelector && foundEl) {
-            warn(`The selector "${position.el}" should be passed as "el: document.querySelector('${position.el}')" because it starts with "#".`);
-            return;
-          }
-        } catch (err) {
-          warn(`The selector "${position.el}" is invalid. If you are using an id selector, make sure to escape it. You can find more information about escaping characters in selectors at https://mathiasbynens.be/notes/css-escapes or use CSS.escape (https://developer.mozilla.org/en-US/docs/Web/API/CSS/escape).`);
-          return;
-        }
-      }
-    }
-    const el2 = typeof positionEl === "string" ? isIdSelector ? document.getElementById(positionEl.slice(1)) : document.querySelector(positionEl) : positionEl;
-    if (!el2) {
-      warn(`Couldn't find element using selector "${position.el}" returned by scrollBehavior.`);
-      return;
-    }
-    scrollToOptions = getElementPosition(el2, position);
-  } else {
-    scrollToOptions = position;
-  }
-  if ("scrollBehavior" in document.documentElement.style)
-    window.scrollTo(scrollToOptions);
-  else {
-    window.scrollTo(scrollToOptions.left != null ? scrollToOptions.left : window.pageXOffset, scrollToOptions.top != null ? scrollToOptions.top : window.pageYOffset);
-  }
-}
-function getScrollKey(path, delta) {
-  const position = history.state ? history.state.position - delta : -1;
-  return position + path;
-}
-const scrollPositions = /* @__PURE__ */ new Map();
-function saveScrollPosition(key, scrollPosition) {
-  scrollPositions.set(key, scrollPosition);
-}
-function getSavedScrollPosition(key) {
-  const scroll = scrollPositions.get(key);
-  scrollPositions.delete(key);
-  return scroll;
-}
-let createBaseLocation = () => location.protocol + "//" + location.host;
-function createCurrentLocation(base, location2) {
-  const { pathname, search, hash: hash2 } = location2;
-  const hashPos = base.indexOf("#");
-  if (hashPos > -1) {
-    let slicePos = hash2.includes(base.slice(hashPos)) ? base.slice(hashPos).length : 1;
-    let pathFromHash = hash2.slice(slicePos);
-    if (pathFromHash[0] !== "/")
-      pathFromHash = "/" + pathFromHash;
-    return stripBase(pathFromHash, "");
-  }
-  const path = stripBase(pathname, base);
-  return path + search + hash2;
-}
-function useHistoryListeners(base, historyState, currentLocation, replace) {
-  let listeners = [];
-  let teardowns = [];
-  let pauseState = null;
-  const popStateHandler = ({ state }) => {
-    const to2 = createCurrentLocation(base, location);
-    const from = currentLocation.value;
-    const fromState = historyState.value;
-    let delta = 0;
-    if (state) {
-      currentLocation.value = to2;
-      historyState.value = state;
-      if (pauseState && pauseState === from) {
-        pauseState = null;
-        return;
-      }
-      delta = fromState ? state.position - fromState.position : 0;
-    } else {
-      replace(to2);
-    }
-    listeners.forEach((listener) => {
-      listener(currentLocation.value, from, {
-        delta,
-        type: NavigationType.pop,
-        direction: delta ? delta > 0 ? NavigationDirection.forward : NavigationDirection.back : NavigationDirection.unknown
-      });
-    });
-  };
-  function pauseListeners() {
-    pauseState = currentLocation.value;
-  }
-  function listen(callback) {
-    listeners.push(callback);
-    const teardown = () => {
-      const index = listeners.indexOf(callback);
-      if (index > -1)
-        listeners.splice(index, 1);
-    };
-    teardowns.push(teardown);
-    return teardown;
-  }
-  function beforeUnloadListener() {
-    const { history: history2 } = window;
-    if (!history2.state)
-      return;
-    history2.replaceState(assign({}, history2.state, { scroll: computeScrollPosition() }), "");
-  }
-  function destroy() {
-    for (const teardown of teardowns)
-      teardown();
-    teardowns = [];
-    window.removeEventListener("popstate", popStateHandler);
-    window.removeEventListener("beforeunload", beforeUnloadListener);
-  }
-  window.addEventListener("popstate", popStateHandler);
-  window.addEventListener("beforeunload", beforeUnloadListener, {
-    passive: true
-  });
-  return {
-    pauseListeners,
-    listen,
-    destroy
-  };
-}
-function buildState(back, current, forward, replaced = false, computeScroll = false) {
-  return {
-    back,
-    current,
-    forward,
-    replaced,
-    position: window.history.length,
-    scroll: computeScroll ? computeScrollPosition() : null
-  };
-}
-function useHistoryStateNavigation(base) {
-  const { history: history2, location: location2 } = window;
-  const currentLocation = {
-    value: createCurrentLocation(base, location2)
-  };
-  const historyState = { value: history2.state };
-  if (!historyState.value) {
-    changeLocation(currentLocation.value, {
-      back: null,
-      current: currentLocation.value,
-      forward: null,
-      // the length is off by one, we need to decrease it
-      position: history2.length - 1,
-      replaced: true,
-      // don't add a scroll as the user may have an anchor, and we want
-      // scrollBehavior to be triggered without a saved position
-      scroll: null
-    }, true);
-  }
-  function changeLocation(to2, state, replace2) {
-    const hashIndex = base.indexOf("#");
-    const url = hashIndex > -1 ? (location2.host && document.querySelector("base") ? base : base.slice(hashIndex)) + to2 : createBaseLocation() + base + to2;
-    try {
-      history2[replace2 ? "replaceState" : "pushState"](state, "", url);
-      historyState.value = state;
-    } catch (err) {
-      {
-        warn("Error with push/replace State", err);
-      }
-      location2[replace2 ? "replace" : "assign"](url);
-    }
-  }
-  function replace(to2, data) {
-    const state = assign({}, history2.state, buildState(
-      historyState.value.back,
-      // keep back and forward entries but override current position
-      to2,
-      historyState.value.forward,
-      true
-    ), data, { position: historyState.value.position });
-    changeLocation(to2, state, true);
-    currentLocation.value = to2;
-  }
-  function push(to2, data) {
-    const currentState = assign(
-      {},
-      // use current history state to gracefully handle a wrong call to
-      // history.replaceState
-      // https://github.com/vuejs/router/issues/366
-      historyState.value,
-      history2.state,
-      {
-        forward: to2,
-        scroll: computeScrollPosition()
-      }
-    );
-    if (!history2.state) {
-      warn(`history.state seems to have been manually replaced without preserving the necessary values. Make sure to preserve existing history state if you are manually calling history.replaceState:
-
-history.replaceState(history.state, '', url)
-
-You can find more information at https://next.router.vuejs.org/guide/migration/#usage-of-history-state.`);
-    }
-    changeLocation(currentState.current, currentState, true);
-    const state = assign({}, buildState(currentLocation.value, to2, null), { position: currentState.position + 1 }, data);
-    changeLocation(to2, state, false);
-    currentLocation.value = to2;
-  }
-  return {
-    location: currentLocation,
-    state: historyState,
-    push,
-    replace
-  };
-}
-function createWebHistory(base) {
-  base = normalizeBase(base);
-  const historyNavigation = useHistoryStateNavigation(base);
-  const historyListeners = useHistoryListeners(base, historyNavigation.state, historyNavigation.location, historyNavigation.replace);
-  function go2(delta, triggerListeners = true) {
-    if (!triggerListeners)
-      historyListeners.pauseListeners();
-    history.go(delta);
-  }
-  const routerHistory = assign({
-    // it's overridden right after
-    location: "",
-    base,
-    go: go2,
-    createHref: createHref.bind(null, base)
-  }, historyNavigation, historyListeners);
-  Object.defineProperty(routerHistory, "location", {
-    enumerable: true,
-    get: () => historyNavigation.location.value
-  });
-  Object.defineProperty(routerHistory, "state", {
-    enumerable: true,
-    get: () => historyNavigation.state.value
-  });
-  return routerHistory;
-}
-function createWebHashHistory(base) {
-  base = location.host ? base || location.pathname + location.search : "";
-  if (!base.includes("#"))
-    base += "#";
-  if (!base.endsWith("#/") && !base.endsWith("#")) {
-    warn(`A hash base must end with a "#":
-"${base}" should be "${base.replace(/#.*$/, "#")}".`);
-  }
-  return createWebHistory(base);
-}
-function isRouteLocation(route) {
-  return typeof route === "string" || route && typeof route === "object";
-}
-function isRouteName(name) {
-  return typeof name === "string" || typeof name === "symbol";
-}
-const START_LOCATION_NORMALIZED = {
-  path: "/",
-  name: void 0,
-  params: {},
-  query: {},
-  hash: "",
-  fullPath: "/",
-  matched: [],
-  meta: {},
-  redirectedFrom: void 0
-};
-const NavigationFailureSymbol = Symbol("navigation failure");
-var NavigationFailureType;
-(function(NavigationFailureType2) {
-  NavigationFailureType2[NavigationFailureType2["aborted"] = 4] = "aborted";
-  NavigationFailureType2[NavigationFailureType2["cancelled"] = 8] = "cancelled";
-  NavigationFailureType2[NavigationFailureType2["duplicated"] = 16] = "duplicated";
-})(NavigationFailureType || (NavigationFailureType = {}));
-const ErrorTypeMessages = {
-  [
-    1
-    /* ErrorTypes.MATCHER_NOT_FOUND */
-  ]({ location: location2, currentLocation }) {
-    return `No match for
- ${JSON.stringify(location2)}${currentLocation ? "\nwhile being at\n" + JSON.stringify(currentLocation) : ""}`;
-  },
-  [
-    2
-    /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */
-  ]({ from, to: to2 }) {
-    return `Redirected from "${from.fullPath}" to "${stringifyRoute(to2)}" via a navigation guard.`;
-  },
-  [
-    4
-    /* ErrorTypes.NAVIGATION_ABORTED */
-  ]({ from, to: to2 }) {
-    return `Navigation aborted from "${from.fullPath}" to "${to2.fullPath}" via a navigation guard.`;
-  },
-  [
-    8
-    /* ErrorTypes.NAVIGATION_CANCELLED */
-  ]({ from, to: to2 }) {
-    return `Navigation cancelled from "${from.fullPath}" to "${to2.fullPath}" with a new navigation.`;
-  },
-  [
-    16
-    /* ErrorTypes.NAVIGATION_DUPLICATED */
-  ]({ from, to: to2 }) {
-    return `Avoided redundant navigation to current location: "${from.fullPath}".`;
-  }
-};
-function createRouterError(type, params) {
-  {
-    return assign(new Error(ErrorTypeMessages[type](params)), {
-      type,
-      [NavigationFailureSymbol]: true
-    }, params);
-  }
-}
-function isNavigationFailure(error, type) {
-  return error instanceof Error && NavigationFailureSymbol in error && (type == null || !!(error.type & type));
-}
-const propertiesToLog = ["params", "query", "hash"];
-function stringifyRoute(to2) {
-  if (typeof to2 === "string")
-    return to2;
-  if ("path" in to2)
-    return to2.path;
-  const location2 = {};
-  for (const key of propertiesToLog) {
-    if (key in to2)
-      location2[key] = to2[key];
-  }
-  return JSON.stringify(location2, null, 2);
-}
-const BASE_PARAM_PATTERN = "[^/]+?";
-const BASE_PATH_PARSER_OPTIONS = {
-  sensitive: false,
-  strict: false,
-  start: true,
-  end: true
-};
-const REGEX_CHARS_RE = /[.+*?^${}()[\]/\\]/g;
-function tokensToParser(segments, extraOptions) {
-  const options = assign({}, BASE_PATH_PARSER_OPTIONS, extraOptions);
-  const score = [];
-  let pattern = options.start ? "^" : "";
-  const keys = [];
-  for (const segment of segments) {
-    const segmentScores = segment.length ? [] : [
-      90
-      /* PathScore.Root */
-    ];
-    if (options.strict && !segment.length)
-      pattern += "/";
-    for (let tokenIndex = 0; tokenIndex < segment.length; tokenIndex++) {
-      const token = segment[tokenIndex];
-      let subSegmentScore = 40 + (options.sensitive ? 0.25 : 0);
-      if (token.type === 0) {
-        if (!tokenIndex)
-          pattern += "/";
-        pattern += token.value.replace(REGEX_CHARS_RE, "\\$&");
-        subSegmentScore += 40;
-      } else if (token.type === 1) {
-        const { value, repeatable, optional, regexp } = token;
-        keys.push({
-          name: value,
-          repeatable,
-          optional
-        });
-        const re3 = regexp ? regexp : BASE_PARAM_PATTERN;
-        if (re3 !== BASE_PARAM_PATTERN) {
-          subSegmentScore += 10;
-          try {
-            new RegExp(`(${re3})`);
-          } catch (err) {
-            throw new Error(`Invalid custom RegExp for param "${value}" (${re3}): ` + err.message);
-          }
-        }
-        let subPattern = repeatable ? `((?:${re3})(?:/(?:${re3}))*)` : `(${re3})`;
-        if (!tokenIndex)
-          subPattern = // avoid an optional / if there are more segments e.g. /:p?-static
-          // or /:p?-:p2
-          optional && segment.length < 2 ? `(?:/${subPattern})` : "/" + subPattern;
-        if (optional)
-          subPattern += "?";
-        pattern += subPattern;
-        subSegmentScore += 20;
-        if (optional)
-          subSegmentScore += -8;
-        if (repeatable)
-          subSegmentScore += -20;
-        if (re3 === ".*")
-          subSegmentScore += -50;
-      }
-      segmentScores.push(subSegmentScore);
-    }
-    score.push(segmentScores);
-  }
-  if (options.strict && options.end) {
-    const i2 = score.length - 1;
-    score[i2][score[i2].length - 1] += 0.7000000000000001;
-  }
-  if (!options.strict)
-    pattern += "/?";
-  if (options.end)
-    pattern += "$";
-  else if (options.strict)
-    pattern += "(?:/|$)";
-  const re2 = new RegExp(pattern, options.sensitive ? "" : "i");
-  function parse2(path) {
-    const match = path.match(re2);
-    const params = {};
-    if (!match)
-      return null;
-    for (let i2 = 1; i2 < match.length; i2++) {
-      const value = match[i2] || "";
-      const key = keys[i2 - 1];
-      params[key.name] = value && key.repeatable ? value.split("/") : value;
-    }
-    return params;
-  }
-  function stringify(params) {
-    let path = "";
-    let avoidDuplicatedSlash = false;
-    for (const segment of segments) {
-      if (!avoidDuplicatedSlash || !path.endsWith("/"))
-        path += "/";
-      avoidDuplicatedSlash = false;
-      for (const token of segment) {
-        if (token.type === 0) {
-          path += token.value;
-        } else if (token.type === 1) {
-          const { value, repeatable, optional } = token;
-          const param = value in params ? params[value] : "";
-          if (isArray(param) && !repeatable) {
-            throw new Error(`Provided param "${value}" is an array but it is not repeatable (* or + modifiers)`);
-          }
-          const text = isArray(param) ? param.join("/") : param;
-          if (!text) {
-            if (optional) {
-              if (segment.length < 2) {
-                if (path.endsWith("/"))
-                  path = path.slice(0, -1);
-                else
-                  avoidDuplicatedSlash = true;
-              }
-            } else
-              throw new Error(`Missing required param "${value}"`);
-          }
-          path += text;
-        }
-      }
-    }
-    return path || "/";
-  }
-  return {
-    re: re2,
-    score,
-    keys,
-    parse: parse2,
-    stringify
-  };
-}
-function compareScoreArray(a2, b2) {
-  let i2 = 0;
-  while (i2 < a2.length && i2 < b2.length) {
-    const diff = b2[i2] - a2[i2];
-    if (diff)
-      return diff;
-    i2++;
-  }
-  if (a2.length < b2.length) {
-    return a2.length === 1 && a2[0] === 40 + 40 ? -1 : 1;
-  } else if (a2.length > b2.length) {
-    return b2.length === 1 && b2[0] === 40 + 40 ? 1 : -1;
-  }
-  return 0;
-}
-function comparePathParserScore(a2, b2) {
-  let i2 = 0;
-  const aScore = a2.score;
-  const bScore = b2.score;
-  while (i2 < aScore.length && i2 < bScore.length) {
-    const comp = compareScoreArray(aScore[i2], bScore[i2]);
-    if (comp)
-      return comp;
-    i2++;
-  }
-  if (Math.abs(bScore.length - aScore.length) === 1) {
-    if (isLastScoreNegative(aScore))
-      return 1;
-    if (isLastScoreNegative(bScore))
-      return -1;
-  }
-  return bScore.length - aScore.length;
-}
-function isLastScoreNegative(score) {
-  const last = score[score.length - 1];
-  return score.length > 0 && last[last.length - 1] < 0;
-}
-const ROOT_TOKEN = {
-  type: 0,
-  value: ""
-};
-const VALID_PARAM_RE = /[a-zA-Z0-9_]/;
-function tokenizePath(path) {
-  if (!path)
-    return [[]];
-  if (path === "/")
-    return [[ROOT_TOKEN]];
-  if (!path.startsWith("/")) {
-    throw new Error(
-      `Route paths should start with a "/": "${path}" should be "/${path}".`
-    );
-  }
-  function crash(message) {
-    throw new Error(`ERR (${state})/"${buffer2}": ${message}`);
-  }
-  let state = 0;
-  let previousState = state;
-  const tokens = [];
-  let segment;
-  function finalizeSegment() {
-    if (segment)
-      tokens.push(segment);
-    segment = [];
-  }
-  let i2 = 0;
-  let char;
-  let buffer2 = "";
-  let customRe = "";
-  function consumeBuffer() {
-    if (!buffer2)
-      return;
-    if (state === 0) {
-      segment.push({
-        type: 0,
-        value: buffer2
-      });
-    } else if (state === 1 || state === 2 || state === 3) {
-      if (segment.length > 1 && (char === "*" || char === "+"))
-        crash(`A repeatable param (${buffer2}) must be alone in its segment. eg: '/:ids+.`);
-      segment.push({
-        type: 1,
-        value: buffer2,
-        regexp: customRe,
-        repeatable: char === "*" || char === "+",
-        optional: char === "*" || char === "?"
-      });
-    } else {
-      crash("Invalid state to consume buffer");
-    }
-    buffer2 = "";
-  }
-  function addCharToBuffer() {
-    buffer2 += char;
-  }
-  while (i2 < path.length) {
-    char = path[i2++];
-    if (char === "\\" && state !== 2) {
-      previousState = state;
-      state = 4;
-      continue;
-    }
-    switch (state) {
-      case 0:
-        if (char === "/") {
-          if (buffer2) {
-            consumeBuffer();
-          }
-          finalizeSegment();
-        } else if (char === ":") {
-          consumeBuffer();
-          state = 1;
-        } else {
-          addCharToBuffer();
-        }
-        break;
-      case 4:
-        addCharToBuffer();
-        state = previousState;
-        break;
-      case 1:
-        if (char === "(") {
-          state = 2;
-        } else if (VALID_PARAM_RE.test(char)) {
-          addCharToBuffer();
-        } else {
-          consumeBuffer();
-          state = 0;
-          if (char !== "*" && char !== "?" && char !== "+")
-            i2--;
-        }
-        break;
-      case 2:
-        if (char === ")") {
-          if (customRe[customRe.length - 1] == "\\")
-            customRe = customRe.slice(0, -1) + char;
-          else
-            state = 3;
-        } else {
-          customRe += char;
-        }
-        break;
-      case 3:
-        consumeBuffer();
-        state = 0;
-        if (char !== "*" && char !== "?" && char !== "+")
-          i2--;
-        customRe = "";
-        break;
-      default:
-        crash("Unknown state");
-        break;
-    }
-  }
-  if (state === 2)
-    crash(`Unfinished custom RegExp for param "${buffer2}"`);
-  consumeBuffer();
-  finalizeSegment();
-  return tokens;
-}
-function createRouteRecordMatcher(record, parent, options) {
-  const parser = tokensToParser(tokenizePath(record.path), options);
-  {
-    const existingKeys = /* @__PURE__ */ new Set();
-    for (const key of parser.keys) {
-      if (existingKeys.has(key.name))
-        warn(`Found duplicated params with name "${key.name}" for path "${record.path}". Only the last one will be available on "$route.params".`);
-      existingKeys.add(key.name);
-    }
-  }
-  const matcher = assign(parser, {
-    record,
-    parent,
-    // these needs to be populated by the parent
-    children: [],
-    alias: []
-  });
-  if (parent) {
-    if (!matcher.record.aliasOf === !parent.record.aliasOf)
-      parent.children.push(matcher);
-  }
-  return matcher;
-}
-function createRouterMatcher(routes, globalOptions) {
-  const matchers = [];
-  const matcherMap = /* @__PURE__ */ new Map();
-  globalOptions = mergeOptions({ strict: false, end: true, sensitive: false }, globalOptions);
-  function getRecordMatcher(name) {
-    return matcherMap.get(name);
-  }
-  function addRoute(record, parent, originalRecord) {
-    const isRootAdd = !originalRecord;
-    const mainNormalizedRecord = normalizeRouteRecord(record);
-    {
-      checkChildMissingNameWithEmptyPath(mainNormalizedRecord, parent);
-    }
-    mainNormalizedRecord.aliasOf = originalRecord && originalRecord.record;
-    const options = mergeOptions(globalOptions, record);
-    const normalizedRecords = [
-      mainNormalizedRecord
-    ];
-    if ("alias" in record) {
-      const aliases = typeof record.alias === "string" ? [record.alias] : record.alias;
-      for (const alias of aliases) {
-        normalizedRecords.push(assign({}, mainNormalizedRecord, {
-          // this allows us to hold a copy of the `components` option
-          // so that async components cache is hold on the original record
-          components: originalRecord ? originalRecord.record.components : mainNormalizedRecord.components,
-          path: alias,
-          // we might be the child of an alias
-          aliasOf: originalRecord ? originalRecord.record : mainNormalizedRecord
-          // the aliases are always of the same kind as the original since they
-          // are defined on the same record
-        }));
-      }
-    }
-    let matcher;
-    let originalMatcher;
-    for (const normalizedRecord of normalizedRecords) {
-      const { path } = normalizedRecord;
-      if (parent && path[0] !== "/") {
-        const parentPath = parent.record.path;
-        const connectingSlash = parentPath[parentPath.length - 1] === "/" ? "" : "/";
-        normalizedRecord.path = parent.record.path + (path && connectingSlash + path);
-      }
-      if (normalizedRecord.path === "*") {
-        throw new Error('Catch all routes ("*") must now be defined using a param with a custom regexp.\nSee more at https://next.router.vuejs.org/guide/migration/#removed-star-or-catch-all-routes.');
-      }
-      matcher = createRouteRecordMatcher(normalizedRecord, parent, options);
-      if (parent && path[0] === "/")
-        checkMissingParamsInAbsolutePath(matcher, parent);
-      if (originalRecord) {
-        originalRecord.alias.push(matcher);
-        {
-          checkSameParams(originalRecord, matcher);
-        }
-      } else {
-        originalMatcher = originalMatcher || matcher;
-        if (originalMatcher !== matcher)
-          originalMatcher.alias.push(matcher);
-        if (isRootAdd && record.name && !isAliasRecord(matcher))
-          removeRoute(record.name);
-      }
-      if (mainNormalizedRecord.children) {
-        const children = mainNormalizedRecord.children;
-        for (let i2 = 0; i2 < children.length; i2++) {
-          addRoute(children[i2], matcher, originalRecord && originalRecord.children[i2]);
-        }
-      }
-      originalRecord = originalRecord || matcher;
-      if (matcher.record.components && Object.keys(matcher.record.components).length || matcher.record.name || matcher.record.redirect) {
-        insertMatcher(matcher);
-      }
-    }
-    return originalMatcher ? () => {
-      removeRoute(originalMatcher);
-    } : noop$1;
-  }
-  function removeRoute(matcherRef) {
-    if (isRouteName(matcherRef)) {
-      const matcher = matcherMap.get(matcherRef);
-      if (matcher) {
-        matcherMap.delete(matcherRef);
-        matchers.splice(matchers.indexOf(matcher), 1);
-        matcher.children.forEach(removeRoute);
-        matcher.alias.forEach(removeRoute);
-      }
-    } else {
-      const index = matchers.indexOf(matcherRef);
-      if (index > -1) {
-        matchers.splice(index, 1);
-        if (matcherRef.record.name)
-          matcherMap.delete(matcherRef.record.name);
-        matcherRef.children.forEach(removeRoute);
-        matcherRef.alias.forEach(removeRoute);
-      }
-    }
-  }
-  function getRoutes() {
-    return matchers;
-  }
-  function insertMatcher(matcher) {
-    let i2 = 0;
-    while (i2 < matchers.length && comparePathParserScore(matcher, matchers[i2]) >= 0 && // Adding children with empty path should still appear before the parent
-    // https://github.com/vuejs/router/issues/1124
-    (matcher.record.path !== matchers[i2].record.path || !isRecordChildOf(matcher, matchers[i2])))
-      i2++;
-    matchers.splice(i2, 0, matcher);
-    if (matcher.record.name && !isAliasRecord(matcher))
-      matcherMap.set(matcher.record.name, matcher);
-  }
-  function resolve2(location2, currentLocation) {
-    let matcher;
-    let params = {};
-    let path;
-    let name;
-    if ("name" in location2 && location2.name) {
-      matcher = matcherMap.get(location2.name);
-      if (!matcher)
-        throw createRouterError(1, {
-          location: location2
-        });
-      {
-        const invalidParams = Object.keys(location2.params || {}).filter((paramName) => !matcher.keys.find((k2) => k2.name === paramName));
-        if (invalidParams.length) {
-          warn(`Discarded invalid param(s) "${invalidParams.join('", "')}" when navigating. See https://github.com/vuejs/router/blob/main/packages/router/CHANGELOG.md#414-2022-08-22 for more details.`);
-        }
-      }
-      name = matcher.record.name;
-      params = assign(
-        // paramsFromLocation is a new object
-        paramsFromLocation(
-          currentLocation.params,
-          // only keep params that exist in the resolved location
-          // TODO: only keep optional params coming from a parent record
-          matcher.keys.filter((k2) => !k2.optional).map((k2) => k2.name)
-        ),
-        // discard any existing params in the current location that do not exist here
-        // #1497 this ensures better active/exact matching
-        location2.params && paramsFromLocation(location2.params, matcher.keys.map((k2) => k2.name))
-      );
-      path = matcher.stringify(params);
-    } else if ("path" in location2) {
-      path = location2.path;
-      if (!path.startsWith("/")) {
-        warn(`The Matcher cannot resolve relative paths but received "${path}". Unless you directly called \`matcher.resolve("${path}")\`, this is probably a bug in vue-router. Please open an issue at https://github.com/vuejs/router/issues/new/choose.`);
-      }
-      matcher = matchers.find((m2) => m2.re.test(path));
-      if (matcher) {
-        params = matcher.parse(path);
-        name = matcher.record.name;
-      }
-    } else {
-      matcher = currentLocation.name ? matcherMap.get(currentLocation.name) : matchers.find((m2) => m2.re.test(currentLocation.path));
-      if (!matcher)
-        throw createRouterError(1, {
-          location: location2,
-          currentLocation
-        });
-      name = matcher.record.name;
-      params = assign({}, currentLocation.params, location2.params);
-      path = matcher.stringify(params);
-    }
-    const matched = [];
-    let parentMatcher = matcher;
-    while (parentMatcher) {
-      matched.unshift(parentMatcher.record);
-      parentMatcher = parentMatcher.parent;
-    }
-    return {
-      name,
-      path,
-      params,
-      matched,
-      meta: mergeMetaFields(matched)
-    };
-  }
-  routes.forEach((route) => addRoute(route));
-  return { addRoute, resolve: resolve2, removeRoute, getRoutes, getRecordMatcher };
-}
-function paramsFromLocation(params, keys) {
-  const newParams = {};
-  for (const key of keys) {
-    if (key in params)
-      newParams[key] = params[key];
-  }
-  return newParams;
-}
-function normalizeRouteRecord(record) {
-  return {
-    path: record.path,
-    redirect: record.redirect,
-    name: record.name,
-    meta: record.meta || {},
-    aliasOf: void 0,
-    beforeEnter: record.beforeEnter,
-    props: normalizeRecordProps(record),
-    children: record.children || [],
-    instances: {},
-    leaveGuards: /* @__PURE__ */ new Set(),
-    updateGuards: /* @__PURE__ */ new Set(),
-    enterCallbacks: {},
-    components: "components" in record ? record.components || null : record.component && { default: record.component }
-  };
-}
-function normalizeRecordProps(record) {
-  const propsObject = {};
-  const props = record.props || false;
-  if ("component" in record) {
-    propsObject.default = props;
-  } else {
-    for (const name in record.components)
-      propsObject[name] = typeof props === "object" ? props[name] : props;
-  }
-  return propsObject;
-}
-function isAliasRecord(record) {
-  while (record) {
-    if (record.record.aliasOf)
-      return true;
-    record = record.parent;
-  }
-  return false;
-}
-function mergeMetaFields(matched) {
-  return matched.reduce((meta, record) => assign(meta, record.meta), {});
-}
-function mergeOptions(defaults2, partialOptions) {
-  const options = {};
-  for (const key in defaults2) {
-    options[key] = key in partialOptions ? partialOptions[key] : defaults2[key];
-  }
-  return options;
-}
-function isSameParam(a2, b2) {
-  return a2.name === b2.name && a2.optional === b2.optional && a2.repeatable === b2.repeatable;
-}
-function checkSameParams(a2, b2) {
-  for (const key of a2.keys) {
-    if (!key.optional && !b2.keys.find(isSameParam.bind(null, key)))
-      return warn(`Alias "${b2.record.path}" and the original record: "${a2.record.path}" must have the exact same param named "${key.name}"`);
-  }
-  for (const key of b2.keys) {
-    if (!key.optional && !a2.keys.find(isSameParam.bind(null, key)))
-      return warn(`Alias "${b2.record.path}" and the original record: "${a2.record.path}" must have the exact same param named "${key.name}"`);
-  }
-}
-function checkChildMissingNameWithEmptyPath(mainNormalizedRecord, parent) {
-  if (parent && parent.record.name && !mainNormalizedRecord.name && !mainNormalizedRecord.path) {
-    warn(`The route named "${String(parent.record.name)}" has a child without a name and an empty path. Using that name won't render the empty path child so you probably want to move the name to the child instead. If this is intentional, add a name to the child route to remove the warning.`);
-  }
-}
-function checkMissingParamsInAbsolutePath(record, parent) {
-  for (const key of parent.keys) {
-    if (!record.keys.find(isSameParam.bind(null, key)))
-      return warn(`Absolute path "${record.record.path}" must have the exact same param named "${key.name}" as its parent "${parent.record.path}".`);
-  }
-}
-function isRecordChildOf(record, parent) {
-  return parent.children.some((child) => child === record || isRecordChildOf(record, child));
-}
-const HASH_RE = /#/g;
-const AMPERSAND_RE = /&/g;
-const SLASH_RE = /\//g;
-const EQUAL_RE = /=/g;
-const IM_RE = /\?/g;
-const PLUS_RE = /\+/g;
-const ENC_BRACKET_OPEN_RE = /%5B/g;
-const ENC_BRACKET_CLOSE_RE = /%5D/g;
-const ENC_CARET_RE = /%5E/g;
-const ENC_BACKTICK_RE = /%60/g;
-const ENC_CURLY_OPEN_RE = /%7B/g;
-const ENC_PIPE_RE = /%7C/g;
-const ENC_CURLY_CLOSE_RE = /%7D/g;
-const ENC_SPACE_RE = /%20/g;
-function commonEncode(text) {
-  return encodeURI("" + text).replace(ENC_PIPE_RE, "|").replace(ENC_BRACKET_OPEN_RE, "[").replace(ENC_BRACKET_CLOSE_RE, "]");
-}
-function encodeHash(text) {
-  return commonEncode(text).replace(ENC_CURLY_OPEN_RE, "{").replace(ENC_CURLY_CLOSE_RE, "}").replace(ENC_CARET_RE, "^");
-}
-function encodeQueryValue(text) {
-  return commonEncode(text).replace(PLUS_RE, "%2B").replace(ENC_SPACE_RE, "+").replace(HASH_RE, "%23").replace(AMPERSAND_RE, "%26").replace(ENC_BACKTICK_RE, "`").replace(ENC_CURLY_OPEN_RE, "{").replace(ENC_CURLY_CLOSE_RE, "}").replace(ENC_CARET_RE, "^");
-}
-function encodeQueryKey(text) {
-  return encodeQueryValue(text).replace(EQUAL_RE, "%3D");
-}
-function encodePath(text) {
-  return commonEncode(text).replace(HASH_RE, "%23").replace(IM_RE, "%3F");
-}
-function encodeParam(text) {
-  return text == null ? "" : encodePath(text).replace(SLASH_RE, "%2F");
-}
-function decode(text) {
-  try {
-    return decodeURIComponent("" + text);
-  } catch (err) {
-    warn(`Error decoding "${text}". Using original value`);
-  }
-  return "" + text;
-}
-function parseQuery(search) {
-  const query = {};
-  if (search === "" || search === "?")
-    return query;
-  const hasLeadingIM = search[0] === "?";
-  const searchParams = (hasLeadingIM ? search.slice(1) : search).split("&");
-  for (let i2 = 0; i2 < searchParams.length; ++i2) {
-    const searchParam = searchParams[i2].replace(PLUS_RE, " ");
-    const eqPos = searchParam.indexOf("=");
-    const key = decode(eqPos < 0 ? searchParam : searchParam.slice(0, eqPos));
-    const value = eqPos < 0 ? null : decode(searchParam.slice(eqPos + 1));
-    if (key in query) {
-      let currentValue = query[key];
-      if (!isArray(currentValue)) {
-        currentValue = query[key] = [currentValue];
-      }
-      currentValue.push(value);
-    } else {
-      query[key] = value;
-    }
-  }
-  return query;
-}
-function stringifyQuery(query) {
-  let search = "";
-  for (let key in query) {
-    const value = query[key];
-    key = encodeQueryKey(key);
-    if (value == null) {
-      if (value !== void 0) {
-        search += (search.length ? "&" : "") + key;
-      }
-      continue;
-    }
-    const values = isArray(value) ? value.map((v2) => v2 && encodeQueryValue(v2)) : [value && encodeQueryValue(value)];
-    values.forEach((value2) => {
-      if (value2 !== void 0) {
-        search += (search.length ? "&" : "") + key;
-        if (value2 != null)
-          search += "=" + value2;
-      }
-    });
-  }
-  return search;
-}
-function normalizeQuery(query) {
-  const normalizedQuery = {};
-  for (const key in query) {
-    const value = query[key];
-    if (value !== void 0) {
-      normalizedQuery[key] = isArray(value) ? value.map((v2) => v2 == null ? null : "" + v2) : value == null ? value : "" + value;
-    }
-  }
-  return normalizedQuery;
-}
-const matchedRouteKey = Symbol("router view location matched");
-const viewDepthKey = Symbol("router view depth");
-const routerKey = Symbol("router");
-const routeLocationKey = Symbol("route location");
-const routerViewLocationKey = Symbol("router view location");
-function useCallbacks() {
-  let handlers2 = [];
-  function add2(handler) {
-    handlers2.push(handler);
-    return () => {
-      const i2 = handlers2.indexOf(handler);
-      if (i2 > -1)
-        handlers2.splice(i2, 1);
-    };
-  }
-  function reset() {
-    handlers2 = [];
-  }
-  return {
-    add: add2,
-    list: () => handlers2.slice(),
-    reset
-  };
-}
-function guardToPromiseFn(guard, to2, from, record, name) {
-  const enterCallbackArray = record && // name is defined if record is because of the function overload
-  (record.enterCallbacks[name] = record.enterCallbacks[name] || []);
-  return () => new Promise((resolve2, reject) => {
-    const next = (valid) => {
-      if (valid === false) {
-        reject(createRouterError(4, {
-          from,
-          to: to2
-        }));
-      } else if (valid instanceof Error) {
-        reject(valid);
-      } else if (isRouteLocation(valid)) {
-        reject(createRouterError(2, {
-          from: to2,
-          to: valid
-        }));
-      } else {
-        if (enterCallbackArray && // since enterCallbackArray is truthy, both record and name also are
-        record.enterCallbacks[name] === enterCallbackArray && typeof valid === "function") {
-          enterCallbackArray.push(valid);
-        }
-        resolve2();
-      }
-    };
-    const guardReturn = guard.call(record && record.instances[name], to2, from, canOnlyBeCalledOnce(next, to2, from));
-    let guardCall = Promise.resolve(guardReturn);
-    if (guard.length < 3)
-      guardCall = guardCall.then(next);
-    if (guard.length > 2) {
-      const message = `The "next" callback was never called inside of ${guard.name ? '"' + guard.name + '"' : ""}:
-${guard.toString()}
-. If you are returning a value instead of calling "next", make sure to remove the "next" parameter from your function.`;
-      if (typeof guardReturn === "object" && "then" in guardReturn) {
-        guardCall = guardCall.then((resolvedValue) => {
-          if (!next._called) {
-            warn(message);
-            return Promise.reject(new Error("Invalid navigation guard"));
-          }
-          return resolvedValue;
-        });
-      } else if (guardReturn !== void 0) {
-        if (!next._called) {
-          warn(message);
-          reject(new Error("Invalid navigation guard"));
-          return;
-        }
-      }
-    }
-    guardCall.catch((err) => reject(err));
-  });
-}
-function canOnlyBeCalledOnce(next, to2, from) {
-  let called = 0;
-  return function() {
-    if (called++ === 1)
-      warn(`The "next" callback was called more than once in one navigation guard when going from "${from.fullPath}" to "${to2.fullPath}". It should be called exactly one time in each navigation guard. This will fail in production.`);
-    next._called = true;
-    if (called === 1)
-      next.apply(null, arguments);
-  };
-}
-function extractComponentsGuards(matched, guardType, to2, from) {
-  const guards = [];
-  for (const record of matched) {
-    if (!record.components && !record.children.length) {
-      warn(`Record with path "${record.path}" is either missing a "component(s)" or "children" property.`);
-    }
-    for (const name in record.components) {
-      let rawComponent = record.components[name];
-      {
-        if (!rawComponent || typeof rawComponent !== "object" && typeof rawComponent !== "function") {
-          warn(`Component "${name}" in record with path "${record.path}" is not a valid component. Received "${String(rawComponent)}".`);
-          throw new Error("Invalid route component");
-        } else if ("then" in rawComponent) {
-          warn(`Component "${name}" in record with path "${record.path}" is a Promise instead of a function that returns a Promise. Did you write "import('./MyPage.vue')" instead of "() => import('./MyPage.vue')" ? This will break in production if not fixed.`);
-          const promise = rawComponent;
-          rawComponent = () => promise;
-        } else if (rawComponent.__asyncLoader && // warn only once per component
-        !rawComponent.__warnedDefineAsync) {
-          rawComponent.__warnedDefineAsync = true;
-          warn(`Component "${name}" in record with path "${record.path}" is defined using "defineAsyncComponent()". Write "() => import('./MyPage.vue')" instead of "defineAsyncComponent(() => import('./MyPage.vue'))".`);
-        }
-      }
-      if (guardType !== "beforeRouteEnter" && !record.instances[name])
-        continue;
-      if (isRouteComponent(rawComponent)) {
-        const options = rawComponent.__vccOpts || rawComponent;
-        const guard = options[guardType];
-        guard && guards.push(guardToPromiseFn(guard, to2, from, record, name));
-      } else {
-        let componentPromise = rawComponent();
-        if (!("catch" in componentPromise)) {
-          warn(`Component "${name}" in record with path "${record.path}" is a function that does not return a Promise. If you were passing a functional component, make sure to add a "displayName" to the component. This will break in production if not fixed.`);
-          componentPromise = Promise.resolve(componentPromise);
-        }
-        guards.push(() => componentPromise.then((resolved) => {
-          if (!resolved)
-            return Promise.reject(new Error(`Couldn't resolve component "${name}" at "${record.path}"`));
-          const resolvedComponent = isESModule(resolved) ? resolved.default : resolved;
-          record.components[name] = resolvedComponent;
-          const options = resolvedComponent.__vccOpts || resolvedComponent;
-          const guard = options[guardType];
-          return guard && guardToPromiseFn(guard, to2, from, record, name)();
-        }));
-      }
-    }
-  }
-  return guards;
-}
-function isRouteComponent(component) {
-  return typeof component === "object" || "displayName" in component || "props" in component || "__vccOpts" in component;
-}
-function useLink(props) {
-  const router = inject$1(routerKey);
-  const currentRoute = inject$1(routeLocationKey);
-  const route = computed$2(() => router.resolve(unref$1(props.to)));
-  const activeRecordIndex = computed$2(() => {
-    const { matched } = route.value;
-    const { length } = matched;
-    const routeMatched = matched[length - 1];
-    const currentMatched = currentRoute.matched;
-    if (!routeMatched || !currentMatched.length)
-      return -1;
-    const index = currentMatched.findIndex(isSameRouteRecord.bind(null, routeMatched));
-    if (index > -1)
-      return index;
-    const parentRecordPath = getOriginalPath(matched[length - 2]);
-    return (
-      // we are dealing with nested routes
-      length > 1 && // if the parent and matched route have the same path, this link is
-      // referring to the empty child. Or we currently are on a different
-      // child of the same parent
-      getOriginalPath(routeMatched) === parentRecordPath && // avoid comparing the child with its parent
-      currentMatched[currentMatched.length - 1].path !== parentRecordPath ? currentMatched.findIndex(isSameRouteRecord.bind(null, matched[length - 2])) : index
-    );
-  });
-  const isActive = computed$2(() => activeRecordIndex.value > -1 && includesParams(currentRoute.params, route.value.params));
-  const isExactActive = computed$2(() => activeRecordIndex.value > -1 && activeRecordIndex.value === currentRoute.matched.length - 1 && isSameRouteLocationParams(currentRoute.params, route.value.params));
-  function navigate(e2 = {}) {
-    if (guardEvent(e2)) {
-      return router[unref$1(props.replace) ? "replace" : "push"](
-        unref$1(props.to)
-        // avoid uncaught errors are they are logged anyway
-      ).catch(noop$1);
-    }
-    return Promise.resolve();
-  }
-  if (isBrowser) {
-    const instance = getCurrentInstance$1();
-    if (instance) {
-      const linkContextDevtools = {
-        route: route.value,
-        isActive: isActive.value,
-        isExactActive: isExactActive.value
-      };
-      instance.__vrl_devtools = instance.__vrl_devtools || [];
-      instance.__vrl_devtools.push(linkContextDevtools);
-      watchEffect(() => {
-        linkContextDevtools.route = route.value;
-        linkContextDevtools.isActive = isActive.value;
-        linkContextDevtools.isExactActive = isExactActive.value;
-      }, { flush: "post" });
-    }
-  }
-  return {
-    route,
-    href: computed$2(() => route.value.href),
-    isActive,
-    isExactActive,
-    navigate
-  };
-}
-const RouterLinkImpl = /* @__PURE__ */ defineComponent$1({
-  name: "RouterLink",
-  compatConfig: { MODE: 3 },
-  props: {
-    to: {
-      type: [String, Object],
-      required: true
-    },
-    replace: Boolean,
-    activeClass: String,
-    // inactiveClass: String,
-    exactActiveClass: String,
-    custom: Boolean,
-    ariaCurrentValue: {
-      type: String,
-      default: "page"
-    }
-  },
-  useLink,
-  setup(props, { slots }) {
-    const link = reactive$1(useLink(props));
-    const { options } = inject$1(routerKey);
-    const elClass = computed$2(() => ({
-      [getLinkClass(props.activeClass, options.linkActiveClass, "router-link-active")]: link.isActive,
-      // [getLinkClass(
-      //   props.inactiveClass,
-      //   options.linkInactiveClass,
-      //   'router-link-inactive'
-      // )]: !link.isExactActive,
-      [getLinkClass(props.exactActiveClass, options.linkExactActiveClass, "router-link-exact-active")]: link.isExactActive
-    }));
-    return () => {
-      const children = slots.default && slots.default(link);
-      return props.custom ? children : h$3("a", {
-        "aria-current": link.isExactActive ? props.ariaCurrentValue : null,
-        href: link.href,
-        // this would override user added attrs but Vue will still add
-        // the listener, so we end up triggering both
-        onClick: link.navigate,
-        class: elClass.value
-      }, children);
-    };
-  }
-});
-const RouterLink = RouterLinkImpl;
-function guardEvent(e2) {
-  if (e2.metaKey || e2.altKey || e2.ctrlKey || e2.shiftKey)
-    return;
-  if (e2.defaultPrevented)
-    return;
-  if (e2.button !== void 0 && e2.button !== 0)
-    return;
-  if (e2.currentTarget && e2.currentTarget.getAttribute) {
-    const target = e2.currentTarget.getAttribute("target");
-    if (/\b_blank\b/i.test(target))
-      return;
-  }
-  if (e2.preventDefault)
-    e2.preventDefault();
-  return true;
-}
-function includesParams(outer, inner) {
-  for (const key in inner) {
-    const innerValue = inner[key];
-    const outerValue = outer[key];
-    if (typeof innerValue === "string") {
-      if (innerValue !== outerValue)
-        return false;
-    } else {
-      if (!isArray(outerValue) || outerValue.length !== innerValue.length || innerValue.some((value, i2) => value !== outerValue[i2]))
-        return false;
-    }
-  }
-  return true;
-}
-function getOriginalPath(record) {
-  return record ? record.aliasOf ? record.aliasOf.path : record.path : "";
-}
-const getLinkClass = (propClass, globalClass, defaultClass) => propClass != null ? propClass : globalClass != null ? globalClass : defaultClass;
-const RouterViewImpl = /* @__PURE__ */ defineComponent$1({
-  name: "RouterView",
-  // #674 we manually inherit them
-  inheritAttrs: false,
-  props: {
-    name: {
-      type: String,
-      default: "default"
-    },
-    route: Object
-  },
-  // Better compat for @vue/compat users
-  // https://github.com/vuejs/router/issues/1315
-  compatConfig: { MODE: 3 },
-  setup(props, { attrs, slots }) {
-    warnDeprecatedUsage();
-    const injectedRoute = inject$1(routerViewLocationKey);
-    const routeToDisplay = computed$2(() => props.route || injectedRoute.value);
-    const injectedDepth = inject$1(viewDepthKey, 0);
-    const depth = computed$2(() => {
-      let initialDepth = unref$1(injectedDepth);
-      const { matched } = routeToDisplay.value;
-      let matchedRoute;
-      while ((matchedRoute = matched[initialDepth]) && !matchedRoute.components) {
-        initialDepth++;
-      }
-      return initialDepth;
-    });
-    const matchedRouteRef = computed$2(() => routeToDisplay.value.matched[depth.value]);
-    provide$1(viewDepthKey, computed$2(() => depth.value + 1));
-    provide$1(matchedRouteKey, matchedRouteRef);
-    provide$1(routerViewLocationKey, routeToDisplay);
-    const viewRef = ref$1();
-    watch$1(() => [viewRef.value, matchedRouteRef.value, props.name], ([instance, to2, name], [oldInstance, from, oldName]) => {
-      if (to2) {
-        to2.instances[name] = instance;
-        if (from && from !== to2 && instance && instance === oldInstance) {
-          if (!to2.leaveGuards.size) {
-            to2.leaveGuards = from.leaveGuards;
-          }
-          if (!to2.updateGuards.size) {
-            to2.updateGuards = from.updateGuards;
-          }
-        }
-      }
-      if (instance && to2 && // if there is no instance but to and from are the same this might be
-      // the first visit
-      (!from || !isSameRouteRecord(to2, from) || !oldInstance)) {
-        (to2.enterCallbacks[name] || []).forEach((callback) => callback(instance));
-      }
-    }, { flush: "post" });
-    return () => {
-      const route = routeToDisplay.value;
-      const currentName = props.name;
-      const matchedRoute = matchedRouteRef.value;
-      const ViewComponent = matchedRoute && matchedRoute.components[currentName];
-      if (!ViewComponent) {
-        return normalizeSlot(slots.default, { Component: ViewComponent, route });
-      }
-      const routePropsOption = matchedRoute.props[currentName];
-      const routeProps = routePropsOption ? routePropsOption === true ? route.params : typeof routePropsOption === "function" ? routePropsOption(route) : routePropsOption : null;
-      const onVnodeUnmounted = (vnode) => {
-        if (vnode.component.isUnmounted) {
-          matchedRoute.instances[currentName] = null;
-        }
-      };
-      const component = h$3(ViewComponent, assign({}, routeProps, attrs, {
-        onVnodeUnmounted,
-        ref: viewRef
-      }));
-      if (isBrowser && component.ref) {
-        const info = {
-          depth: depth.value,
-          name: matchedRoute.name,
-          path: matchedRoute.path,
-          meta: matchedRoute.meta
-        };
-        const internalInstances = isArray(component.ref) ? component.ref.map((r2) => r2.i) : [component.ref.i];
-        internalInstances.forEach((instance) => {
-          instance.__vrv_devtools = info;
-        });
-      }
-      return (
-        // pass the vnode to the slot as a prop.
-        // h and <component :is="..."> both accept vnodes
-        normalizeSlot(slots.default, { Component: component, route }) || component
-      );
-    };
-  }
-});
-function normalizeSlot(slot, data) {
-  if (!slot)
-    return null;
-  const slotContent = slot(data);
-  return slotContent.length === 1 ? slotContent[0] : slotContent;
-}
-const RouterView = RouterViewImpl;
-function warnDeprecatedUsage() {
-  const instance = getCurrentInstance$1();
-  const parentName = instance.parent && instance.parent.type.name;
-  const parentSubTreeType = instance.parent && instance.parent.subTree && instance.parent.subTree.type;
-  if (parentName && (parentName === "KeepAlive" || parentName.includes("Transition")) && typeof parentSubTreeType === "object" && parentSubTreeType.name === "RouterView") {
-    const comp = parentName === "KeepAlive" ? "keep-alive" : "transition";
-    warn(`<router-view> can no longer be used directly inside <transition> or <keep-alive>.
-Use slot props instead:
-
-<router-view v-slot="{ Component }">
-  <${comp}>
-    <component :is="Component" />
-  </${comp}>
-</router-view>`);
-  }
-}
-function formatRouteLocation(routeLocation, tooltip) {
-  const copy = assign({}, routeLocation, {
-    // remove variables that can contain vue instances
-    matched: routeLocation.matched.map((matched) => omit$1(matched, ["instances", "children", "aliasOf"]))
-  });
-  return {
-    _custom: {
-      type: null,
-      readOnly: true,
-      display: routeLocation.fullPath,
-      tooltip,
-      value: copy
-    }
-  };
-}
-function formatDisplay(display) {
-  return {
-    _custom: {
-      display
-    }
-  };
-}
-let routerId = 0;
-function addDevtools(app, router, matcher) {
-  if (router.__hasDevtools)
-    return;
-  router.__hasDevtools = true;
-  const id2 = routerId++;
-  setupDevtoolsPlugin({
-    id: "org.vuejs.router" + (id2 ? "." + id2 : ""),
-    label: "Vue Router",
-    packageName: "vue-router",
-    homepage: "https://router.vuejs.org",
-    logo: "https://router.vuejs.org/logo.png",
-    componentStateTypes: ["Routing"],
-    app
-  }, (api) => {
-    if (typeof api.now !== "function") {
-      console.warn("[Vue Router]: You seem to be using an outdated version of Vue Devtools. Are you still using the Beta release instead of the stable one? You can find the links at https://devtools.vuejs.org/guide/installation.html.");
-    }
-    api.on.inspectComponent((payload, ctx) => {
-      if (payload.instanceData) {
-        payload.instanceData.state.push({
-          type: "Routing",
-          key: "$route",
-          editable: false,
-          value: formatRouteLocation(router.currentRoute.value, "Current Route")
-        });
-      }
-    });
-    api.on.visitComponentTree(({ treeNode: node, componentInstance }) => {
-      if (componentInstance.__vrv_devtools) {
-        const info = componentInstance.__vrv_devtools;
-        node.tags.push({
-          label: (info.name ? `${info.name.toString()}: ` : "") + info.path,
-          textColor: 0,
-          tooltip: "This component is rendered by &lt;router-view&gt;",
-          backgroundColor: PINK_500
-        });
-      }
-      if (isArray(componentInstance.__vrl_devtools)) {
-        componentInstance.__devtoolsApi = api;
-        componentInstance.__vrl_devtools.forEach((devtoolsData) => {
-          let backgroundColor = ORANGE_400;
-          let tooltip = "";
-          if (devtoolsData.isExactActive) {
-            backgroundColor = LIME_500;
-            tooltip = "This is exactly active";
-          } else if (devtoolsData.isActive) {
-            backgroundColor = BLUE_600;
-            tooltip = "This link is active";
-          }
-          node.tags.push({
-            label: devtoolsData.route.path,
-            textColor: 0,
-            tooltip,
-            backgroundColor
-          });
-        });
-      }
-    });
-    watch$1(router.currentRoute, () => {
-      refreshRoutesView();
-      api.notifyComponentUpdate();
-      api.sendInspectorTree(routerInspectorId);
-      api.sendInspectorState(routerInspectorId);
-    });
-    const navigationsLayerId = "router:navigations:" + id2;
-    api.addTimelineLayer({
-      id: navigationsLayerId,
-      label: `Router${id2 ? " " + id2 : ""} Navigations`,
-      color: 4237508
-    });
-    router.onError((error, to2) => {
-      api.addTimelineEvent({
-        layerId: navigationsLayerId,
-        event: {
-          title: "Error during Navigation",
-          subtitle: to2.fullPath,
-          logType: "error",
-          time: api.now(),
-          data: { error },
-          groupId: to2.meta.__navigationId
-        }
-      });
-    });
-    let navigationId = 0;
-    router.beforeEach((to2, from) => {
-      const data = {
-        guard: formatDisplay("beforeEach"),
-        from: formatRouteLocation(from, "Current Location during this navigation"),
-        to: formatRouteLocation(to2, "Target location")
-      };
-      Object.defineProperty(to2.meta, "__navigationId", {
-        value: navigationId++
-      });
-      api.addTimelineEvent({
-        layerId: navigationsLayerId,
-        event: {
-          time: api.now(),
-          title: "Start of navigation",
-          subtitle: to2.fullPath,
-          data,
-          groupId: to2.meta.__navigationId
-        }
-      });
-    });
-    router.afterEach((to2, from, failure) => {
-      const data = {
-        guard: formatDisplay("afterEach")
-      };
-      if (failure) {
-        data.failure = {
-          _custom: {
-            type: Error,
-            readOnly: true,
-            display: failure ? failure.message : "",
-            tooltip: "Navigation Failure",
-            value: failure
-          }
-        };
-        data.status = formatDisplay("❌");
-      } else {
-        data.status = formatDisplay("✅");
-      }
-      data.from = formatRouteLocation(from, "Current Location during this navigation");
-      data.to = formatRouteLocation(to2, "Target location");
-      api.addTimelineEvent({
-        layerId: navigationsLayerId,
-        event: {
-          title: "End of navigation",
-          subtitle: to2.fullPath,
-          time: api.now(),
-          data,
-          logType: failure ? "warning" : "default",
-          groupId: to2.meta.__navigationId
-        }
-      });
-    });
-    const routerInspectorId = "router-inspector:" + id2;
-    api.addInspector({
-      id: routerInspectorId,
-      label: "Routes" + (id2 ? " " + id2 : ""),
-      icon: "book",
-      treeFilterPlaceholder: "Search routes"
-    });
-    function refreshRoutesView() {
-      if (!activeRoutesPayload)
-        return;
-      const payload = activeRoutesPayload;
-      let routes = matcher.getRoutes().filter((route) => !route.parent);
-      routes.forEach(resetMatchStateOnRouteRecord);
-      if (payload.filter) {
-        routes = routes.filter((route) => (
-          // save matches state based on the payload
-          isRouteMatching(route, payload.filter.toLowerCase())
-        ));
-      }
-      routes.forEach((route) => markRouteRecordActive(route, router.currentRoute.value));
-      payload.rootNodes = routes.map(formatRouteRecordForInspector);
-    }
-    let activeRoutesPayload;
-    api.on.getInspectorTree((payload) => {
-      activeRoutesPayload = payload;
-      if (payload.app === app && payload.inspectorId === routerInspectorId) {
-        refreshRoutesView();
-      }
-    });
-    api.on.getInspectorState((payload) => {
-      if (payload.app === app && payload.inspectorId === routerInspectorId) {
-        const routes = matcher.getRoutes();
-        const route = routes.find((route2) => route2.record.__vd_id === payload.nodeId);
-        if (route) {
-          payload.state = {
-            options: formatRouteRecordMatcherForStateInspector(route)
-          };
-        }
-      }
-    });
-    api.sendInspectorTree(routerInspectorId);
-    api.sendInspectorState(routerInspectorId);
-  });
-}
-function modifierForKey(key) {
-  if (key.optional) {
-    return key.repeatable ? "*" : "?";
-  } else {
-    return key.repeatable ? "+" : "";
-  }
-}
-function formatRouteRecordMatcherForStateInspector(route) {
-  const { record } = route;
-  const fields = [
-    { editable: false, key: "path", value: record.path }
-  ];
-  if (record.name != null) {
-    fields.push({
-      editable: false,
-      key: "name",
-      value: record.name
-    });
-  }
-  fields.push({ editable: false, key: "regexp", value: route.re });
-  if (route.keys.length) {
-    fields.push({
-      editable: false,
-      key: "keys",
-      value: {
-        _custom: {
-          type: null,
-          readOnly: true,
-          display: route.keys.map((key) => `${key.name}${modifierForKey(key)}`).join(" "),
-          tooltip: "Param keys",
-          value: route.keys
-        }
-      }
-    });
-  }
-  if (record.redirect != null) {
-    fields.push({
-      editable: false,
-      key: "redirect",
-      value: record.redirect
-    });
-  }
-  if (route.alias.length) {
-    fields.push({
-      editable: false,
-      key: "aliases",
-      value: route.alias.map((alias) => alias.record.path)
-    });
-  }
-  if (Object.keys(route.record.meta).length) {
-    fields.push({
-      editable: false,
-      key: "meta",
-      value: route.record.meta
-    });
-  }
-  fields.push({
-    key: "score",
-    editable: false,
-    value: {
-      _custom: {
-        type: null,
-        readOnly: true,
-        display: route.score.map((score) => score.join(", ")).join(" | "),
-        tooltip: "Score used to sort routes",
-        value: route.score
-      }
-    }
-  });
-  return fields;
-}
-const PINK_500 = 15485081;
-const BLUE_600 = 2450411;
-const LIME_500 = 8702998;
-const CYAN_400 = 2282478;
-const ORANGE_400 = 16486972;
-const DARK = 6710886;
-function formatRouteRecordForInspector(route) {
-  const tags = [];
-  const { record } = route;
-  if (record.name != null) {
-    tags.push({
-      label: String(record.name),
-      textColor: 0,
-      backgroundColor: CYAN_400
-    });
-  }
-  if (record.aliasOf) {
-    tags.push({
-      label: "alias",
-      textColor: 0,
-      backgroundColor: ORANGE_400
-    });
-  }
-  if (route.__vd_match) {
-    tags.push({
-      label: "matches",
-      textColor: 0,
-      backgroundColor: PINK_500
-    });
-  }
-  if (route.__vd_exactActive) {
-    tags.push({
-      label: "exact",
-      textColor: 0,
-      backgroundColor: LIME_500
-    });
-  }
-  if (route.__vd_active) {
-    tags.push({
-      label: "active",
-      textColor: 0,
-      backgroundColor: BLUE_600
-    });
-  }
-  if (record.redirect) {
-    tags.push({
-      label: typeof record.redirect === "string" ? `redirect: ${record.redirect}` : "redirects",
-      textColor: 16777215,
-      backgroundColor: DARK
-    });
-  }
-  let id2 = record.__vd_id;
-  if (id2 == null) {
-    id2 = String(routeRecordId++);
-    record.__vd_id = id2;
-  }
-  return {
-    id: id2,
-    label: record.path,
-    tags,
-    children: route.children.map(formatRouteRecordForInspector)
-  };
-}
-let routeRecordId = 0;
-const EXTRACT_REGEXP_RE = /^\/(.*)\/([a-z]*)$/;
-function markRouteRecordActive(route, currentRoute) {
-  const isExactActive = currentRoute.matched.length && isSameRouteRecord(currentRoute.matched[currentRoute.matched.length - 1], route.record);
-  route.__vd_exactActive = route.__vd_active = isExactActive;
-  if (!isExactActive) {
-    route.__vd_active = currentRoute.matched.some((match) => isSameRouteRecord(match, route.record));
-  }
-  route.children.forEach((childRoute) => markRouteRecordActive(childRoute, currentRoute));
-}
-function resetMatchStateOnRouteRecord(route) {
-  route.__vd_match = false;
-  route.children.forEach(resetMatchStateOnRouteRecord);
-}
-function isRouteMatching(route, filter) {
-  const found = String(route.re).match(EXTRACT_REGEXP_RE);
-  route.__vd_match = false;
-  if (!found || found.length < 3) {
-    return false;
-  }
-  const nonEndingRE = new RegExp(found[1].replace(/\$$/, ""), found[2]);
-  if (nonEndingRE.test(filter)) {
-    route.children.forEach((child) => isRouteMatching(child, filter));
-    if (route.record.path !== "/" || filter === "/") {
-      route.__vd_match = route.re.test(filter);
-      return true;
-    }
-    return false;
-  }
-  const path = route.record.path.toLowerCase();
-  const decodedPath = decode(path);
-  if (!filter.startsWith("/") && (decodedPath.includes(filter) || path.includes(filter)))
-    return true;
-  if (decodedPath.startsWith(filter) || path.startsWith(filter))
-    return true;
-  if (route.record.name && String(route.record.name).includes(filter))
-    return true;
-  return route.children.some((child) => isRouteMatching(child, filter));
-}
-function omit$1(obj, keys) {
-  const ret = {};
-  for (const key in obj) {
-    if (!keys.includes(key)) {
-      ret[key] = obj[key];
-    }
-  }
-  return ret;
-}
-function createRouter(options) {
-  const matcher = createRouterMatcher(options.routes, options);
-  const parseQuery$1 = options.parseQuery || parseQuery;
-  const stringifyQuery$1 = options.stringifyQuery || stringifyQuery;
-  const routerHistory = options.history;
-  if (!routerHistory)
-    throw new Error('Provide the "history" option when calling "createRouter()": https://next.router.vuejs.org/api/#history.');
-  const beforeGuards = useCallbacks();
-  const beforeResolveGuards = useCallbacks();
-  const afterGuards = useCallbacks();
-  const currentRoute = shallowRef(START_LOCATION_NORMALIZED);
-  let pendingLocation = START_LOCATION_NORMALIZED;
-  if (isBrowser && options.scrollBehavior && "scrollRestoration" in history) {
-    history.scrollRestoration = "manual";
-  }
-  const normalizeParams = applyToParams.bind(null, (paramValue) => "" + paramValue);
-  const encodeParams = applyToParams.bind(null, encodeParam);
-  const decodeParams = (
-    // @ts-expect-error: intentionally avoid the type check
-    applyToParams.bind(null, decode)
-  );
-  function addRoute(parentOrRoute, route) {
-    let parent;
-    let record;
-    if (isRouteName(parentOrRoute)) {
-      parent = matcher.getRecordMatcher(parentOrRoute);
-      record = route;
-    } else {
-      record = parentOrRoute;
-    }
-    return matcher.addRoute(record, parent);
-  }
-  function removeRoute(name) {
-    const recordMatcher = matcher.getRecordMatcher(name);
-    if (recordMatcher) {
-      matcher.removeRoute(recordMatcher);
-    } else {
-      warn(`Cannot remove non-existent route "${String(name)}"`);
-    }
-  }
-  function getRoutes() {
-    return matcher.getRoutes().map((routeMatcher) => routeMatcher.record);
-  }
-  function hasRoute(name) {
-    return !!matcher.getRecordMatcher(name);
-  }
-  function resolve2(rawLocation, currentLocation) {
-    currentLocation = assign({}, currentLocation || currentRoute.value);
-    if (typeof rawLocation === "string") {
-      const locationNormalized = parseURL(parseQuery$1, rawLocation, currentLocation.path);
-      const matchedRoute2 = matcher.resolve({ path: locationNormalized.path }, currentLocation);
-      const href2 = routerHistory.createHref(locationNormalized.fullPath);
-      {
-        if (href2.startsWith("//"))
-          warn(`Location "${rawLocation}" resolved to "${href2}". A resolved location cannot start with multiple slashes.`);
-        else if (!matchedRoute2.matched.length) {
-          warn(`No match found for location with path "${rawLocation}"`);
-        }
-      }
-      return assign(locationNormalized, matchedRoute2, {
-        params: decodeParams(matchedRoute2.params),
-        hash: decode(locationNormalized.hash),
-        redirectedFrom: void 0,
-        href: href2
-      });
-    }
-    let matcherLocation;
-    if ("path" in rawLocation) {
-      if ("params" in rawLocation && !("name" in rawLocation) && // @ts-expect-error: the type is never
-      Object.keys(rawLocation.params).length) {
-        warn(`Path "${rawLocation.path}" was passed with params but they will be ignored. Use a named route alongside params instead.`);
-      }
-      matcherLocation = assign({}, rawLocation, {
-        path: parseURL(parseQuery$1, rawLocation.path, currentLocation.path).path
-      });
-    } else {
-      const targetParams = assign({}, rawLocation.params);
-      for (const key in targetParams) {
-        if (targetParams[key] == null) {
-          delete targetParams[key];
-        }
-      }
-      matcherLocation = assign({}, rawLocation, {
-        params: encodeParams(targetParams)
-      });
-      currentLocation.params = encodeParams(currentLocation.params);
-    }
-    const matchedRoute = matcher.resolve(matcherLocation, currentLocation);
-    const hash2 = rawLocation.hash || "";
-    if (hash2 && !hash2.startsWith("#")) {
-      warn(`A \`hash\` should always start with the character "#". Replace "${hash2}" with "#${hash2}".`);
-    }
-    matchedRoute.params = normalizeParams(decodeParams(matchedRoute.params));
-    const fullPath = stringifyURL(stringifyQuery$1, assign({}, rawLocation, {
-      hash: encodeHash(hash2),
-      path: matchedRoute.path
-    }));
-    const href = routerHistory.createHref(fullPath);
-    {
-      if (href.startsWith("//")) {
-        warn(`Location "${rawLocation}" resolved to "${href}". A resolved location cannot start with multiple slashes.`);
-      } else if (!matchedRoute.matched.length) {
-        warn(`No match found for location with path "${"path" in rawLocation ? rawLocation.path : rawLocation}"`);
-      }
-    }
-    return assign({
-      fullPath,
-      // keep the hash encoded so fullPath is effectively path + encodedQuery +
-      // hash
-      hash: hash2,
-      query: (
-        // if the user is using a custom query lib like qs, we might have
-        // nested objects, so we keep the query as is, meaning it can contain
-        // numbers at `$route.query`, but at the point, the user will have to
-        // use their own type anyway.
-        // https://github.com/vuejs/router/issues/328#issuecomment-649481567
-        stringifyQuery$1 === stringifyQuery ? normalizeQuery(rawLocation.query) : rawLocation.query || {}
-      )
-    }, matchedRoute, {
-      redirectedFrom: void 0,
-      href
-    });
-  }
-  function locationAsObject(to2) {
-    return typeof to2 === "string" ? parseURL(parseQuery$1, to2, currentRoute.value.path) : assign({}, to2);
-  }
-  function checkCanceledNavigation(to2, from) {
-    if (pendingLocation !== to2) {
-      return createRouterError(8, {
-        from,
-        to: to2
-      });
-    }
-  }
-  function push(to2) {
-    return pushWithRedirect(to2);
-  }
-  function replace(to2) {
-    return push(assign(locationAsObject(to2), { replace: true }));
-  }
-  function handleRedirectRecord(to2) {
-    const lastMatched = to2.matched[to2.matched.length - 1];
-    if (lastMatched && lastMatched.redirect) {
-      const { redirect } = lastMatched;
-      let newTargetLocation = typeof redirect === "function" ? redirect(to2) : redirect;
-      if (typeof newTargetLocation === "string") {
-        newTargetLocation = newTargetLocation.includes("?") || newTargetLocation.includes("#") ? newTargetLocation = locationAsObject(newTargetLocation) : (
-          // force empty params
-          { path: newTargetLocation }
-        );
-        newTargetLocation.params = {};
-      }
-      if (!("path" in newTargetLocation) && !("name" in newTargetLocation)) {
-        warn(`Invalid redirect found:
-${JSON.stringify(newTargetLocation, null, 2)}
- when navigating to "${to2.fullPath}". A redirect must contain a name or path. This will break in production.`);
-        throw new Error("Invalid redirect");
-      }
-      return assign({
-        query: to2.query,
-        hash: to2.hash,
-        // avoid transferring params if the redirect has a path
-        params: "path" in newTargetLocation ? {} : to2.params
-      }, newTargetLocation);
-    }
-  }
-  function pushWithRedirect(to2, redirectedFrom) {
-    const targetLocation = pendingLocation = resolve2(to2);
-    const from = currentRoute.value;
-    const data = to2.state;
-    const force = to2.force;
-    const replace2 = to2.replace === true;
-    const shouldRedirect = handleRedirectRecord(targetLocation);
-    if (shouldRedirect)
-      return pushWithRedirect(
-        assign(locationAsObject(shouldRedirect), {
-          state: typeof shouldRedirect === "object" ? assign({}, data, shouldRedirect.state) : data,
-          force,
-          replace: replace2
-        }),
-        // keep original redirectedFrom if it exists
-        redirectedFrom || targetLocation
-      );
-    const toLocation = targetLocation;
-    toLocation.redirectedFrom = redirectedFrom;
-    let failure;
-    if (!force && isSameRouteLocation(stringifyQuery$1, from, targetLocation)) {
-      failure = createRouterError(16, { to: toLocation, from });
-      handleScroll(
-        from,
-        from,
-        // this is a push, the only way for it to be triggered from a
-        // history.listen is with a redirect, which makes it become a push
-        true,
-        // This cannot be the first navigation because the initial location
-        // cannot be manually navigated to
-        false
-      );
-    }
-    return (failure ? Promise.resolve(failure) : navigate(toLocation, from)).catch((error) => isNavigationFailure(error) ? (
-      // navigation redirects still mark the router as ready
-      isNavigationFailure(
-        error,
-        2
-        /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */
-      ) ? error : markAsReady(error)
-    ) : (
-      // reject any unknown error
-      triggerError(error, toLocation, from)
-    )).then((failure2) => {
-      if (failure2) {
-        if (isNavigationFailure(
-          failure2,
-          2
-          /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */
-        )) {
-          if (
-            // we are redirecting to the same location we were already at
-            isSameRouteLocation(stringifyQuery$1, resolve2(failure2.to), toLocation) && // and we have done it a couple of times
-            redirectedFrom && // @ts-expect-error: added only in dev
-            (redirectedFrom._count = redirectedFrom._count ? (
-              // @ts-expect-error
-              redirectedFrom._count + 1
-            ) : 1) > 30
-          ) {
-            warn(`Detected a possibly infinite redirection in a navigation guard when going from "${from.fullPath}" to "${toLocation.fullPath}". Aborting to avoid a Stack Overflow.
- Are you always returning a new location within a navigation guard? That would lead to this error. Only return when redirecting or aborting, that should fix this. This might break in production if not fixed.`);
-            return Promise.reject(new Error("Infinite redirect in navigation guard"));
-          }
-          return pushWithRedirect(
-            // keep options
-            assign({
-              // preserve an existing replacement but allow the redirect to override it
-              replace: replace2
-            }, locationAsObject(failure2.to), {
-              state: typeof failure2.to === "object" ? assign({}, data, failure2.to.state) : data,
-              force
-            }),
-            // preserve the original redirectedFrom if any
-            redirectedFrom || toLocation
-          );
-        }
-      } else {
-        failure2 = finalizeNavigation(toLocation, from, true, replace2, data);
-      }
-      triggerAfterEach(toLocation, from, failure2);
-      return failure2;
-    });
-  }
-  function checkCanceledNavigationAndReject(to2, from) {
-    const error = checkCanceledNavigation(to2, from);
-    return error ? Promise.reject(error) : Promise.resolve();
-  }
-  function runWithContext(fn2) {
-    const app = installedApps.values().next().value;
-    return app && typeof app.runWithContext === "function" ? app.runWithContext(fn2) : fn2();
-  }
-  function navigate(to2, from) {
-    let guards;
-    const [leavingRecords, updatingRecords, enteringRecords] = extractChangingRecords(to2, from);
-    guards = extractComponentsGuards(leavingRecords.reverse(), "beforeRouteLeave", to2, from);
-    for (const record of leavingRecords) {
-      record.leaveGuards.forEach((guard) => {
-        guards.push(guardToPromiseFn(guard, to2, from));
-      });
-    }
-    const canceledNavigationCheck = checkCanceledNavigationAndReject.bind(null, to2, from);
-    guards.push(canceledNavigationCheck);
-    return runGuardQueue(guards).then(() => {
-      guards = [];
-      for (const guard of beforeGuards.list()) {
-        guards.push(guardToPromiseFn(guard, to2, from));
-      }
-      guards.push(canceledNavigationCheck);
-      return runGuardQueue(guards);
-    }).then(() => {
-      guards = extractComponentsGuards(updatingRecords, "beforeRouteUpdate", to2, from);
-      for (const record of updatingRecords) {
-        record.updateGuards.forEach((guard) => {
-          guards.push(guardToPromiseFn(guard, to2, from));
-        });
-      }
-      guards.push(canceledNavigationCheck);
-      return runGuardQueue(guards);
-    }).then(() => {
-      guards = [];
-      for (const record of enteringRecords) {
-        if (record.beforeEnter) {
-          if (isArray(record.beforeEnter)) {
-            for (const beforeEnter of record.beforeEnter)
-              guards.push(guardToPromiseFn(beforeEnter, to2, from));
-          } else {
-            guards.push(guardToPromiseFn(record.beforeEnter, to2, from));
-          }
-        }
-      }
-      guards.push(canceledNavigationCheck);
-      return runGuardQueue(guards);
-    }).then(() => {
-      to2.matched.forEach((record) => record.enterCallbacks = {});
-      guards = extractComponentsGuards(enteringRecords, "beforeRouteEnter", to2, from);
-      guards.push(canceledNavigationCheck);
-      return runGuardQueue(guards);
-    }).then(() => {
-      guards = [];
-      for (const guard of beforeResolveGuards.list()) {
-        guards.push(guardToPromiseFn(guard, to2, from));
-      }
-      guards.push(canceledNavigationCheck);
-      return runGuardQueue(guards);
-    }).catch((err) => isNavigationFailure(
-      err,
-      8
-      /* ErrorTypes.NAVIGATION_CANCELLED */
-    ) ? err : Promise.reject(err));
-  }
-  function triggerAfterEach(to2, from, failure) {
-    afterGuards.list().forEach((guard) => runWithContext(() => guard(to2, from, failure)));
-  }
-  function finalizeNavigation(toLocation, from, isPush, replace2, data) {
-    const error = checkCanceledNavigation(toLocation, from);
-    if (error)
-      return error;
-    const isFirstNavigation = from === START_LOCATION_NORMALIZED;
-    const state = !isBrowser ? {} : history.state;
-    if (isPush) {
-      if (replace2 || isFirstNavigation)
-        routerHistory.replace(toLocation.fullPath, assign({
-          scroll: isFirstNavigation && state && state.scroll
-        }, data));
-      else
-        routerHistory.push(toLocation.fullPath, data);
-    }
-    currentRoute.value = toLocation;
-    handleScroll(toLocation, from, isPush, isFirstNavigation);
-    markAsReady();
-  }
-  let removeHistoryListener;
-  function setupListeners() {
-    if (removeHistoryListener)
-      return;
-    removeHistoryListener = routerHistory.listen((to2, _from, info) => {
-      if (!router.listening)
-        return;
-      const toLocation = resolve2(to2);
-      const shouldRedirect = handleRedirectRecord(toLocation);
-      if (shouldRedirect) {
-        pushWithRedirect(assign(shouldRedirect, { replace: true }), toLocation).catch(noop$1);
-        return;
-      }
-      pendingLocation = toLocation;
-      const from = currentRoute.value;
-      if (isBrowser) {
-        saveScrollPosition(getScrollKey(from.fullPath, info.delta), computeScrollPosition());
-      }
-      navigate(toLocation, from).catch((error) => {
-        if (isNavigationFailure(
-          error,
-          4 | 8
-          /* ErrorTypes.NAVIGATION_CANCELLED */
-        )) {
-          return error;
-        }
-        if (isNavigationFailure(
-          error,
-          2
-          /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */
-        )) {
-          pushWithRedirect(
-            error.to,
-            toLocation
-            // avoid an uncaught rejection, let push call triggerError
-          ).then((failure) => {
-            if (isNavigationFailure(
-              failure,
-              4 | 16
-              /* ErrorTypes.NAVIGATION_DUPLICATED */
-            ) && !info.delta && info.type === NavigationType.pop) {
-              routerHistory.go(-1, false);
-            }
-          }).catch(noop$1);
-          return Promise.reject();
-        }
-        if (info.delta) {
-          routerHistory.go(-info.delta, false);
-        }
-        return triggerError(error, toLocation, from);
-      }).then((failure) => {
-        failure = failure || finalizeNavigation(
-          // after navigation, all matched components are resolved
-          toLocation,
-          from,
-          false
-        );
-        if (failure) {
-          if (info.delta && // a new navigation has been triggered, so we do not want to revert, that will change the current history
-          // entry while a different route is displayed
-          !isNavigationFailure(
-            failure,
-            8
-            /* ErrorTypes.NAVIGATION_CANCELLED */
-          )) {
-            routerHistory.go(-info.delta, false);
-          } else if (info.type === NavigationType.pop && isNavigationFailure(
-            failure,
-            4 | 16
-            /* ErrorTypes.NAVIGATION_DUPLICATED */
-          )) {
-            routerHistory.go(-1, false);
-          }
-        }
-        triggerAfterEach(toLocation, from, failure);
-      }).catch(noop$1);
-    });
-  }
-  let readyHandlers = useCallbacks();
-  let errorHandlers = useCallbacks();
-  let ready;
-  function triggerError(error, to2, from) {
-    markAsReady(error);
-    const list = errorHandlers.list();
-    if (list.length) {
-      list.forEach((handler) => handler(error, to2, from));
-    } else {
-      {
-        warn("uncaught error during route navigation:");
-      }
-      console.error(error);
-    }
-    return Promise.reject(error);
-  }
-  function isReady() {
-    if (ready && currentRoute.value !== START_LOCATION_NORMALIZED)
-      return Promise.resolve();
-    return new Promise((resolve3, reject) => {
-      readyHandlers.add([resolve3, reject]);
-    });
-  }
-  function markAsReady(err) {
-    if (!ready) {
-      ready = !err;
-      setupListeners();
-      readyHandlers.list().forEach(([resolve3, reject]) => err ? reject(err) : resolve3());
-      readyHandlers.reset();
-    }
-    return err;
-  }
-  function handleScroll(to2, from, isPush, isFirstNavigation) {
-    const { scrollBehavior } = options;
-    if (!isBrowser || !scrollBehavior)
-      return Promise.resolve();
-    const scrollPosition = !isPush && getSavedScrollPosition(getScrollKey(to2.fullPath, 0)) || (isFirstNavigation || !isPush) && history.state && history.state.scroll || null;
-    return nextTick$1().then(() => scrollBehavior(to2, from, scrollPosition)).then((position) => position && scrollToPosition(position)).catch((err) => triggerError(err, to2, from));
-  }
-  const go2 = (delta) => routerHistory.go(delta);
-  let started;
-  const installedApps = /* @__PURE__ */ new Set();
-  const router = {
-    currentRoute,
-    listening: true,
-    addRoute,
-    removeRoute,
-    hasRoute,
-    getRoutes,
-    resolve: resolve2,
-    options,
-    push,
-    replace,
-    go: go2,
-    back: () => go2(-1),
-    forward: () => go2(1),
-    beforeEach: beforeGuards.add,
-    beforeResolve: beforeResolveGuards.add,
-    afterEach: afterGuards.add,
-    onError: errorHandlers.add,
-    isReady,
-    install(app) {
-      const router2 = this;
-      app.component("RouterLink", RouterLink);
-      app.component("RouterView", RouterView);
-      app.config.globalProperties.$router = router2;
-      Object.defineProperty(app.config.globalProperties, "$route", {
-        enumerable: true,
-        get: () => unref$1(currentRoute)
-      });
-      if (isBrowser && // used for the initial navigation client side to avoid pushing
-      // multiple times when the router is used in multiple apps
-      !started && currentRoute.value === START_LOCATION_NORMALIZED) {
-        started = true;
-        push(routerHistory.location).catch((err) => {
-          warn("Unexpected error when starting the router:", err);
-        });
-      }
-      const reactiveRoute = {};
-      for (const key in START_LOCATION_NORMALIZED) {
-        Object.defineProperty(reactiveRoute, key, {
-          get: () => currentRoute.value[key],
-          enumerable: true
-        });
-      }
-      app.provide(routerKey, router2);
-      app.provide(routeLocationKey, shallowReactive$1(reactiveRoute));
-      app.provide(routerViewLocationKey, currentRoute);
-      const unmountApp = app.unmount;
-      installedApps.add(app);
-      app.unmount = function() {
-        installedApps.delete(app);
-        if (installedApps.size < 1) {
-          pendingLocation = START_LOCATION_NORMALIZED;
-          removeHistoryListener && removeHistoryListener();
-          removeHistoryListener = null;
-          currentRoute.value = START_LOCATION_NORMALIZED;
-          started = false;
-          ready = false;
-        }
-        unmountApp();
-      };
-      if (isBrowser) {
-        addDevtools(app, router2, matcher);
-      }
-    }
-  };
-  function runGuardQueue(guards) {
-    return guards.reduce((promise, guard) => promise.then(() => runWithContext(guard)), Promise.resolve());
-  }
-  return router;
-}
-function extractChangingRecords(to2, from) {
-  const leavingRecords = [];
-  const updatingRecords = [];
-  const enteringRecords = [];
-  const len = Math.max(from.matched.length, to2.matched.length);
-  for (let i2 = 0; i2 < len; i2++) {
-    const recordFrom = from.matched[i2];
-    if (recordFrom) {
-      if (to2.matched.find((record) => isSameRouteRecord(record, recordFrom)))
-        updatingRecords.push(recordFrom);
-      else
-        leavingRecords.push(recordFrom);
-    }
-    const recordTo = to2.matched[i2];
-    if (recordTo) {
-      if (!from.matched.find((record) => isSameRouteRecord(record, recordTo))) {
-        enteringRecords.push(recordTo);
-      }
-    }
-  }
-  return [leavingRecords, updatingRecords, enteringRecords];
-}
-function useRouter() {
-  return inject$1(routerKey);
-}
-function useRoute() {
-  return inject$1(routeLocationKey);
-}
-function t(t2) {
-  return "object" == typeof t2 && null != t2 && 1 === t2.nodeType;
-}
-function e(t2, e2) {
-  return (!e2 || "hidden" !== t2) && "visible" !== t2 && "clip" !== t2;
-}
-function n$1(t2, n2) {
-  if (t2.clientHeight < t2.scrollHeight || t2.clientWidth < t2.scrollWidth) {
-    var r2 = getComputedStyle(t2, null);
-    return e(r2.overflowY, n2) || e(r2.overflowX, n2) || function(t3) {
-      var e2 = function(t4) {
-        if (!t4.ownerDocument || !t4.ownerDocument.defaultView)
-          return null;
-        try {
-          return t4.ownerDocument.defaultView.frameElement;
-        } catch (t5) {
-          return null;
-        }
-      }(t3);
-      return !!e2 && (e2.clientHeight < t3.scrollHeight || e2.clientWidth < t3.scrollWidth);
-    }(t2);
-  }
-  return false;
-}
-function r$1(t2, e2, n2, r2, i2, o2, l, d2) {
-  return o2 < t2 && l > e2 || o2 > t2 && l < e2 ? 0 : o2 <= t2 && d2 <= n2 || l >= e2 && d2 >= n2 ? o2 - t2 - r2 : l > e2 && d2 < n2 || o2 < t2 && d2 > n2 ? l - e2 + i2 : 0;
-}
-var i$2 = function(e2, i2) {
-  var o2 = window, l = i2.scrollMode, d2 = i2.block, f2 = i2.inline, h2 = i2.boundary, u2 = i2.skipOverflowHiddenElements, s = "function" == typeof h2 ? h2 : function(t2) {
-    return t2 !== h2;
-  };
-  if (!t(e2))
-    throw new TypeError("Invalid target");
-  for (var a2, c2, g = document.scrollingElement || document.documentElement, p2 = [], m2 = e2; t(m2) && s(m2); ) {
-    if ((m2 = null == (c2 = (a2 = m2).parentElement) ? a2.getRootNode().host || null : c2) === g) {
-      p2.push(m2);
-      break;
-    }
-    null != m2 && m2 === document.body && n$1(m2) && !n$1(document.documentElement) || null != m2 && n$1(m2, u2) && p2.push(m2);
-  }
-  for (var w = o2.visualViewport ? o2.visualViewport.width : innerWidth, v2 = o2.visualViewport ? o2.visualViewport.height : innerHeight, W2 = window.scrollX || pageXOffset, H2 = window.scrollY || pageYOffset, b2 = e2.getBoundingClientRect(), y = b2.height, E2 = b2.width, M2 = b2.top, V2 = b2.right, x2 = b2.bottom, I2 = b2.left, C2 = "start" === d2 || "nearest" === d2 ? M2 : "end" === d2 ? x2 : M2 + y / 2, R2 = "center" === f2 ? I2 + E2 / 2 : "end" === f2 ? V2 : I2, T2 = [], k2 = 0; k2 < p2.length; k2++) {
-    var B = p2[k2], D2 = B.getBoundingClientRect(), O2 = D2.height, X = D2.width, Y2 = D2.top, L2 = D2.right, S2 = D2.bottom, j2 = D2.left;
-    if ("if-needed" === l && M2 >= 0 && I2 >= 0 && x2 <= v2 && V2 <= w && M2 >= Y2 && x2 <= S2 && I2 >= j2 && V2 <= L2)
-      return T2;
-    var N2 = getComputedStyle(B), q = parseInt(N2.borderLeftWidth, 10), z2 = parseInt(N2.borderTopWidth, 10), A3 = parseInt(N2.borderRightWidth, 10), F2 = parseInt(N2.borderBottomWidth, 10), G2 = 0, J2 = 0, K2 = "offsetWidth" in B ? B.offsetWidth - B.clientWidth - q - A3 : 0, P3 = "offsetHeight" in B ? B.offsetHeight - B.clientHeight - z2 - F2 : 0, Q3 = "offsetWidth" in B ? 0 === B.offsetWidth ? 0 : X / B.offsetWidth : 0, U2 = "offsetHeight" in B ? 0 === B.offsetHeight ? 0 : O2 / B.offsetHeight : 0;
-    if (g === B)
-      G2 = "start" === d2 ? C2 : "end" === d2 ? C2 - v2 : "nearest" === d2 ? r$1(H2, H2 + v2, v2, z2, F2, H2 + C2, H2 + C2 + y, y) : C2 - v2 / 2, J2 = "start" === f2 ? R2 : "center" === f2 ? R2 - w / 2 : "end" === f2 ? R2 - w : r$1(W2, W2 + w, w, q, A3, W2 + R2, W2 + R2 + E2, E2), G2 = Math.max(0, G2 + H2), J2 = Math.max(0, J2 + W2);
-    else {
-      G2 = "start" === d2 ? C2 - Y2 - z2 : "end" === d2 ? C2 - S2 + F2 + P3 : "nearest" === d2 ? r$1(Y2, S2, O2, z2, F2 + P3, C2, C2 + y, y) : C2 - (Y2 + O2 / 2) + P3 / 2, J2 = "start" === f2 ? R2 - j2 - q : "center" === f2 ? R2 - (j2 + X / 2) + K2 / 2 : "end" === f2 ? R2 - L2 + A3 + K2 : r$1(j2, L2, X, q, A3 + K2, R2, R2 + E2, E2);
-      var Z2 = B.scrollLeft, $2 = B.scrollTop;
-      C2 += $2 - (G2 = Math.max(0, Math.min($2 + G2 / U2, B.scrollHeight - O2 / U2 + P3))), R2 += Z2 - (J2 = Math.max(0, Math.min(Z2 + J2 / Q3, B.scrollWidth - X / Q3 + K2)));
-    }
-    T2.push({ el: B, top: G2, left: J2 });
-  }
-  return T2;
-};
-function isOptionsObject(options) {
-  return options === Object(options) && Object.keys(options).length !== 0;
-}
-function defaultBehavior(actions, behavior) {
-  if (behavior === void 0) {
-    behavior = "auto";
-  }
-  var canSmoothScroll = "scrollBehavior" in document.body.style;
-  actions.forEach(function(_ref) {
-    var el2 = _ref.el, top = _ref.top, left = _ref.left;
-    if (el2.scroll && canSmoothScroll) {
-      el2.scroll({
-        top,
-        left,
-        behavior
-      });
-    } else {
-      el2.scrollTop = top;
-      el2.scrollLeft = left;
-    }
-  });
-}
-function getOptions(options) {
-  if (options === false) {
-    return {
-      block: "end",
-      inline: "nearest"
-    };
-  }
-  if (isOptionsObject(options)) {
-    return options;
-  }
-  return {
-    block: "start",
-    inline: "nearest"
-  };
-}
-function scrollIntoView(target, options) {
-  var isTargetAttached = target.isConnected || target.ownerDocument.documentElement.contains(target);
-  if (isOptionsObject(options) && typeof options.behavior === "function") {
-    return options.behavior(isTargetAttached ? i$2(target, options) : []);
-  }
-  if (!isTargetAttached) {
-    return;
-  }
-  var computeOptions = getOptions(options);
-  return defaultBehavior(i$2(target, computeOptions), computeOptions.behavior);
-}
 var _a$1;
 const isClient = typeof window !== "undefined";
 const isFunction = (val) => typeof val === "function";
 const isString = (val) => typeof val === "string";
-const noop = () => {
+const noop$1 = () => {
 };
 const isIOS = isClient && ((_a$1 = window == null ? void 0 : window.navigator) == null ? void 0 : _a$1.userAgent) && /iP(ad|hone|od)/.test(window.navigator.userAgent);
 function resolveUnref(r2) {
@@ -25120,11 +22590,11 @@ const bypassFilter = (invoke) => {
 function debounceFilter(ms2, options = {}) {
   let timer;
   let maxTimer;
-  let lastRejector = noop;
+  let lastRejector = noop$1;
   const _clearTimeout = (timer2) => {
     clearTimeout(timer2);
     lastRejector();
-    lastRejector = noop;
+    lastRejector = noop$1;
   };
   const filter = (invoke) => {
     const duration = resolveUnref(ms2);
@@ -25349,7 +22819,7 @@ function useEventListener(...args) {
     [target, events, listeners, options] = args;
   }
   if (!target)
-    return noop;
+    return noop$1;
   if (!Array.isArray(events))
     events = [events];
   if (!Array.isArray(listeners))
@@ -25385,7 +22855,7 @@ function onClickOutside(target, handler, options = {}) {
     return;
   if (isIOS && !_iOSWorkaround) {
     _iOSWorkaround = true;
-    Array.from(window2.document.body.children).forEach((el2) => el2.addEventListener("click", noop));
+    Array.from(window2.document.body.children).forEach((el2) => el2.addEventListener("click", noop$1));
   }
   let shouldListen = true;
   const shouldIgnore = (event) => {
@@ -26004,283 +23474,6 @@ const _TransitionPresets = {
 __spreadValues({
   linear: identity
 }, _TransitionPresets);
-const voidElements = [
-  "area",
-  "base",
-  "br",
-  "col",
-  "embed",
-  "hr",
-  "img",
-  "input",
-  "keygen",
-  "link",
-  "meta",
-  "param",
-  "source",
-  "track",
-  "wbr"
-];
-const KEY_ESCAPE_REG = /[\s-.:|#@$£*%]/;
-const MAX_SINGLE_LINE_ARRAY_LENGTH = 3;
-function serializeJs(value) {
-  const seen = /* @__PURE__ */ new Set();
-  if (value === void 0) {
-    return "undefined";
-  }
-  if (value === null) {
-    return "null";
-  }
-  if (typeof value === "string") {
-    return `'${value}'`;
-  }
-  if (typeof value === "boolean") {
-    return value ? "true" : "false";
-  }
-  if (Array.isArray(value)) {
-    return printLines(arrayToSourceLines(value, seen));
-  }
-  if (typeof value === "object") {
-    return printLines(objectToSourceLines(value, seen));
-  }
-  if (value == null ? void 0 : value.__autoBuildingObject) {
-    return value;
-  }
-  if (typeof value === "function" && value.name) {
-    return value.name;
-  }
-  return value.toString();
-}
-function printLines(lines) {
-  return lines.map((line) => "  ".repeat(line.spaces) + line.line).join("\n");
-}
-function objectToSourceLines(object, seen, indentCount = 0) {
-  if (seen.has(object)) {
-    object = {};
-  } else {
-    seen.add(object);
-  }
-  return createLines(indentCount, (lines) => {
-    lines.push("{");
-    lines.push(...createLines(1, (lines2) => {
-      for (const key in object) {
-        const value = object[key];
-        let printedKey = key;
-        if (KEY_ESCAPE_REG.test(key)) {
-          printedKey = `'${printedKey}'`;
-        }
-        addLinesFromValue(lines2, value, `${printedKey}: `, ",", seen);
-      }
-    }));
-    lines.push("}");
-  });
-}
-function arrayToSourceLines(array, seen, indentCount = 0) {
-  if (seen.has(array)) {
-    array = [];
-  } else {
-    seen.add(array);
-  }
-  return createLines(indentCount, (lines) => {
-    const contentLines = createLines(1, (lines2) => {
-      for (const value of array) {
-        addLinesFromValue(lines2, value, "", ",", seen);
-      }
-    });
-    if (contentLines.length === 0) {
-      lines.push("[]");
-    } else if (contentLines.length <= MAX_SINGLE_LINE_ARRAY_LENGTH && !contentLines.some((line) => line.spaces > 1)) {
-      const [first] = contentLines;
-      first.line = contentLines.map(({ line }) => line.substring(0, line.length - 1)).join(", ");
-      first.line = `[${first.line}]`;
-      first.spaces--;
-      lines.push(first);
-    } else {
-      lines.push("[", ...contentLines, "]");
-    }
-  });
-}
-function createLines(indentCount, handler) {
-  const lines = [];
-  handler(lines);
-  return lines.map((line) => {
-    if (line.spaces != null) {
-      line.spaces += indentCount;
-      return line;
-    }
-    return { spaces: indentCount, line };
-  });
-}
-function addLinesFromValue(lines, value, before, after, seen) {
-  let result;
-  if (Array.isArray(value)) {
-    lines.push(...wrap(arrayToSourceLines(value, seen), before, after));
-    return;
-  } else if (value && typeof value === "object") {
-    lines.push(...wrap(objectToSourceLines(value, seen), before, after));
-    return;
-  } else if (typeof value === "string") {
-    result = value.includes("'") ? `\`${value}\`` : `'${value}'`;
-  } else if (typeof value === "undefined") {
-    result = "undefined";
-  } else if (value === null) {
-    result = "null";
-  } else if (typeof value === "boolean") {
-    result = value ? "true" : "false";
-  } else {
-    result = value;
-  }
-  lines.push(before + result + after);
-}
-function wrap(lines, before, after) {
-  lines[0].line = before + lines[0].line;
-  lines[lines.length - 1].line += after;
-  return lines;
-}
-function indent(lines, count2 = 1) {
-  return lines.map((line) => `${"  ".repeat(count2)}${line}`);
-}
-function unindent(code) {
-  const lines = code.split("\n");
-  let indentLevel = -1;
-  let indentText;
-  const linesToAnalyze = lines.filter((line) => line.trim().length > 0);
-  for (const line of linesToAnalyze) {
-    const match = /^\s*/.exec(line);
-    if (match && (indentLevel === -1 || indentLevel > match[0].length)) {
-      indentLevel = match[0].length;
-      indentText = match[0];
-    }
-  }
-  const result = [];
-  for (const line of lines) {
-    result.push(line.replace(indentText, ""));
-  }
-  return result.join("\n").trim();
-}
-function createAutoBuildingObject(format, specialKeysHandler, key = "", depth = 0) {
-  const cache2 = {};
-  if (depth > 32)
-    return { key, cache: cache2, target: {}, proxy: () => key };
-  const target = () => {
-    const k2 = key + "()";
-    return format ? format(k2) : k2;
-  };
-  const proxy = new Proxy(target, {
-    get(_3, p2) {
-      if (p2 === "__autoBuildingObject") {
-        return true;
-      }
-      if (p2 === "__autoBuildingObjectGetKey") {
-        return key;
-      }
-      if (specialKeysHandler) {
-        const fn2 = specialKeysHandler(target, p2);
-        if (fn2) {
-          return fn2();
-        }
-      }
-      if (p2 === "toString") {
-        const k2 = key + ".toString()";
-        return () => format ? format(k2) : k2;
-      }
-      if (p2 === Symbol.toPrimitive) {
-        return () => format ? format(key) : key;
-      }
-      if (!cache2[p2]) {
-        const childKey = key ? `${key}.${p2.toString()}` : p2.toString();
-        const child = createAutoBuildingObject(format, specialKeysHandler, childKey, depth + 1);
-        cache2[p2] = { key: childKey, ...child };
-      }
-      return cache2[p2].proxy;
-    },
-    apply(_3, thisArg, args) {
-      const k2 = `${key}(${args.join(", ")})`;
-      return format ? format(k2) : k2;
-    }
-  });
-  return {
-    key,
-    cache: cache2,
-    target,
-    proxy
-  };
-}
-function clone(data) {
-  try {
-    return structuredClone(data);
-  } catch (e2) {
-    console.warn(e2, `Fallback to JSON cloning`);
-    try {
-      return JSON.parse(JSON.stringify(data));
-    } catch (e3) {
-      console.error(e3);
-    }
-    return data;
-  }
-}
-function omit(data, keys) {
-  const copy = {};
-  for (const key in data) {
-    if (!keys.includes(key)) {
-      copy[key] = data[key];
-    }
-  }
-  return copy;
-}
-function applyState(target, state, override = false) {
-  for (const key in state) {
-    if (!override && target[key] && !key.startsWith("_h") && typeof target[key] === "object" && !Array.isArray(target[key])) {
-      Object.assign(target[key], state[key]);
-    } else {
-      target[key] = state[key];
-    }
-  }
-}
-const omitInheritStoryProps = [
-  "id",
-  "title",
-  "group",
-  "layout",
-  "variants",
-  "file",
-  "slots",
-  "lastSelectedVariant"
-];
-const clickEventType = function() {
-  return document.ontouchstart !== null ? "click" : "touchstart";
-};
-const UNIQUE_ID = "__vue_click_away__";
-const onMounted = function(el2, binding, vnode) {
-  onUnmounted(el2);
-  let vm = vnode.context;
-  let callback = binding.value;
-  let nextTick2 = false;
-  setTimeout(function() {
-    nextTick2 = true;
-  }, 0);
-  el2[UNIQUE_ID] = function(event) {
-    if ((!el2 || !el2.contains(event.target)) && callback && nextTick2 && typeof callback === "function") {
-      return callback.call(vm, event);
-    }
-  };
-  document.addEventListener(clickEventType(), el2[UNIQUE_ID], false);
-};
-const onUnmounted = function(el2) {
-  document.removeEventListener(clickEventType(), el2[UNIQUE_ID], false);
-  delete el2[UNIQUE_ID];
-};
-const onUpdated = function(el2, binding, vnode) {
-  if (binding.value === binding.oldValue) {
-    return;
-  }
-  onMounted(el2, binding, vnode);
-};
-const directive = {
-  mounted: onMounted,
-  updated: onUpdated,
-  unmounted: onUnmounted
-};
 const ga = {
   name: "HstButton"
 }, Uo = /* @__PURE__ */ defineComponent$1({
@@ -26297,7 +23490,7 @@ const ga = {
     return (e2, i2) => (openBlock$1(), createElementBlock$1("button", {
       class: normalizeClass$1(["histoire-button htw-cursor-pointer htw-rounded-sm", t2[e2.color ?? "default"]])
     }, [
-      renderSlot(e2.$slots, "default")
+      renderSlot$1(e2.$slots, "default")
     ], 2));
   }
 }), ma = { class: "htw-w-28 htw-whitespace-nowrap htw-text-ellipsis htw-overflow-hidden htw-shrink-0" }, wa = { class: "htw-grow htw-max-w-full htw-flex htw-items-center htw-gap-1" }, ya = { class: "htw-block htw-grow htw-max-w-full" }, ba = {
@@ -26322,9 +23515,9 @@ const ga = {
         ]),
         createBaseVNode$1("span", wa, [
           createBaseVNode$1("span", ya, [
-            renderSlot(t2.$slots, "default")
+            renderSlot$1(t2.$slots, "default")
           ]),
-          renderSlot(t2.$slots, "actions")
+          renderSlot$1(t2.$slots, "actions")
         ])
       ]),
       _: 3
@@ -26355,7 +23548,7 @@ const ga = {
       class: "histoire-button-group htw-flex-nowrap htw-items-center"
     }, {
       actions: withCtx$1(() => [
-        renderSlot(r2.$slots, "actions")
+        renderSlot$1(r2.$slots, "actions")
       ]),
       default: withCtx$1(() => [
         createBaseVNode$1("div", ka, [
@@ -26464,7 +23657,7 @@ const ga = {
       ]
     }, {
       actions: withCtx$1(() => [
-        renderSlot(r2.$slots, "actions")
+        renderSlot$1(r2.$slots, "actions")
       ]),
       default: withCtx$1(() => [
         createVNode$1(Qo, { "model-value": s.value }, null, 8, ["model-value"])
@@ -26494,7 +23687,7 @@ const ga = {
       style: normalizeStyle$1(r2.$attrs.style)
     }, {
       actions: withCtx$1(() => [
-        renderSlot(r2.$slots, "actions")
+        renderSlot$1(r2.$slots, "actions")
       ]),
       default: withCtx$1(() => [
         createBaseVNode$1("div", Da, [
@@ -26540,7 +23733,7 @@ const ga = {
       onClick: s[1] || (s[1] = (r2) => e2.value.focus())
     }, {
       actions: withCtx$1(() => [
-        renderSlot(i2.$slots, "actions")
+        renderSlot$1(i2.$slots, "actions")
       ]),
       default: withCtx$1(() => [
         createBaseVNode$1("input", mergeProps$1({
@@ -26603,7 +23796,7 @@ const ga = {
       onMousedown: a2
     }, {
       actions: withCtx$1(() => [
-        renderSlot(u2.$slots, "actions")
+        renderSlot$1(u2.$slots, "actions")
       ]),
       default: withCtx$1(() => [
         withDirectives$1(createBaseVNode$1("input", mergeProps$1({
@@ -26711,7 +23904,7 @@ const Fa = ["value"], za = {
       onClick: s[1] || (s[1] = (r2) => e2.value.focus())
     }, {
       actions: withCtx$1(() => [
-        renderSlot(i2.$slots, "actions")
+        renderSlot$1(i2.$slots, "actions")
       ]),
       default: withCtx$1(() => [
         createBaseVNode$1("textarea", mergeProps$1({
@@ -26761,7 +23954,7 @@ const Fa = ["value"], za = {
       default: withCtx$1(() => [
         createBaseVNode$1("div", ja, [
           createBaseVNode$1("div", Ka, [
-            renderSlot(o2.$slots, "default", { label: s.value }, () => [
+            renderSlot$1(o2.$slots, "default", { label: s.value }, () => [
               createTextVNode$1(toDisplayString$1(s.value), 1)
             ])
           ]),
@@ -26792,7 +23985,7 @@ const Ja = {
       style: normalizeStyle$1(e2.$attrs.style)
     }, {
       actions: withCtx$1(() => [
-        renderSlot(e2.$slots, "actions")
+        renderSlot$1(e2.$slots, "actions")
       ]),
       default: withCtx$1(() => [
         createVNode$1(Qa, {
@@ -26871,7 +24064,7 @@ const Ja = {
         onMouseenter: (a2) => r2.value = h2.key,
         onMouseleave: l[0] || (l[0] = (a2) => r2.value = null)
       }, [
-        renderSlot(o2.$slots, "default", {
+        renderSlot$1(o2.$slots, "default", {
           color: h2.color
         }, () => [
           createBaseVNode$1("div", {
@@ -26936,7 +24129,7 @@ const Ja = {
       onMouseenter: (l) => i2.value = o2.key,
       onMouseleave: r2[0] || (r2[0] = (l) => i2.value = null)
     }, [
-      renderSlot(s.$slots, "default", { token: o2 }),
+      renderSlot$1(s.$slots, "default", { token: o2 }),
       createBaseVNode$1("div", hc, [
         createBaseVNode$1("div", ac, [
           createBaseVNode$1("pre", cc, toDisplayString$1(o2.name), 1),
@@ -26990,7 +24183,7 @@ const Ja = {
         onMouseenter: (h2) => s.value = l.key,
         onMouseleave: o2[0] || (o2[0] = (h2) => s.value = null)
       }, [
-        renderSlot(r2.$slots, "default", { token: l }),
+        renderSlot$1(r2.$slots, "default", { token: l }),
         createBaseVNode$1("div", null, [
           createBaseVNode$1("div", mc, [
             withDirectives$1((openBlock$1(), createElementBlock$1("pre", wc, [
@@ -27044,7 +24237,7 @@ const vc = { class: "-htw-my-1" }, Sc = ["id", "name", "value", "checked", "onCh
       style: normalizeStyle$1(o2.$attrs.style)
     }, {
       actions: withCtx$1(() => [
-        renderSlot(o2.$slots, "actions")
+        renderSlot$1(o2.$slots, "actions")
       ]),
       default: withCtx$1(() => [
         createBaseVNode$1("div", vc, [
@@ -41118,7 +38311,7 @@ const Hg = {
         }, null, 512)), [
           [unref$1(VTooltip), "JSON error"]
         ]) : createCommentVNode$1("", true),
-        renderSlot(c2.$slots, "actions", {}, void 0, true)
+        renderSlot$1(c2.$slots, "actions", {}, void 0, true)
       ]),
       default: withCtx$1(() => [
         createBaseVNode$1("div", mergeProps$1({
@@ -41180,7 +38373,7 @@ const $g = (n2, t2) => {
       style: normalizeStyle$1(h2.$attrs.style)
     }, {
       actions: withCtx$1(() => [
-        renderSlot(h2.$slots, "actions")
+        renderSlot$1(h2.$slots, "actions")
       ]),
       default: withCtx$1(() => [
         createBaseVNode$1("div", zg, [
@@ -41221,6 +38414,9793 @@ const $g = (n2, t2) => {
   HstTokenGrid: sm,
   HstCopyIcon: nm,
   HstColorSelect: lm
+};
+const config = markRaw$1({
+  "theme": {
+    "accentColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      },
+      "auto": "auto"
+    },
+    "animation": {
+      "none": "none",
+      "spin": "spin 1s linear infinite",
+      "ping": "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
+      "pulse": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      "bounce": "bounce 1s infinite"
+    },
+    "aria": {
+      "busy": 'busy="true"',
+      "checked": 'checked="true"',
+      "disabled": 'disabled="true"',
+      "expanded": 'expanded="true"',
+      "hidden": 'hidden="true"',
+      "pressed": 'pressed="true"',
+      "readonly": 'readonly="true"',
+      "required": 'required="true"',
+      "selected": 'selected="true"'
+    },
+    "aspectRatio": {
+      "auto": "auto",
+      "square": "1 / 1",
+      "video": "16 / 9"
+    },
+    "backdropBlur": {
+      "0": "0",
+      "none": "0",
+      "sm": "4px",
+      "DEFAULT": "8px",
+      "md": "12px",
+      "lg": "16px",
+      "xl": "24px",
+      "2xl": "40px",
+      "3xl": "64px"
+    },
+    "backdropBrightness": {
+      "0": "0",
+      "50": ".5",
+      "75": ".75",
+      "90": ".9",
+      "95": ".95",
+      "100": "1",
+      "105": "1.05",
+      "110": "1.1",
+      "125": "1.25",
+      "150": "1.5",
+      "200": "2"
+    },
+    "backdropContrast": {
+      "0": "0",
+      "50": ".5",
+      "75": ".75",
+      "100": "1",
+      "125": "1.25",
+      "150": "1.5",
+      "200": "2"
+    },
+    "backdropGrayscale": {
+      "0": "0",
+      "DEFAULT": "100%"
+    },
+    "backdropHueRotate": {
+      "0": "0deg",
+      "15": "15deg",
+      "30": "30deg",
+      "60": "60deg",
+      "90": "90deg",
+      "180": "180deg"
+    },
+    "backdropInvert": {
+      "0": "0",
+      "DEFAULT": "100%"
+    },
+    "backdropOpacity": {
+      "0": "0",
+      "5": "0.05",
+      "10": "0.1",
+      "20": "0.2",
+      "25": "0.25",
+      "30": "0.3",
+      "40": "0.4",
+      "50": "0.5",
+      "60": "0.6",
+      "70": "0.7",
+      "75": "0.75",
+      "80": "0.8",
+      "90": "0.9",
+      "95": "0.95",
+      "100": "1"
+    },
+    "backdropSaturate": {
+      "0": "0",
+      "50": ".5",
+      "100": "1",
+      "150": "1.5",
+      "200": "2"
+    },
+    "backdropSepia": {
+      "0": "0",
+      "DEFAULT": "100%"
+    },
+    "backgroundColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "backgroundImage": {
+      "none": "none",
+      "gradient-to-t": "linear-gradient(to top, var(--tw-gradient-stops))",
+      "gradient-to-tr": "linear-gradient(to top right, var(--tw-gradient-stops))",
+      "gradient-to-r": "linear-gradient(to right, var(--tw-gradient-stops))",
+      "gradient-to-br": "linear-gradient(to bottom right, var(--tw-gradient-stops))",
+      "gradient-to-b": "linear-gradient(to bottom, var(--tw-gradient-stops))",
+      "gradient-to-bl": "linear-gradient(to bottom left, var(--tw-gradient-stops))",
+      "gradient-to-l": "linear-gradient(to left, var(--tw-gradient-stops))",
+      "gradient-to-tl": "linear-gradient(to top left, var(--tw-gradient-stops))"
+    },
+    "backgroundOpacity": {
+      "0": "0",
+      "5": "0.05",
+      "10": "0.1",
+      "20": "0.2",
+      "25": "0.25",
+      "30": "0.3",
+      "40": "0.4",
+      "50": "0.5",
+      "60": "0.6",
+      "70": "0.7",
+      "75": "0.75",
+      "80": "0.8",
+      "90": "0.9",
+      "95": "0.95",
+      "100": "1"
+    },
+    "backgroundPosition": {
+      "bottom": "bottom",
+      "center": "center",
+      "left": "left",
+      "left-bottom": "left bottom",
+      "left-top": "left top",
+      "right": "right",
+      "right-bottom": "right bottom",
+      "right-top": "right top",
+      "top": "top"
+    },
+    "backgroundSize": {
+      "auto": "auto",
+      "cover": "cover",
+      "contain": "contain"
+    },
+    "blur": {
+      "0": "0",
+      "none": "0",
+      "sm": "4px",
+      "DEFAULT": "8px",
+      "md": "12px",
+      "lg": "16px",
+      "xl": "24px",
+      "2xl": "40px",
+      "3xl": "64px"
+    },
+    "borderColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      },
+      "DEFAULT": "#e5e7eb"
+    },
+    "borderOpacity": {
+      "0": "0",
+      "5": "0.05",
+      "10": "0.1",
+      "20": "0.2",
+      "25": "0.25",
+      "30": "0.3",
+      "40": "0.4",
+      "50": "0.5",
+      "60": "0.6",
+      "70": "0.7",
+      "75": "0.75",
+      "80": "0.8",
+      "90": "0.9",
+      "95": "0.95",
+      "100": "1"
+    },
+    "borderRadius": {
+      "none": "0px",
+      "sm": "0.125rem",
+      "DEFAULT": "0.25rem",
+      "md": "0.375rem",
+      "lg": "0.5rem",
+      "xl": "0.75rem",
+      "2xl": "1rem",
+      "3xl": "1.5rem",
+      "full": "9999px"
+    },
+    "borderSpacing": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem"
+    },
+    "borderWidth": {
+      "0": "0px",
+      "2": "2px",
+      "4": "4px",
+      "8": "8px",
+      "DEFAULT": "1px"
+    },
+    "boxShadow": {
+      "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "DEFAULT": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+      "md": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+      "lg": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+      "xl": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+      "2xl": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+      "inner": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
+      "none": "none"
+    },
+    "boxShadowColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "brightness": {
+      "0": "0",
+      "50": ".5",
+      "75": ".75",
+      "90": ".9",
+      "95": ".95",
+      "100": "1",
+      "105": "1.05",
+      "110": "1.1",
+      "125": "1.25",
+      "150": "1.5",
+      "200": "2"
+    },
+    "caretColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "colors": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "columns": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
+      "11": "11",
+      "12": "12",
+      "auto": "auto",
+      "3xs": "16rem",
+      "2xs": "18rem",
+      "xs": "20rem",
+      "sm": "24rem",
+      "md": "28rem",
+      "lg": "32rem",
+      "xl": "36rem",
+      "2xl": "42rem",
+      "3xl": "48rem",
+      "4xl": "56rem",
+      "5xl": "64rem",
+      "6xl": "72rem",
+      "7xl": "80rem"
+    },
+    "container": {},
+    "content": {
+      "none": "none"
+    },
+    "contrast": {
+      "0": "0",
+      "50": ".5",
+      "75": ".75",
+      "100": "1",
+      "125": "1.25",
+      "150": "1.5",
+      "200": "2"
+    },
+    "cursor": {
+      "auto": "auto",
+      "default": "default",
+      "pointer": "pointer",
+      "wait": "wait",
+      "text": "text",
+      "move": "move",
+      "help": "help",
+      "not-allowed": "not-allowed",
+      "none": "none",
+      "context-menu": "context-menu",
+      "progress": "progress",
+      "cell": "cell",
+      "crosshair": "crosshair",
+      "vertical-text": "vertical-text",
+      "alias": "alias",
+      "copy": "copy",
+      "no-drop": "no-drop",
+      "grab": "grab",
+      "grabbing": "grabbing",
+      "all-scroll": "all-scroll",
+      "col-resize": "col-resize",
+      "row-resize": "row-resize",
+      "n-resize": "n-resize",
+      "e-resize": "e-resize",
+      "s-resize": "s-resize",
+      "w-resize": "w-resize",
+      "ne-resize": "ne-resize",
+      "nw-resize": "nw-resize",
+      "se-resize": "se-resize",
+      "sw-resize": "sw-resize",
+      "ew-resize": "ew-resize",
+      "ns-resize": "ns-resize",
+      "nesw-resize": "nesw-resize",
+      "nwse-resize": "nwse-resize",
+      "zoom-in": "zoom-in",
+      "zoom-out": "zoom-out"
+    },
+    "divideColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      },
+      "DEFAULT": "#e5e7eb"
+    },
+    "divideOpacity": {
+      "0": "0",
+      "5": "0.05",
+      "10": "0.1",
+      "20": "0.2",
+      "25": "0.25",
+      "30": "0.3",
+      "40": "0.4",
+      "50": "0.5",
+      "60": "0.6",
+      "70": "0.7",
+      "75": "0.75",
+      "80": "0.8",
+      "90": "0.9",
+      "95": "0.95",
+      "100": "1"
+    },
+    "divideWidth": {
+      "0": "0px",
+      "2": "2px",
+      "4": "4px",
+      "8": "8px",
+      "DEFAULT": "1px"
+    },
+    "dropShadow": {
+      "sm": "0 1px 1px rgb(0 0 0 / 0.05)",
+      "DEFAULT": [
+        "0 1px 2px rgb(0 0 0 / 0.1)",
+        "0 1px 1px rgb(0 0 0 / 0.06)"
+      ],
+      "md": [
+        "0 4px 3px rgb(0 0 0 / 0.07)",
+        "0 2px 2px rgb(0 0 0 / 0.06)"
+      ],
+      "lg": [
+        "0 10px 8px rgb(0 0 0 / 0.04)",
+        "0 4px 3px rgb(0 0 0 / 0.1)"
+      ],
+      "xl": [
+        "0 20px 13px rgb(0 0 0 / 0.03)",
+        "0 8px 5px rgb(0 0 0 / 0.08)"
+      ],
+      "2xl": "0 25px 25px rgb(0 0 0 / 0.15)",
+      "none": "0 0 #0000"
+    },
+    "fill": {
+      "none": "none",
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "flex": {
+      "1": "1 1 0%",
+      "auto": "1 1 auto",
+      "initial": "0 1 auto",
+      "none": "none"
+    },
+    "flexBasis": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "auto": "auto",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem",
+      "1/2": "50%",
+      "1/3": "33.333333%",
+      "2/3": "66.666667%",
+      "1/4": "25%",
+      "2/4": "50%",
+      "3/4": "75%",
+      "1/5": "20%",
+      "2/5": "40%",
+      "3/5": "60%",
+      "4/5": "80%",
+      "1/6": "16.666667%",
+      "2/6": "33.333333%",
+      "3/6": "50%",
+      "4/6": "66.666667%",
+      "5/6": "83.333333%",
+      "1/12": "8.333333%",
+      "2/12": "16.666667%",
+      "3/12": "25%",
+      "4/12": "33.333333%",
+      "5/12": "41.666667%",
+      "6/12": "50%",
+      "7/12": "58.333333%",
+      "8/12": "66.666667%",
+      "9/12": "75%",
+      "10/12": "83.333333%",
+      "11/12": "91.666667%",
+      "full": "100%"
+    },
+    "flexGrow": {
+      "0": "0",
+      "DEFAULT": "1"
+    },
+    "flexShrink": {
+      "0": "0",
+      "DEFAULT": "1"
+    },
+    "fontFamily": {
+      "sans": [
+        "ui-sans-serif",
+        "system-ui",
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        '"Noto Sans"',
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+        '"Noto Color Emoji"'
+      ],
+      "serif": [
+        "ui-serif",
+        "Georgia",
+        "Cambria",
+        '"Times New Roman"',
+        "Times",
+        "serif"
+      ],
+      "mono": [
+        "ui-monospace",
+        "SFMono-Regular",
+        "Menlo",
+        "Monaco",
+        "Consolas",
+        '"Liberation Mono"',
+        '"Courier New"',
+        "monospace"
+      ]
+    },
+    "fontSize": {
+      "xs": [
+        "0.75rem",
+        {
+          "lineHeight": "1rem"
+        }
+      ],
+      "sm": [
+        "0.875rem",
+        {
+          "lineHeight": "1.25rem"
+        }
+      ],
+      "base": [
+        "1rem",
+        {
+          "lineHeight": "1.5rem"
+        }
+      ],
+      "lg": [
+        "1.125rem",
+        {
+          "lineHeight": "1.75rem"
+        }
+      ],
+      "xl": [
+        "1.25rem",
+        {
+          "lineHeight": "1.75rem"
+        }
+      ],
+      "2xl": [
+        "1.5rem",
+        {
+          "lineHeight": "2rem"
+        }
+      ],
+      "3xl": [
+        "1.875rem",
+        {
+          "lineHeight": "2.25rem"
+        }
+      ],
+      "4xl": [
+        "2.25rem",
+        {
+          "lineHeight": "2.5rem"
+        }
+      ],
+      "5xl": [
+        "3rem",
+        {
+          "lineHeight": "1"
+        }
+      ],
+      "6xl": [
+        "3.75rem",
+        {
+          "lineHeight": "1"
+        }
+      ],
+      "7xl": [
+        "4.5rem",
+        {
+          "lineHeight": "1"
+        }
+      ],
+      "8xl": [
+        "6rem",
+        {
+          "lineHeight": "1"
+        }
+      ],
+      "9xl": [
+        "8rem",
+        {
+          "lineHeight": "1"
+        }
+      ]
+    },
+    "fontWeight": {
+      "thin": "100",
+      "extralight": "200",
+      "light": "300",
+      "normal": "400",
+      "medium": "500",
+      "semibold": "600",
+      "bold": "700",
+      "extrabold": "800",
+      "black": "900"
+    },
+    "gap": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem"
+    },
+    "gradientColorStops": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "gradientColorStopPositions": {
+      "0%": "0%",
+      "5%": "5%",
+      "10%": "10%",
+      "15%": "15%",
+      "20%": "20%",
+      "25%": "25%",
+      "30%": "30%",
+      "35%": "35%",
+      "40%": "40%",
+      "45%": "45%",
+      "50%": "50%",
+      "55%": "55%",
+      "60%": "60%",
+      "65%": "65%",
+      "70%": "70%",
+      "75%": "75%",
+      "80%": "80%",
+      "85%": "85%",
+      "90%": "90%",
+      "95%": "95%",
+      "100%": "100%"
+    },
+    "grayscale": {
+      "0": "0",
+      "DEFAULT": "100%"
+    },
+    "gridAutoColumns": {
+      "auto": "auto",
+      "min": "min-content",
+      "max": "max-content",
+      "fr": "minmax(0, 1fr)"
+    },
+    "gridAutoRows": {
+      "auto": "auto",
+      "min": "min-content",
+      "max": "max-content",
+      "fr": "minmax(0, 1fr)"
+    },
+    "gridColumn": {
+      "auto": "auto",
+      "span-1": "span 1 / span 1",
+      "span-2": "span 2 / span 2",
+      "span-3": "span 3 / span 3",
+      "span-4": "span 4 / span 4",
+      "span-5": "span 5 / span 5",
+      "span-6": "span 6 / span 6",
+      "span-7": "span 7 / span 7",
+      "span-8": "span 8 / span 8",
+      "span-9": "span 9 / span 9",
+      "span-10": "span 10 / span 10",
+      "span-11": "span 11 / span 11",
+      "span-12": "span 12 / span 12",
+      "span-full": "1 / -1"
+    },
+    "gridColumnEnd": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
+      "11": "11",
+      "12": "12",
+      "13": "13",
+      "auto": "auto"
+    },
+    "gridColumnStart": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
+      "11": "11",
+      "12": "12",
+      "13": "13",
+      "auto": "auto"
+    },
+    "gridRow": {
+      "auto": "auto",
+      "span-1": "span 1 / span 1",
+      "span-2": "span 2 / span 2",
+      "span-3": "span 3 / span 3",
+      "span-4": "span 4 / span 4",
+      "span-5": "span 5 / span 5",
+      "span-6": "span 6 / span 6",
+      "span-full": "1 / -1"
+    },
+    "gridRowEnd": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "auto": "auto"
+    },
+    "gridRowStart": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "auto": "auto"
+    },
+    "gridTemplateColumns": {
+      "1": "repeat(1, minmax(0, 1fr))",
+      "2": "repeat(2, minmax(0, 1fr))",
+      "3": "repeat(3, minmax(0, 1fr))",
+      "4": "repeat(4, minmax(0, 1fr))",
+      "5": "repeat(5, minmax(0, 1fr))",
+      "6": "repeat(6, minmax(0, 1fr))",
+      "7": "repeat(7, minmax(0, 1fr))",
+      "8": "repeat(8, minmax(0, 1fr))",
+      "9": "repeat(9, minmax(0, 1fr))",
+      "10": "repeat(10, minmax(0, 1fr))",
+      "11": "repeat(11, minmax(0, 1fr))",
+      "12": "repeat(12, minmax(0, 1fr))",
+      "none": "none"
+    },
+    "gridTemplateRows": {
+      "1": "repeat(1, minmax(0, 1fr))",
+      "2": "repeat(2, minmax(0, 1fr))",
+      "3": "repeat(3, minmax(0, 1fr))",
+      "4": "repeat(4, minmax(0, 1fr))",
+      "5": "repeat(5, minmax(0, 1fr))",
+      "6": "repeat(6, minmax(0, 1fr))",
+      "none": "none"
+    },
+    "height": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "auto": "auto",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem",
+      "1/2": "50%",
+      "1/3": "33.333333%",
+      "2/3": "66.666667%",
+      "1/4": "25%",
+      "2/4": "50%",
+      "3/4": "75%",
+      "1/5": "20%",
+      "2/5": "40%",
+      "3/5": "60%",
+      "4/5": "80%",
+      "1/6": "16.666667%",
+      "2/6": "33.333333%",
+      "3/6": "50%",
+      "4/6": "66.666667%",
+      "5/6": "83.333333%",
+      "full": "100%",
+      "screen": "100vh",
+      "min": "min-content",
+      "max": "max-content",
+      "fit": "fit-content"
+    },
+    "hueRotate": {
+      "0": "0deg",
+      "15": "15deg",
+      "30": "30deg",
+      "60": "60deg",
+      "90": "90deg",
+      "180": "180deg"
+    },
+    "inset": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "auto": "auto",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem",
+      "1/2": "50%",
+      "1/3": "33.333333%",
+      "2/3": "66.666667%",
+      "1/4": "25%",
+      "2/4": "50%",
+      "3/4": "75%",
+      "full": "100%"
+    },
+    "invert": {
+      "0": "0",
+      "DEFAULT": "100%"
+    },
+    "keyframes": {
+      "spin": {
+        "to": {
+          "transform": "rotate(360deg)"
+        }
+      },
+      "ping": {
+        "75%, 100%": {
+          "transform": "scale(2)",
+          "opacity": "0"
+        }
+      },
+      "pulse": {
+        "50%": {
+          "opacity": ".5"
+        }
+      },
+      "bounce": {
+        "0%, 100%": {
+          "transform": "translateY(-25%)",
+          "animationTimingFunction": "cubic-bezier(0.8,0,1,1)"
+        },
+        "50%": {
+          "transform": "none",
+          "animationTimingFunction": "cubic-bezier(0,0,0.2,1)"
+        }
+      }
+    },
+    "letterSpacing": {
+      "tighter": "-0.05em",
+      "tight": "-0.025em",
+      "normal": "0em",
+      "wide": "0.025em",
+      "wider": "0.05em",
+      "widest": "0.1em"
+    },
+    "lineHeight": {
+      "3": ".75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "none": "1",
+      "tight": "1.25",
+      "snug": "1.375",
+      "normal": "1.5",
+      "relaxed": "1.625",
+      "loose": "2"
+    },
+    "listStyleType": {
+      "none": "none",
+      "disc": "disc",
+      "decimal": "decimal"
+    },
+    "listStyleImage": {
+      "none": "none"
+    },
+    "margin": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "auto": "auto",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem"
+    },
+    "lineClamp": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6"
+    },
+    "maxHeight": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem",
+      "none": "none",
+      "full": "100%",
+      "screen": "100vh",
+      "min": "min-content",
+      "max": "max-content",
+      "fit": "fit-content"
+    },
+    "maxWidth": {
+      "0": "0rem",
+      "none": "none",
+      "xs": "20rem",
+      "sm": "24rem",
+      "md": "28rem",
+      "lg": "32rem",
+      "xl": "36rem",
+      "2xl": "42rem",
+      "3xl": "48rem",
+      "4xl": "56rem",
+      "5xl": "64rem",
+      "6xl": "72rem",
+      "7xl": "80rem",
+      "full": "100%",
+      "min": "min-content",
+      "max": "max-content",
+      "fit": "fit-content",
+      "prose": "65ch",
+      "screen-sm": "640px",
+      "screen-md": "768px",
+      "screen-lg": "1024px",
+      "screen-xl": "1280px",
+      "screen-2xl": "1536px"
+    },
+    "minHeight": {
+      "0": "0px",
+      "full": "100%",
+      "screen": "100vh",
+      "min": "min-content",
+      "max": "max-content",
+      "fit": "fit-content"
+    },
+    "minWidth": {
+      "0": "0px",
+      "full": "100%",
+      "min": "min-content",
+      "max": "max-content",
+      "fit": "fit-content"
+    },
+    "objectPosition": {
+      "bottom": "bottom",
+      "center": "center",
+      "left": "left",
+      "left-bottom": "left bottom",
+      "left-top": "left top",
+      "right": "right",
+      "right-bottom": "right bottom",
+      "right-top": "right top",
+      "top": "top"
+    },
+    "opacity": {
+      "0": "0",
+      "5": "0.05",
+      "10": "0.1",
+      "20": "0.2",
+      "25": "0.25",
+      "30": "0.3",
+      "40": "0.4",
+      "50": "0.5",
+      "60": "0.6",
+      "70": "0.7",
+      "75": "0.75",
+      "80": "0.8",
+      "90": "0.9",
+      "95": "0.95",
+      "100": "1"
+    },
+    "order": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
+      "11": "11",
+      "12": "12",
+      "first": "-9999",
+      "last": "9999",
+      "none": "0"
+    },
+    "outlineColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "outlineOffset": {
+      "0": "0px",
+      "1": "1px",
+      "2": "2px",
+      "4": "4px",
+      "8": "8px"
+    },
+    "outlineWidth": {
+      "0": "0px",
+      "1": "1px",
+      "2": "2px",
+      "4": "4px",
+      "8": "8px"
+    },
+    "padding": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem"
+    },
+    "placeholderColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "placeholderOpacity": {
+      "0": "0",
+      "5": "0.05",
+      "10": "0.1",
+      "20": "0.2",
+      "25": "0.25",
+      "30": "0.3",
+      "40": "0.4",
+      "50": "0.5",
+      "60": "0.6",
+      "70": "0.7",
+      "75": "0.75",
+      "80": "0.8",
+      "90": "0.9",
+      "95": "0.95",
+      "100": "1"
+    },
+    "ringColor": {
+      "DEFAULT": "#3b82f6",
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "ringOffsetColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "ringOffsetWidth": {
+      "0": "0px",
+      "1": "1px",
+      "2": "2px",
+      "4": "4px",
+      "8": "8px"
+    },
+    "ringOpacity": {
+      "0": "0",
+      "5": "0.05",
+      "10": "0.1",
+      "20": "0.2",
+      "25": "0.25",
+      "30": "0.3",
+      "40": "0.4",
+      "50": "0.5",
+      "60": "0.6",
+      "70": "0.7",
+      "75": "0.75",
+      "80": "0.8",
+      "90": "0.9",
+      "95": "0.95",
+      "100": "1",
+      "DEFAULT": "0.5"
+    },
+    "ringWidth": {
+      "0": "0px",
+      "1": "1px",
+      "2": "2px",
+      "4": "4px",
+      "8": "8px",
+      "DEFAULT": "3px"
+    },
+    "rotate": {
+      "0": "0deg",
+      "1": "1deg",
+      "2": "2deg",
+      "3": "3deg",
+      "6": "6deg",
+      "12": "12deg",
+      "45": "45deg",
+      "90": "90deg",
+      "180": "180deg"
+    },
+    "saturate": {
+      "0": "0",
+      "50": ".5",
+      "100": "1",
+      "150": "1.5",
+      "200": "2"
+    },
+    "scale": {
+      "0": "0",
+      "50": ".5",
+      "75": ".75",
+      "90": ".9",
+      "95": ".95",
+      "100": "1",
+      "105": "1.05",
+      "110": "1.1",
+      "125": "1.25",
+      "150": "1.5"
+    },
+    "screens": {
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px",
+      "2xl": "1536px"
+    },
+    "scrollMargin": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem"
+    },
+    "scrollPadding": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem"
+    },
+    "sepia": {
+      "0": "0",
+      "DEFAULT": "100%"
+    },
+    "skew": {
+      "0": "0deg",
+      "1": "1deg",
+      "2": "2deg",
+      "3": "3deg",
+      "6": "6deg",
+      "12": "12deg"
+    },
+    "space": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem"
+    },
+    "spacing": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem"
+    },
+    "stroke": {
+      "none": "none",
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "strokeWidth": {
+      "0": "0",
+      "1": "1",
+      "2": "2"
+    },
+    "supports": {},
+    "data": {},
+    "textColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "textDecorationColor": {
+      "inherit": "inherit",
+      "current": "currentColor",
+      "transparent": "transparent",
+      "black": "#000",
+      "white": "#fff",
+      "slate": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a",
+        "950": "#020617"
+      },
+      "gray": {
+        "50": "#f9fafb",
+        "100": "#f3f4f6",
+        "200": "#e5e7eb",
+        "300": "#d1d5db",
+        "400": "#9ca3af",
+        "500": "#6b7280",
+        "600": "#4b5563",
+        "700": "#374151",
+        "800": "#1f2937",
+        "900": "#111827",
+        "950": "#030712"
+      },
+      "zinc": {
+        "50": "#fafafa",
+        "100": "#f4f4f5",
+        "200": "#e4e4e7",
+        "300": "#d4d4d8",
+        "400": "#a1a1aa",
+        "500": "#71717a",
+        "600": "#52525b",
+        "700": "#3f3f46",
+        "800": "#27272a",
+        "900": "#18181b",
+        "950": "#09090b"
+      },
+      "neutral": {
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a3a3a3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "stone": {
+        "50": "#fafaf9",
+        "100": "#f5f5f4",
+        "200": "#e7e5e4",
+        "300": "#d6d3d1",
+        "400": "#a8a29e",
+        "500": "#78716c",
+        "600": "#57534e",
+        "700": "#44403c",
+        "800": "#292524",
+        "900": "#1c1917",
+        "950": "#0c0a09"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#fee2e2",
+        "200": "#fecaca",
+        "300": "#fca5a5",
+        "400": "#f87171",
+        "500": "#ef4444",
+        "600": "#dc2626",
+        "700": "#b91c1c",
+        "800": "#991b1b",
+        "900": "#7f1d1d",
+        "950": "#450a0a"
+      },
+      "orange": {
+        "50": "#fff7ed",
+        "100": "#ffedd5",
+        "200": "#fed7aa",
+        "300": "#fdba74",
+        "400": "#fb923c",
+        "500": "#f97316",
+        "600": "#ea580c",
+        "700": "#c2410c",
+        "800": "#9a3412",
+        "900": "#7c2d12",
+        "950": "#431407"
+      },
+      "amber": {
+        "50": "#fffbeb",
+        "100": "#fef3c7",
+        "200": "#fde68a",
+        "300": "#fcd34d",
+        "400": "#fbbf24",
+        "500": "#f59e0b",
+        "600": "#d97706",
+        "700": "#b45309",
+        "800": "#92400e",
+        "900": "#78350f",
+        "950": "#451a03"
+      },
+      "yellow": {
+        "50": "#fefce8",
+        "100": "#fef9c3",
+        "200": "#fef08a",
+        "300": "#fde047",
+        "400": "#facc15",
+        "500": "#eab308",
+        "600": "#ca8a04",
+        "700": "#a16207",
+        "800": "#854d0e",
+        "900": "#713f12",
+        "950": "#422006"
+      },
+      "lime": {
+        "50": "#f7fee7",
+        "100": "#ecfccb",
+        "200": "#d9f99d",
+        "300": "#bef264",
+        "400": "#a3e635",
+        "500": "#84cc16",
+        "600": "#65a30d",
+        "700": "#4d7c0f",
+        "800": "#3f6212",
+        "900": "#365314",
+        "950": "#1a2e05"
+      },
+      "green": {
+        "50": "#f0fdf4",
+        "100": "#dcfce7",
+        "200": "#bbf7d0",
+        "300": "#86efac",
+        "400": "#4ade80",
+        "500": "#22c55e",
+        "600": "#16a34a",
+        "700": "#15803d",
+        "800": "#166534",
+        "900": "#14532d",
+        "950": "#052e16"
+      },
+      "emerald": {
+        "50": "#ecfdf5",
+        "100": "#d1fae5",
+        "200": "#a7f3d0",
+        "300": "#6ee7b7",
+        "400": "#34d399",
+        "500": "#10b981",
+        "600": "#059669",
+        "700": "#047857",
+        "800": "#065f46",
+        "900": "#064e3b",
+        "950": "#022c22"
+      },
+      "teal": {
+        "50": "#f0fdfa",
+        "100": "#ccfbf1",
+        "200": "#99f6e4",
+        "300": "#5eead4",
+        "400": "#2dd4bf",
+        "500": "#14b8a6",
+        "600": "#0d9488",
+        "700": "#0f766e",
+        "800": "#115e59",
+        "900": "#134e4a",
+        "950": "#042f2e"
+      },
+      "cyan": {
+        "50": "#ecfeff",
+        "100": "#cffafe",
+        "200": "#a5f3fc",
+        "300": "#67e8f9",
+        "400": "#22d3ee",
+        "500": "#06b6d4",
+        "600": "#0891b2",
+        "700": "#0e7490",
+        "800": "#155e75",
+        "900": "#164e63",
+        "950": "#083344"
+      },
+      "sky": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "200": "#bae6fd",
+        "300": "#7dd3fc",
+        "400": "#38bdf8",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "800": "#075985",
+        "900": "#0c4a6e",
+        "950": "#082f49"
+      },
+      "blue": {
+        "50": "#eff6ff",
+        "100": "#dbeafe",
+        "200": "#bfdbfe",
+        "300": "#93c5fd",
+        "400": "#60a5fa",
+        "500": "#3b82f6",
+        "600": "#2563eb",
+        "700": "#1d4ed8",
+        "800": "#1e40af",
+        "900": "#1e3a8a",
+        "950": "#172554"
+      },
+      "indigo": {
+        "50": "#eef2ff",
+        "100": "#e0e7ff",
+        "200": "#c7d2fe",
+        "300": "#a5b4fc",
+        "400": "#818cf8",
+        "500": "#6366f1",
+        "600": "#4f46e5",
+        "700": "#4338ca",
+        "800": "#3730a3",
+        "900": "#312e81",
+        "950": "#1e1b4b"
+      },
+      "violet": {
+        "50": "#f5f3ff",
+        "100": "#ede9fe",
+        "200": "#ddd6fe",
+        "300": "#c4b5fd",
+        "400": "#a78bfa",
+        "500": "#8b5cf6",
+        "600": "#7c3aed",
+        "700": "#6d28d9",
+        "800": "#5b21b6",
+        "900": "#4c1d95",
+        "950": "#2e1065"
+      },
+      "purple": {
+        "50": "#faf5ff",
+        "100": "#f3e8ff",
+        "200": "#e9d5ff",
+        "300": "#d8b4fe",
+        "400": "#c084fc",
+        "500": "#a855f7",
+        "600": "#9333ea",
+        "700": "#7e22ce",
+        "800": "#6b21a8",
+        "900": "#581c87",
+        "950": "#3b0764"
+      },
+      "fuchsia": {
+        "50": "#fdf4ff",
+        "100": "#fae8ff",
+        "200": "#f5d0fe",
+        "300": "#f0abfc",
+        "400": "#e879f9",
+        "500": "#d946ef",
+        "600": "#c026d3",
+        "700": "#a21caf",
+        "800": "#86198f",
+        "900": "#701a75",
+        "950": "#4a044e"
+      },
+      "pink": {
+        "50": "#fdf2f8",
+        "100": "#fce7f3",
+        "200": "#fbcfe8",
+        "300": "#f9a8d4",
+        "400": "#f472b6",
+        "500": "#ec4899",
+        "600": "#db2777",
+        "700": "#be185d",
+        "800": "#9d174d",
+        "900": "#831843",
+        "950": "#500724"
+      },
+      "rose": {
+        "50": "#fff1f2",
+        "100": "#ffe4e6",
+        "200": "#fecdd3",
+        "300": "#fda4af",
+        "400": "#fb7185",
+        "500": "#f43f5e",
+        "600": "#e11d48",
+        "700": "#be123c",
+        "800": "#9f1239",
+        "900": "#881337",
+        "950": "#4c0519"
+      }
+    },
+    "textDecorationThickness": {
+      "0": "0px",
+      "1": "1px",
+      "2": "2px",
+      "4": "4px",
+      "8": "8px",
+      "auto": "auto",
+      "from-font": "from-font"
+    },
+    "textIndent": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem"
+    },
+    "textOpacity": {
+      "0": "0",
+      "5": "0.05",
+      "10": "0.1",
+      "20": "0.2",
+      "25": "0.25",
+      "30": "0.3",
+      "40": "0.4",
+      "50": "0.5",
+      "60": "0.6",
+      "70": "0.7",
+      "75": "0.75",
+      "80": "0.8",
+      "90": "0.9",
+      "95": "0.95",
+      "100": "1"
+    },
+    "textUnderlineOffset": {
+      "0": "0px",
+      "1": "1px",
+      "2": "2px",
+      "4": "4px",
+      "8": "8px",
+      "auto": "auto"
+    },
+    "transformOrigin": {
+      "center": "center",
+      "top": "top",
+      "top-right": "top right",
+      "right": "right",
+      "bottom-right": "bottom right",
+      "bottom": "bottom",
+      "bottom-left": "bottom left",
+      "left": "left",
+      "top-left": "top left"
+    },
+    "transitionDelay": {
+      "0": "0s",
+      "75": "75ms",
+      "100": "100ms",
+      "150": "150ms",
+      "200": "200ms",
+      "300": "300ms",
+      "500": "500ms",
+      "700": "700ms",
+      "1000": "1000ms"
+    },
+    "transitionDuration": {
+      "0": "0s",
+      "75": "75ms",
+      "100": "100ms",
+      "150": "150ms",
+      "200": "200ms",
+      "300": "300ms",
+      "500": "500ms",
+      "700": "700ms",
+      "1000": "1000ms",
+      "DEFAULT": "150ms"
+    },
+    "transitionProperty": {
+      "none": "none",
+      "all": "all",
+      "DEFAULT": "color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter",
+      "colors": "color, background-color, border-color, text-decoration-color, fill, stroke",
+      "opacity": "opacity",
+      "shadow": "box-shadow",
+      "transform": "transform"
+    },
+    "transitionTimingFunction": {
+      "DEFAULT": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "linear": "linear",
+      "in": "cubic-bezier(0.4, 0, 1, 1)",
+      "out": "cubic-bezier(0, 0, 0.2, 1)",
+      "in-out": "cubic-bezier(0.4, 0, 0.2, 1)"
+    },
+    "translate": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem",
+      "1/2": "50%",
+      "1/3": "33.333333%",
+      "2/3": "66.666667%",
+      "1/4": "25%",
+      "2/4": "50%",
+      "3/4": "75%",
+      "full": "100%"
+    },
+    "width": {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "7": "1.75rem",
+      "8": "2rem",
+      "9": "2.25rem",
+      "10": "2.5rem",
+      "11": "2.75rem",
+      "12": "3rem",
+      "14": "3.5rem",
+      "16": "4rem",
+      "20": "5rem",
+      "24": "6rem",
+      "28": "7rem",
+      "32": "8rem",
+      "36": "9rem",
+      "40": "10rem",
+      "44": "11rem",
+      "48": "12rem",
+      "52": "13rem",
+      "56": "14rem",
+      "60": "15rem",
+      "64": "16rem",
+      "72": "18rem",
+      "80": "20rem",
+      "96": "24rem",
+      "auto": "auto",
+      "px": "1px",
+      "0.5": "0.125rem",
+      "1.5": "0.375rem",
+      "2.5": "0.625rem",
+      "3.5": "0.875rem",
+      "1/2": "50%",
+      "1/3": "33.333333%",
+      "2/3": "66.666667%",
+      "1/4": "25%",
+      "2/4": "50%",
+      "3/4": "75%",
+      "1/5": "20%",
+      "2/5": "40%",
+      "3/5": "60%",
+      "4/5": "80%",
+      "1/6": "16.666667%",
+      "2/6": "33.333333%",
+      "3/6": "50%",
+      "4/6": "66.666667%",
+      "5/6": "83.333333%",
+      "1/12": "8.333333%",
+      "2/12": "16.666667%",
+      "3/12": "25%",
+      "4/12": "33.333333%",
+      "5/12": "41.666667%",
+      "6/12": "50%",
+      "7/12": "58.333333%",
+      "8/12": "66.666667%",
+      "9/12": "75%",
+      "10/12": "83.333333%",
+      "11/12": "91.666667%",
+      "full": "100%",
+      "screen": "100vw",
+      "min": "min-content",
+      "max": "max-content",
+      "fit": "fit-content"
+    },
+    "willChange": {
+      "auto": "auto",
+      "scroll": "scroll-position",
+      "contents": "contents",
+      "transform": "transform"
+    },
+    "zIndex": {
+      "0": "0",
+      "10": "10",
+      "20": "20",
+      "30": "30",
+      "40": "40",
+      "50": "50",
+      "auto": "auto"
+    }
+  },
+  "corePlugins": [
+    "preflight",
+    "container",
+    "accessibility",
+    "pointerEvents",
+    "visibility",
+    "position",
+    "inset",
+    "isolation",
+    "zIndex",
+    "order",
+    "gridColumn",
+    "gridColumnStart",
+    "gridColumnEnd",
+    "gridRow",
+    "gridRowStart",
+    "gridRowEnd",
+    "float",
+    "clear",
+    "margin",
+    "boxSizing",
+    "lineClamp",
+    "display",
+    "aspectRatio",
+    "height",
+    "maxHeight",
+    "minHeight",
+    "width",
+    "minWidth",
+    "maxWidth",
+    "flex",
+    "flexShrink",
+    "flexGrow",
+    "flexBasis",
+    "tableLayout",
+    "captionSide",
+    "borderCollapse",
+    "borderSpacing",
+    "transformOrigin",
+    "translate",
+    "rotate",
+    "skew",
+    "scale",
+    "transform",
+    "animation",
+    "cursor",
+    "touchAction",
+    "userSelect",
+    "resize",
+    "scrollSnapType",
+    "scrollSnapAlign",
+    "scrollSnapStop",
+    "scrollMargin",
+    "scrollPadding",
+    "listStylePosition",
+    "listStyleType",
+    "listStyleImage",
+    "appearance",
+    "columns",
+    "breakBefore",
+    "breakInside",
+    "breakAfter",
+    "gridAutoColumns",
+    "gridAutoFlow",
+    "gridAutoRows",
+    "gridTemplateColumns",
+    "gridTemplateRows",
+    "flexDirection",
+    "flexWrap",
+    "placeContent",
+    "placeItems",
+    "alignContent",
+    "alignItems",
+    "justifyContent",
+    "justifyItems",
+    "gap",
+    "space",
+    "divideWidth",
+    "divideStyle",
+    "divideColor",
+    "divideOpacity",
+    "placeSelf",
+    "alignSelf",
+    "justifySelf",
+    "overflow",
+    "overscrollBehavior",
+    "scrollBehavior",
+    "textOverflow",
+    "hyphens",
+    "whitespace",
+    "wordBreak",
+    "borderRadius",
+    "borderWidth",
+    "borderStyle",
+    "borderColor",
+    "borderOpacity",
+    "backgroundColor",
+    "backgroundOpacity",
+    "backgroundImage",
+    "gradientColorStops",
+    "boxDecorationBreak",
+    "backgroundSize",
+    "backgroundAttachment",
+    "backgroundClip",
+    "backgroundPosition",
+    "backgroundRepeat",
+    "backgroundOrigin",
+    "fill",
+    "stroke",
+    "strokeWidth",
+    "objectFit",
+    "objectPosition",
+    "padding",
+    "textAlign",
+    "textIndent",
+    "verticalAlign",
+    "fontFamily",
+    "fontSize",
+    "fontWeight",
+    "textTransform",
+    "fontStyle",
+    "fontVariantNumeric",
+    "lineHeight",
+    "letterSpacing",
+    "textColor",
+    "textOpacity",
+    "textDecoration",
+    "textDecorationColor",
+    "textDecorationStyle",
+    "textDecorationThickness",
+    "textUnderlineOffset",
+    "fontSmoothing",
+    "placeholderColor",
+    "placeholderOpacity",
+    "caretColor",
+    "accentColor",
+    "opacity",
+    "backgroundBlendMode",
+    "mixBlendMode",
+    "boxShadow",
+    "boxShadowColor",
+    "outlineStyle",
+    "outlineWidth",
+    "outlineOffset",
+    "outlineColor",
+    "ringWidth",
+    "ringColor",
+    "ringOpacity",
+    "ringOffsetWidth",
+    "ringOffsetColor",
+    "blur",
+    "brightness",
+    "contrast",
+    "dropShadow",
+    "grayscale",
+    "hueRotate",
+    "invert",
+    "saturate",
+    "sepia",
+    "filter",
+    "backdropBlur",
+    "backdropBrightness",
+    "backdropContrast",
+    "backdropGrayscale",
+    "backdropHueRotate",
+    "backdropInvert",
+    "backdropOpacity",
+    "backdropSaturate",
+    "backdropSepia",
+    "backdropFilter",
+    "transitionProperty",
+    "transitionDelay",
+    "transitionDuration",
+    "transitionTimingFunction",
+    "willChange",
+    "content"
+  ],
+  "plugins": [],
+  "default": {
+    "purge": [
+      "./index.html",
+      "./src/**/*.{vue,js,ts,jsx,tsx}"
+    ],
+    "prefix": "tw-",
+    "content": [],
+    "theme": {
+      "extend": {}
+    },
+    "plugins": []
+  },
+  "content": {
+    "relative": false,
+    "files": [],
+    "extract": {},
+    "transform": {}
+  },
+  "presets": [],
+  "darkMode": "media",
+  "prefix": "",
+  "important": false,
+  "separator": ":",
+  "safelist": [],
+  "blocklist": []
+});
+const search = ref$1("");
+const sampleText = ref$1("Cat sit like bread eat prawns daintily with a claw then lick paws clean wash down prawns with a lap of carnation milk then retire to the warmest spot on the couch to claw at the fabric before taking a catnap mrow cat cat moo moo lick ears lick paws");
+const fontSize = ref$1(16);
+function mountApp({ el: el2, state, onUnmount }, render2) {
+  Object.assign(state, {
+    search,
+    sampleText,
+    fontSize
+  });
+  const app = createApp$1({
+    render: render2
+  });
+  app.mount(el2);
+  onUnmount(() => {
+    app.unmount();
+  });
+}
+const Comp1 = {
+  id: "tailwind",
+  title: "Tailwind",
+  group: "design-system",
+  icon: "mdi:tailwind",
+  responsiveDisabled: true,
+  layout: { type: "single", iframe: false },
+  variants: [
+    {
+      id: "background-color",
+      title: "Background Color",
+      icon: "carbon:color-palette",
+      onMount: (api) => mountApp(api, () => Object.entries(config.theme.backgroundColor).map(([key, shades]) => h$3(em, {
+        key,
+        shades: typeof shades === "object" ? shades : { DEFAULT: shades },
+        getName: (shade) => (config.prefix ?? "") + (shade === "DEFAULT" ? `bg-${key}` : `bg-${key}-${shade}`),
+        search: search.value
+      }, ({ color }) => h$3("div", {
+        class: "__hst-shade",
+        style: {
+          backgroundColor: color.replace("<alpha-value>", 1)
+        }
+      })))),
+      onMountControls: (api) => mountApp(api, () => [
+        h$3(Jg, {
+          title: "Filter...",
+          modelValue: search.value,
+          "onUpdate:modelValue": (value) => {
+            search.value = value;
+          }
+        })
+      ])
+    },
+    {
+      id: "text-color",
+      title: "Text Color",
+      icon: "carbon:text-color",
+      onMount: (api) => mountApp(api, () => Object.entries(config.theme.textColor).map(([key, shades]) => h$3(em, {
+        key,
+        shades: typeof shades === "object" ? shades : { DEFAULT: shades },
+        getName: (shade) => (config.prefix ?? "") + (shade === "DEFAULT" ? `text-${key}` : `text-${key}-${shade}`),
+        search: search.value
+      }, ({ color }) => h$3("div", {
+        class: "__hst-shade __hst-text",
+        style: {
+          color: color.replace("<alpha-value>", 1)
+        }
+      }, "Aa")))),
+      onMountControls: (api) => mountApp(api, () => [
+        h$3(Jg, {
+          title: "Filter...",
+          modelValue: search.value,
+          "onUpdate:modelValue": (value) => {
+            search.value = value;
+          }
+        })
+      ])
+    },
+    {
+      id: "border-color",
+      title: "Border Color",
+      icon: "carbon:color-palette",
+      onMount: (api) => mountApp(api, () => Object.entries(config.theme.borderColor).map(([key, shades]) => h$3(em, {
+        key,
+        shades: typeof shades === "object" ? shades : { DEFAULT: shades },
+        getName: (shade) => (config.prefix ?? "") + (shade === "DEFAULT" ? `border-${key}` : `border-${key}-${shade}`),
+        search: search.value
+      }, ({ color }) => h$3("div", {
+        class: "__hst-shade __hst-border",
+        style: {
+          borderColor: color.replace("<alpha-value>", 1)
+        }
+      })))),
+      onMountControls: (api) => mountApp(api, () => [
+        h$3(Jg, {
+          title: "Filter...",
+          modelValue: search.value,
+          "onUpdate:modelValue": (value) => {
+            search.value = value;
+          }
+        })
+      ])
+    },
+    {
+      id: "padding",
+      title: "Padding",
+      icon: "carbon:area",
+      onMount: (api) => mountApp(api, () => h$3(im, {
+        tokens: config.theme.padding,
+        getName: (key) => `${config.prefix ?? ""}p-${key}`
+      }, ({ token }) => h$3("div", {
+        class: "__hst-padding",
+        style: {
+          padding: token.value
+        }
+      }, [
+        h$3("div", {
+          class: "__hst-padding-box"
+        })
+      ])))
+    },
+    {
+      id: "margin",
+      title: "Margin",
+      icon: "carbon:area",
+      onMount: (api) => mountApp(api, () => h$3(im, {
+        tokens: config.theme.margin,
+        getName: (key) => `${config.prefix ?? ""}m-${key}`
+      }, ({ token }) => h$3("div", {
+        class: "__hst-margin"
+      }, [
+        h$3("div", {
+          class: "__hst-margin-box",
+          style: {
+            margin: token.value
+          }
+        })
+      ])))
+    },
+    {
+      id: "font-size",
+      title: "Font Size",
+      icon: "carbon:text-font",
+      onMount: (api) => mountApp(api, () => h$3(im, {
+        tokens: config.theme.fontSize,
+        getName: (key) => `${config.prefix ?? ""}text-${key}`
+      }, ({ token }) => h$3("div", {
+        class: "__hst-truncate",
+        style: {
+          fontSize: Array.isArray(token.value) ? token.value[0] : token.value,
+          ...Array.isArray(token.value) && typeof token.value[1] === "object" ? token.value[1] : { lineHeight: token.value[1] }
+        }
+      }, sampleText.value))),
+      onMountControls: (api) => mountApp(api, () => [
+        h$3(Zg, {
+          title: "Sample text",
+          modelValue: sampleText.value,
+          "onUpdate:modelValue": (value) => {
+            sampleText.value = value;
+          },
+          rows: 5
+        })
+      ])
+    },
+    {
+      id: "font-weight",
+      title: "Font Weight",
+      icon: "carbon:text-font",
+      onMount: (api) => mountApp(api, () => h$3(im, {
+        tokens: config.theme.fontWeight,
+        getName: (key) => `${config.prefix ?? ""}font-${key}`
+      }, ({ token }) => h$3("div", {
+        class: "__hst-truncate",
+        style: {
+          fontWeight: token.value,
+          fontSize: `${fontSize.value}px`
+        }
+      }, sampleText.value))),
+      onMountControls: (api) => mountApp(api, () => [
+        h$3(Zg, {
+          title: "Sample text",
+          modelValue: sampleText.value,
+          "onUpdate:modelValue": (value) => {
+            sampleText.value = value;
+          },
+          rows: 5
+        }),
+        h$3(Yg, {
+          title: "Font size",
+          modelValue: fontSize.value,
+          "onUpdate:modelValue": (value) => {
+            fontSize.value = value;
+          },
+          min: 1
+        })
+      ])
+    },
+    {
+      id: "font-family",
+      title: "Font Family",
+      icon: "carbon:text-font",
+      onMount: (api) => mountApp(api, () => h$3(im, {
+        tokens: config.theme.fontFamily,
+        getName: (key) => `${config.prefix ?? ""}font-${key}`
+      }, ({ token }) => h$3("div", {
+        class: "__hst-truncate",
+        style: {
+          fontFamily: token.value,
+          fontSize: `${fontSize.value}px`
+        }
+      }, sampleText.value))),
+      onMountControls: (api) => mountApp(api, () => [
+        h$3(Zg, {
+          title: "Sample text",
+          modelValue: sampleText.value,
+          "onUpdate:modelValue": (value) => {
+            sampleText.value = value;
+          },
+          rows: 5
+        }),
+        h$3(Yg, {
+          title: "Font size",
+          modelValue: fontSize.value,
+          "onUpdate:modelValue": (value) => {
+            fontSize.value = value;
+          },
+          min: 1
+        })
+      ])
+    },
+    {
+      id: "letter-spacing",
+      title: "Letter Spacing",
+      icon: "carbon:text-font",
+      onMount: (api) => mountApp(api, () => h$3(im, {
+        tokens: config.theme.letterSpacing,
+        getName: (key) => `${config.prefix ?? ""}tracking-${key}`
+      }, ({ token }) => h$3("div", {
+        class: "__hst-truncate",
+        style: {
+          letterSpacing: token.value,
+          fontSize: `${fontSize.value}px`
+        }
+      }, sampleText.value))),
+      onMountControls: (api) => mountApp(api, () => [
+        h$3(Zg, {
+          title: "Sample text",
+          modelValue: sampleText.value,
+          "onUpdate:modelValue": (value) => {
+            sampleText.value = value;
+          },
+          rows: 5
+        }),
+        h$3(Yg, {
+          title: "Font size",
+          modelValue: fontSize.value,
+          "onUpdate:modelValue": (value) => {
+            fontSize.value = value;
+          },
+          min: 1
+        })
+      ])
+    },
+    {
+      id: "line-height",
+      title: "Line Height",
+      icon: "carbon:text-font",
+      onMount: (api) => mountApp(api, () => h$3(im, {
+        tokens: config.theme.lineHeight,
+        getName: (key) => `${config.prefix ?? ""}leading-${key}`
+      }, ({ token }) => h$3("div", {
+        style: {
+          lineHeight: token.value
+        }
+      }, sampleText.value))),
+      onMountControls: (api) => mountApp(api, () => [
+        h$3(Zg, {
+          title: "Sample text",
+          modelValue: sampleText.value,
+          "onUpdate:modelValue": (value) => {
+            sampleText.value = value;
+          },
+          rows: 5
+        })
+        // @TODO select font size
+      ])
+    },
+    {
+      id: "drop-shadow",
+      title: "Drop Shadow",
+      icon: "carbon:shape-except",
+      onMount: (api) => mountApp(api, () => h$3(sm, {
+        tokens: config.theme.dropShadow,
+        getName: (key) => (config.prefix ?? "") + (key === "DEFAULT" ? "drop-shadow" : `drop-shadow-${key}`),
+        colSize: 180
+      }, ({ token }) => h$3("div", {
+        class: "__hst-drop-shadow",
+        style: {
+          filter: `${(Array.isArray(token.value) ? token.value : [token.value]).map((v2) => `drop-shadow(${v2})`).join(" ")}`
+        }
+      })))
+    },
+    {
+      id: "border-radius",
+      title: "Border Radius",
+      icon: "carbon:condition-wait-point",
+      onMount: (api) => mountApp(api, () => h$3(sm, {
+        tokens: config.theme.borderRadius,
+        getName: (key) => (config.prefix ?? "") + (key === "DEFAULT" ? "rounded" : `rounded-${key}`),
+        colSize: 180
+      }, ({ token }) => h$3("div", {
+        class: "__hst-border-radius",
+        style: {
+          borderRadius: token.value
+        }
+      })))
+    },
+    {
+      id: "border-width",
+      title: "Border Width",
+      icon: "carbon:checkbox",
+      onMount: (api) => mountApp(api, () => h$3(sm, {
+        tokens: config.theme.borderWidth,
+        getName: (key) => (config.prefix ?? "") + (key === "DEFAULT" ? "border" : `border-${key}`),
+        colSize: 180
+      }, ({ token }) => h$3("div", {
+        class: "__hst-border-width",
+        style: {
+          borderWidth: token.value
+        }
+      })))
+    },
+    {
+      id: "width",
+      title: "Width",
+      icon: "carbon:pan-horizontal",
+      onMount: (api) => mountApp(api, () => h$3(im, {
+        tokens: config.theme.width,
+        getName: (key) => (config.prefix ?? "") + (key === "DEFAULT" ? "w" : `w-${key}`)
+      }, ({ token }) => h$3("div", {
+        class: "__hst-width"
+      }, [
+        h$3("div", {
+          class: "__hst-width-box",
+          style: {
+            width: token.value
+          }
+        })
+      ])))
+    },
+    {
+      id: "height",
+      title: "Height",
+      icon: "carbon:pan-vertical",
+      onMount: (api) => mountApp(api, () => h$3(im, {
+        tokens: config.theme.height,
+        getName: (key) => (config.prefix ?? "") + (key === "DEFAULT" ? "h" : `h-${key}`)
+      }, ({ token }) => h$3("div", {
+        class: "__hst-height",
+        style: {
+          height: token.value
+        }
+      })))
+    },
+    {
+      id: "full-config",
+      title: "Full Config",
+      icon: "carbon:code",
+      onMount: (api) => mountApp(api, () => h$3("pre", JSON.stringify(config, null, 2)))
+    }
+  ]
+};
+/*!
+  * vue-router v4.2.4
+  * (c) 2023 Eduardo San Martin Morote
+  * @license MIT
+  */
+const isBrowser = typeof window !== "undefined";
+function isESModule(obj) {
+  return obj.__esModule || obj[Symbol.toStringTag] === "Module";
+}
+const assign = Object.assign;
+function applyToParams(fn2, params) {
+  const newParams = {};
+  for (const key in params) {
+    const value = params[key];
+    newParams[key] = isArray(value) ? value.map(fn2) : fn2(value);
+  }
+  return newParams;
+}
+const noop = () => {
+};
+const isArray = Array.isArray;
+function warn(msg) {
+  const args = Array.from(arguments).slice(1);
+  console.warn.apply(console, ["[Vue Router warn]: " + msg].concat(args));
+}
+const TRAILING_SLASH_RE = /\/$/;
+const removeTrailingSlash = (path) => path.replace(TRAILING_SLASH_RE, "");
+function parseURL(parseQuery2, location2, currentLocation = "/") {
+  let path, query = {}, searchString = "", hash2 = "";
+  const hashPos = location2.indexOf("#");
+  let searchPos = location2.indexOf("?");
+  if (hashPos < searchPos && hashPos >= 0) {
+    searchPos = -1;
+  }
+  if (searchPos > -1) {
+    path = location2.slice(0, searchPos);
+    searchString = location2.slice(searchPos + 1, hashPos > -1 ? hashPos : location2.length);
+    query = parseQuery2(searchString);
+  }
+  if (hashPos > -1) {
+    path = path || location2.slice(0, hashPos);
+    hash2 = location2.slice(hashPos, location2.length);
+  }
+  path = resolveRelativePath(path != null ? path : location2, currentLocation);
+  return {
+    fullPath: path + (searchString && "?") + searchString + hash2,
+    path,
+    query,
+    hash: hash2
+  };
+}
+function stringifyURL(stringifyQuery2, location2) {
+  const query = location2.query ? stringifyQuery2(location2.query) : "";
+  return location2.path + (query && "?") + query + (location2.hash || "");
+}
+function stripBase(pathname, base) {
+  if (!base || !pathname.toLowerCase().startsWith(base.toLowerCase()))
+    return pathname;
+  return pathname.slice(base.length) || "/";
+}
+function isSameRouteLocation(stringifyQuery2, a2, b2) {
+  const aLastIndex = a2.matched.length - 1;
+  const bLastIndex = b2.matched.length - 1;
+  return aLastIndex > -1 && aLastIndex === bLastIndex && isSameRouteRecord(a2.matched[aLastIndex], b2.matched[bLastIndex]) && isSameRouteLocationParams(a2.params, b2.params) && stringifyQuery2(a2.query) === stringifyQuery2(b2.query) && a2.hash === b2.hash;
+}
+function isSameRouteRecord(a2, b2) {
+  return (a2.aliasOf || a2) === (b2.aliasOf || b2);
+}
+function isSameRouteLocationParams(a2, b2) {
+  if (Object.keys(a2).length !== Object.keys(b2).length)
+    return false;
+  for (const key in a2) {
+    if (!isSameRouteLocationParamsValue(a2[key], b2[key]))
+      return false;
+  }
+  return true;
+}
+function isSameRouteLocationParamsValue(a2, b2) {
+  return isArray(a2) ? isEquivalentArray(a2, b2) : isArray(b2) ? isEquivalentArray(b2, a2) : a2 === b2;
+}
+function isEquivalentArray(a2, b2) {
+  return isArray(b2) ? a2.length === b2.length && a2.every((value, i2) => value === b2[i2]) : a2.length === 1 && a2[0] === b2;
+}
+function resolveRelativePath(to2, from) {
+  if (to2.startsWith("/"))
+    return to2;
+  if (!from.startsWith("/")) {
+    warn(`Cannot resolve a relative location without an absolute path. Trying to resolve "${to2}" from "${from}". It should look like "/${from}".`);
+    return to2;
+  }
+  if (!to2)
+    return from;
+  const fromSegments = from.split("/");
+  const toSegments = to2.split("/");
+  const lastToSegment = toSegments[toSegments.length - 1];
+  if (lastToSegment === ".." || lastToSegment === ".") {
+    toSegments.push("");
+  }
+  let position = fromSegments.length - 1;
+  let toPosition;
+  let segment;
+  for (toPosition = 0; toPosition < toSegments.length; toPosition++) {
+    segment = toSegments[toPosition];
+    if (segment === ".")
+      continue;
+    if (segment === "..") {
+      if (position > 1)
+        position--;
+    } else
+      break;
+  }
+  return fromSegments.slice(0, position).join("/") + "/" + toSegments.slice(toPosition - (toPosition === toSegments.length ? 1 : 0)).join("/");
+}
+var NavigationType;
+(function(NavigationType2) {
+  NavigationType2["pop"] = "pop";
+  NavigationType2["push"] = "push";
+})(NavigationType || (NavigationType = {}));
+var NavigationDirection;
+(function(NavigationDirection2) {
+  NavigationDirection2["back"] = "back";
+  NavigationDirection2["forward"] = "forward";
+  NavigationDirection2["unknown"] = "";
+})(NavigationDirection || (NavigationDirection = {}));
+function normalizeBase(base) {
+  if (!base) {
+    if (isBrowser) {
+      const baseEl = document.querySelector("base");
+      base = baseEl && baseEl.getAttribute("href") || "/";
+      base = base.replace(/^\w+:\/\/[^\/]+/, "");
+    } else {
+      base = "/";
+    }
+  }
+  if (base[0] !== "/" && base[0] !== "#")
+    base = "/" + base;
+  return removeTrailingSlash(base);
+}
+const BEFORE_HASH_RE = /^[^#]+#/;
+function createHref(base, location2) {
+  return base.replace(BEFORE_HASH_RE, "#") + location2;
+}
+function getElementPosition(el2, offset2) {
+  const docRect = document.documentElement.getBoundingClientRect();
+  const elRect = el2.getBoundingClientRect();
+  return {
+    behavior: offset2.behavior,
+    left: elRect.left - docRect.left - (offset2.left || 0),
+    top: elRect.top - docRect.top - (offset2.top || 0)
+  };
+}
+const computeScrollPosition = () => ({
+  left: window.pageXOffset,
+  top: window.pageYOffset
+});
+function scrollToPosition(position) {
+  let scrollToOptions;
+  if ("el" in position) {
+    const positionEl = position.el;
+    const isIdSelector = typeof positionEl === "string" && positionEl.startsWith("#");
+    if (typeof position.el === "string") {
+      if (!isIdSelector || !document.getElementById(position.el.slice(1))) {
+        try {
+          const foundEl = document.querySelector(position.el);
+          if (isIdSelector && foundEl) {
+            warn(`The selector "${position.el}" should be passed as "el: document.querySelector('${position.el}')" because it starts with "#".`);
+            return;
+          }
+        } catch (err) {
+          warn(`The selector "${position.el}" is invalid. If you are using an id selector, make sure to escape it. You can find more information about escaping characters in selectors at https://mathiasbynens.be/notes/css-escapes or use CSS.escape (https://developer.mozilla.org/en-US/docs/Web/API/CSS/escape).`);
+          return;
+        }
+      }
+    }
+    const el2 = typeof positionEl === "string" ? isIdSelector ? document.getElementById(positionEl.slice(1)) : document.querySelector(positionEl) : positionEl;
+    if (!el2) {
+      warn(`Couldn't find element using selector "${position.el}" returned by scrollBehavior.`);
+      return;
+    }
+    scrollToOptions = getElementPosition(el2, position);
+  } else {
+    scrollToOptions = position;
+  }
+  if ("scrollBehavior" in document.documentElement.style)
+    window.scrollTo(scrollToOptions);
+  else {
+    window.scrollTo(scrollToOptions.left != null ? scrollToOptions.left : window.pageXOffset, scrollToOptions.top != null ? scrollToOptions.top : window.pageYOffset);
+  }
+}
+function getScrollKey(path, delta) {
+  const position = history.state ? history.state.position - delta : -1;
+  return position + path;
+}
+const scrollPositions = /* @__PURE__ */ new Map();
+function saveScrollPosition(key, scrollPosition) {
+  scrollPositions.set(key, scrollPosition);
+}
+function getSavedScrollPosition(key) {
+  const scroll = scrollPositions.get(key);
+  scrollPositions.delete(key);
+  return scroll;
+}
+let createBaseLocation = () => location.protocol + "//" + location.host;
+function createCurrentLocation(base, location2) {
+  const { pathname, search: search2, hash: hash2 } = location2;
+  const hashPos = base.indexOf("#");
+  if (hashPos > -1) {
+    let slicePos = hash2.includes(base.slice(hashPos)) ? base.slice(hashPos).length : 1;
+    let pathFromHash = hash2.slice(slicePos);
+    if (pathFromHash[0] !== "/")
+      pathFromHash = "/" + pathFromHash;
+    return stripBase(pathFromHash, "");
+  }
+  const path = stripBase(pathname, base);
+  return path + search2 + hash2;
+}
+function useHistoryListeners(base, historyState, currentLocation, replace) {
+  let listeners = [];
+  let teardowns = [];
+  let pauseState = null;
+  const popStateHandler = ({ state }) => {
+    const to2 = createCurrentLocation(base, location);
+    const from = currentLocation.value;
+    const fromState = historyState.value;
+    let delta = 0;
+    if (state) {
+      currentLocation.value = to2;
+      historyState.value = state;
+      if (pauseState && pauseState === from) {
+        pauseState = null;
+        return;
+      }
+      delta = fromState ? state.position - fromState.position : 0;
+    } else {
+      replace(to2);
+    }
+    listeners.forEach((listener) => {
+      listener(currentLocation.value, from, {
+        delta,
+        type: NavigationType.pop,
+        direction: delta ? delta > 0 ? NavigationDirection.forward : NavigationDirection.back : NavigationDirection.unknown
+      });
+    });
+  };
+  function pauseListeners() {
+    pauseState = currentLocation.value;
+  }
+  function listen(callback) {
+    listeners.push(callback);
+    const teardown = () => {
+      const index = listeners.indexOf(callback);
+      if (index > -1)
+        listeners.splice(index, 1);
+    };
+    teardowns.push(teardown);
+    return teardown;
+  }
+  function beforeUnloadListener() {
+    const { history: history2 } = window;
+    if (!history2.state)
+      return;
+    history2.replaceState(assign({}, history2.state, { scroll: computeScrollPosition() }), "");
+  }
+  function destroy() {
+    for (const teardown of teardowns)
+      teardown();
+    teardowns = [];
+    window.removeEventListener("popstate", popStateHandler);
+    window.removeEventListener("beforeunload", beforeUnloadListener);
+  }
+  window.addEventListener("popstate", popStateHandler);
+  window.addEventListener("beforeunload", beforeUnloadListener, {
+    passive: true
+  });
+  return {
+    pauseListeners,
+    listen,
+    destroy
+  };
+}
+function buildState(back, current, forward, replaced = false, computeScroll = false) {
+  return {
+    back,
+    current,
+    forward,
+    replaced,
+    position: window.history.length,
+    scroll: computeScroll ? computeScrollPosition() : null
+  };
+}
+function useHistoryStateNavigation(base) {
+  const { history: history2, location: location2 } = window;
+  const currentLocation = {
+    value: createCurrentLocation(base, location2)
+  };
+  const historyState = { value: history2.state };
+  if (!historyState.value) {
+    changeLocation(currentLocation.value, {
+      back: null,
+      current: currentLocation.value,
+      forward: null,
+      // the length is off by one, we need to decrease it
+      position: history2.length - 1,
+      replaced: true,
+      // don't add a scroll as the user may have an anchor, and we want
+      // scrollBehavior to be triggered without a saved position
+      scroll: null
+    }, true);
+  }
+  function changeLocation(to2, state, replace2) {
+    const hashIndex = base.indexOf("#");
+    const url = hashIndex > -1 ? (location2.host && document.querySelector("base") ? base : base.slice(hashIndex)) + to2 : createBaseLocation() + base + to2;
+    try {
+      history2[replace2 ? "replaceState" : "pushState"](state, "", url);
+      historyState.value = state;
+    } catch (err) {
+      {
+        warn("Error with push/replace State", err);
+      }
+      location2[replace2 ? "replace" : "assign"](url);
+    }
+  }
+  function replace(to2, data) {
+    const state = assign({}, history2.state, buildState(
+      historyState.value.back,
+      // keep back and forward entries but override current position
+      to2,
+      historyState.value.forward,
+      true
+    ), data, { position: historyState.value.position });
+    changeLocation(to2, state, true);
+    currentLocation.value = to2;
+  }
+  function push(to2, data) {
+    const currentState = assign(
+      {},
+      // use current history state to gracefully handle a wrong call to
+      // history.replaceState
+      // https://github.com/vuejs/router/issues/366
+      historyState.value,
+      history2.state,
+      {
+        forward: to2,
+        scroll: computeScrollPosition()
+      }
+    );
+    if (!history2.state) {
+      warn(`history.state seems to have been manually replaced without preserving the necessary values. Make sure to preserve existing history state if you are manually calling history.replaceState:
+
+history.replaceState(history.state, '', url)
+
+You can find more information at https://next.router.vuejs.org/guide/migration/#usage-of-history-state.`);
+    }
+    changeLocation(currentState.current, currentState, true);
+    const state = assign({}, buildState(currentLocation.value, to2, null), { position: currentState.position + 1 }, data);
+    changeLocation(to2, state, false);
+    currentLocation.value = to2;
+  }
+  return {
+    location: currentLocation,
+    state: historyState,
+    push,
+    replace
+  };
+}
+function createWebHistory(base) {
+  base = normalizeBase(base);
+  const historyNavigation = useHistoryStateNavigation(base);
+  const historyListeners = useHistoryListeners(base, historyNavigation.state, historyNavigation.location, historyNavigation.replace);
+  function go2(delta, triggerListeners = true) {
+    if (!triggerListeners)
+      historyListeners.pauseListeners();
+    history.go(delta);
+  }
+  const routerHistory = assign({
+    // it's overridden right after
+    location: "",
+    base,
+    go: go2,
+    createHref: createHref.bind(null, base)
+  }, historyNavigation, historyListeners);
+  Object.defineProperty(routerHistory, "location", {
+    enumerable: true,
+    get: () => historyNavigation.location.value
+  });
+  Object.defineProperty(routerHistory, "state", {
+    enumerable: true,
+    get: () => historyNavigation.state.value
+  });
+  return routerHistory;
+}
+function createWebHashHistory(base) {
+  base = location.host ? base || location.pathname + location.search : "";
+  if (!base.includes("#"))
+    base += "#";
+  if (!base.endsWith("#/") && !base.endsWith("#")) {
+    warn(`A hash base must end with a "#":
+"${base}" should be "${base.replace(/#.*$/, "#")}".`);
+  }
+  return createWebHistory(base);
+}
+function isRouteLocation(route) {
+  return typeof route === "string" || route && typeof route === "object";
+}
+function isRouteName(name) {
+  return typeof name === "string" || typeof name === "symbol";
+}
+const START_LOCATION_NORMALIZED = {
+  path: "/",
+  name: void 0,
+  params: {},
+  query: {},
+  hash: "",
+  fullPath: "/",
+  matched: [],
+  meta: {},
+  redirectedFrom: void 0
+};
+const NavigationFailureSymbol = Symbol("navigation failure");
+var NavigationFailureType;
+(function(NavigationFailureType2) {
+  NavigationFailureType2[NavigationFailureType2["aborted"] = 4] = "aborted";
+  NavigationFailureType2[NavigationFailureType2["cancelled"] = 8] = "cancelled";
+  NavigationFailureType2[NavigationFailureType2["duplicated"] = 16] = "duplicated";
+})(NavigationFailureType || (NavigationFailureType = {}));
+const ErrorTypeMessages = {
+  [
+    1
+    /* ErrorTypes.MATCHER_NOT_FOUND */
+  ]({ location: location2, currentLocation }) {
+    return `No match for
+ ${JSON.stringify(location2)}${currentLocation ? "\nwhile being at\n" + JSON.stringify(currentLocation) : ""}`;
+  },
+  [
+    2
+    /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */
+  ]({ from, to: to2 }) {
+    return `Redirected from "${from.fullPath}" to "${stringifyRoute(to2)}" via a navigation guard.`;
+  },
+  [
+    4
+    /* ErrorTypes.NAVIGATION_ABORTED */
+  ]({ from, to: to2 }) {
+    return `Navigation aborted from "${from.fullPath}" to "${to2.fullPath}" via a navigation guard.`;
+  },
+  [
+    8
+    /* ErrorTypes.NAVIGATION_CANCELLED */
+  ]({ from, to: to2 }) {
+    return `Navigation cancelled from "${from.fullPath}" to "${to2.fullPath}" with a new navigation.`;
+  },
+  [
+    16
+    /* ErrorTypes.NAVIGATION_DUPLICATED */
+  ]({ from, to: to2 }) {
+    return `Avoided redundant navigation to current location: "${from.fullPath}".`;
+  }
+};
+function createRouterError(type, params) {
+  {
+    return assign(new Error(ErrorTypeMessages[type](params)), {
+      type,
+      [NavigationFailureSymbol]: true
+    }, params);
+  }
+}
+function isNavigationFailure(error, type) {
+  return error instanceof Error && NavigationFailureSymbol in error && (type == null || !!(error.type & type));
+}
+const propertiesToLog = ["params", "query", "hash"];
+function stringifyRoute(to2) {
+  if (typeof to2 === "string")
+    return to2;
+  if ("path" in to2)
+    return to2.path;
+  const location2 = {};
+  for (const key of propertiesToLog) {
+    if (key in to2)
+      location2[key] = to2[key];
+  }
+  return JSON.stringify(location2, null, 2);
+}
+const BASE_PARAM_PATTERN = "[^/]+?";
+const BASE_PATH_PARSER_OPTIONS = {
+  sensitive: false,
+  strict: false,
+  start: true,
+  end: true
+};
+const REGEX_CHARS_RE = /[.+*?^${}()[\]/\\]/g;
+function tokensToParser(segments, extraOptions) {
+  const options = assign({}, BASE_PATH_PARSER_OPTIONS, extraOptions);
+  const score = [];
+  let pattern = options.start ? "^" : "";
+  const keys = [];
+  for (const segment of segments) {
+    const segmentScores = segment.length ? [] : [
+      90
+      /* PathScore.Root */
+    ];
+    if (options.strict && !segment.length)
+      pattern += "/";
+    for (let tokenIndex = 0; tokenIndex < segment.length; tokenIndex++) {
+      const token = segment[tokenIndex];
+      let subSegmentScore = 40 + (options.sensitive ? 0.25 : 0);
+      if (token.type === 0) {
+        if (!tokenIndex)
+          pattern += "/";
+        pattern += token.value.replace(REGEX_CHARS_RE, "\\$&");
+        subSegmentScore += 40;
+      } else if (token.type === 1) {
+        const { value, repeatable, optional, regexp } = token;
+        keys.push({
+          name: value,
+          repeatable,
+          optional
+        });
+        const re3 = regexp ? regexp : BASE_PARAM_PATTERN;
+        if (re3 !== BASE_PARAM_PATTERN) {
+          subSegmentScore += 10;
+          try {
+            new RegExp(`(${re3})`);
+          } catch (err) {
+            throw new Error(`Invalid custom RegExp for param "${value}" (${re3}): ` + err.message);
+          }
+        }
+        let subPattern = repeatable ? `((?:${re3})(?:/(?:${re3}))*)` : `(${re3})`;
+        if (!tokenIndex)
+          subPattern = // avoid an optional / if there are more segments e.g. /:p?-static
+          // or /:p?-:p2
+          optional && segment.length < 2 ? `(?:/${subPattern})` : "/" + subPattern;
+        if (optional)
+          subPattern += "?";
+        pattern += subPattern;
+        subSegmentScore += 20;
+        if (optional)
+          subSegmentScore += -8;
+        if (repeatable)
+          subSegmentScore += -20;
+        if (re3 === ".*")
+          subSegmentScore += -50;
+      }
+      segmentScores.push(subSegmentScore);
+    }
+    score.push(segmentScores);
+  }
+  if (options.strict && options.end) {
+    const i2 = score.length - 1;
+    score[i2][score[i2].length - 1] += 0.7000000000000001;
+  }
+  if (!options.strict)
+    pattern += "/?";
+  if (options.end)
+    pattern += "$";
+  else if (options.strict)
+    pattern += "(?:/|$)";
+  const re2 = new RegExp(pattern, options.sensitive ? "" : "i");
+  function parse2(path) {
+    const match = path.match(re2);
+    const params = {};
+    if (!match)
+      return null;
+    for (let i2 = 1; i2 < match.length; i2++) {
+      const value = match[i2] || "";
+      const key = keys[i2 - 1];
+      params[key.name] = value && key.repeatable ? value.split("/") : value;
+    }
+    return params;
+  }
+  function stringify(params) {
+    let path = "";
+    let avoidDuplicatedSlash = false;
+    for (const segment of segments) {
+      if (!avoidDuplicatedSlash || !path.endsWith("/"))
+        path += "/";
+      avoidDuplicatedSlash = false;
+      for (const token of segment) {
+        if (token.type === 0) {
+          path += token.value;
+        } else if (token.type === 1) {
+          const { value, repeatable, optional } = token;
+          const param = value in params ? params[value] : "";
+          if (isArray(param) && !repeatable) {
+            throw new Error(`Provided param "${value}" is an array but it is not repeatable (* or + modifiers)`);
+          }
+          const text = isArray(param) ? param.join("/") : param;
+          if (!text) {
+            if (optional) {
+              if (segment.length < 2) {
+                if (path.endsWith("/"))
+                  path = path.slice(0, -1);
+                else
+                  avoidDuplicatedSlash = true;
+              }
+            } else
+              throw new Error(`Missing required param "${value}"`);
+          }
+          path += text;
+        }
+      }
+    }
+    return path || "/";
+  }
+  return {
+    re: re2,
+    score,
+    keys,
+    parse: parse2,
+    stringify
+  };
+}
+function compareScoreArray(a2, b2) {
+  let i2 = 0;
+  while (i2 < a2.length && i2 < b2.length) {
+    const diff = b2[i2] - a2[i2];
+    if (diff)
+      return diff;
+    i2++;
+  }
+  if (a2.length < b2.length) {
+    return a2.length === 1 && a2[0] === 40 + 40 ? -1 : 1;
+  } else if (a2.length > b2.length) {
+    return b2.length === 1 && b2[0] === 40 + 40 ? 1 : -1;
+  }
+  return 0;
+}
+function comparePathParserScore(a2, b2) {
+  let i2 = 0;
+  const aScore = a2.score;
+  const bScore = b2.score;
+  while (i2 < aScore.length && i2 < bScore.length) {
+    const comp = compareScoreArray(aScore[i2], bScore[i2]);
+    if (comp)
+      return comp;
+    i2++;
+  }
+  if (Math.abs(bScore.length - aScore.length) === 1) {
+    if (isLastScoreNegative(aScore))
+      return 1;
+    if (isLastScoreNegative(bScore))
+      return -1;
+  }
+  return bScore.length - aScore.length;
+}
+function isLastScoreNegative(score) {
+  const last = score[score.length - 1];
+  return score.length > 0 && last[last.length - 1] < 0;
+}
+const ROOT_TOKEN = {
+  type: 0,
+  value: ""
+};
+const VALID_PARAM_RE = /[a-zA-Z0-9_]/;
+function tokenizePath(path) {
+  if (!path)
+    return [[]];
+  if (path === "/")
+    return [[ROOT_TOKEN]];
+  if (!path.startsWith("/")) {
+    throw new Error(
+      `Route paths should start with a "/": "${path}" should be "/${path}".`
+    );
+  }
+  function crash(message) {
+    throw new Error(`ERR (${state})/"${buffer2}": ${message}`);
+  }
+  let state = 0;
+  let previousState = state;
+  const tokens = [];
+  let segment;
+  function finalizeSegment() {
+    if (segment)
+      tokens.push(segment);
+    segment = [];
+  }
+  let i2 = 0;
+  let char;
+  let buffer2 = "";
+  let customRe = "";
+  function consumeBuffer() {
+    if (!buffer2)
+      return;
+    if (state === 0) {
+      segment.push({
+        type: 0,
+        value: buffer2
+      });
+    } else if (state === 1 || state === 2 || state === 3) {
+      if (segment.length > 1 && (char === "*" || char === "+"))
+        crash(`A repeatable param (${buffer2}) must be alone in its segment. eg: '/:ids+.`);
+      segment.push({
+        type: 1,
+        value: buffer2,
+        regexp: customRe,
+        repeatable: char === "*" || char === "+",
+        optional: char === "*" || char === "?"
+      });
+    } else {
+      crash("Invalid state to consume buffer");
+    }
+    buffer2 = "";
+  }
+  function addCharToBuffer() {
+    buffer2 += char;
+  }
+  while (i2 < path.length) {
+    char = path[i2++];
+    if (char === "\\" && state !== 2) {
+      previousState = state;
+      state = 4;
+      continue;
+    }
+    switch (state) {
+      case 0:
+        if (char === "/") {
+          if (buffer2) {
+            consumeBuffer();
+          }
+          finalizeSegment();
+        } else if (char === ":") {
+          consumeBuffer();
+          state = 1;
+        } else {
+          addCharToBuffer();
+        }
+        break;
+      case 4:
+        addCharToBuffer();
+        state = previousState;
+        break;
+      case 1:
+        if (char === "(") {
+          state = 2;
+        } else if (VALID_PARAM_RE.test(char)) {
+          addCharToBuffer();
+        } else {
+          consumeBuffer();
+          state = 0;
+          if (char !== "*" && char !== "?" && char !== "+")
+            i2--;
+        }
+        break;
+      case 2:
+        if (char === ")") {
+          if (customRe[customRe.length - 1] == "\\")
+            customRe = customRe.slice(0, -1) + char;
+          else
+            state = 3;
+        } else {
+          customRe += char;
+        }
+        break;
+      case 3:
+        consumeBuffer();
+        state = 0;
+        if (char !== "*" && char !== "?" && char !== "+")
+          i2--;
+        customRe = "";
+        break;
+      default:
+        crash("Unknown state");
+        break;
+    }
+  }
+  if (state === 2)
+    crash(`Unfinished custom RegExp for param "${buffer2}"`);
+  consumeBuffer();
+  finalizeSegment();
+  return tokens;
+}
+function createRouteRecordMatcher(record, parent, options) {
+  const parser = tokensToParser(tokenizePath(record.path), options);
+  {
+    const existingKeys = /* @__PURE__ */ new Set();
+    for (const key of parser.keys) {
+      if (existingKeys.has(key.name))
+        warn(`Found duplicated params with name "${key.name}" for path "${record.path}". Only the last one will be available on "$route.params".`);
+      existingKeys.add(key.name);
+    }
+  }
+  const matcher = assign(parser, {
+    record,
+    parent,
+    // these needs to be populated by the parent
+    children: [],
+    alias: []
+  });
+  if (parent) {
+    if (!matcher.record.aliasOf === !parent.record.aliasOf)
+      parent.children.push(matcher);
+  }
+  return matcher;
+}
+function createRouterMatcher(routes, globalOptions) {
+  const matchers = [];
+  const matcherMap = /* @__PURE__ */ new Map();
+  globalOptions = mergeOptions({ strict: false, end: true, sensitive: false }, globalOptions);
+  function getRecordMatcher(name) {
+    return matcherMap.get(name);
+  }
+  function addRoute(record, parent, originalRecord) {
+    const isRootAdd = !originalRecord;
+    const mainNormalizedRecord = normalizeRouteRecord(record);
+    {
+      checkChildMissingNameWithEmptyPath(mainNormalizedRecord, parent);
+    }
+    mainNormalizedRecord.aliasOf = originalRecord && originalRecord.record;
+    const options = mergeOptions(globalOptions, record);
+    const normalizedRecords = [
+      mainNormalizedRecord
+    ];
+    if ("alias" in record) {
+      const aliases = typeof record.alias === "string" ? [record.alias] : record.alias;
+      for (const alias of aliases) {
+        normalizedRecords.push(assign({}, mainNormalizedRecord, {
+          // this allows us to hold a copy of the `components` option
+          // so that async components cache is hold on the original record
+          components: originalRecord ? originalRecord.record.components : mainNormalizedRecord.components,
+          path: alias,
+          // we might be the child of an alias
+          aliasOf: originalRecord ? originalRecord.record : mainNormalizedRecord
+          // the aliases are always of the same kind as the original since they
+          // are defined on the same record
+        }));
+      }
+    }
+    let matcher;
+    let originalMatcher;
+    for (const normalizedRecord of normalizedRecords) {
+      const { path } = normalizedRecord;
+      if (parent && path[0] !== "/") {
+        const parentPath = parent.record.path;
+        const connectingSlash = parentPath[parentPath.length - 1] === "/" ? "" : "/";
+        normalizedRecord.path = parent.record.path + (path && connectingSlash + path);
+      }
+      if (normalizedRecord.path === "*") {
+        throw new Error('Catch all routes ("*") must now be defined using a param with a custom regexp.\nSee more at https://next.router.vuejs.org/guide/migration/#removed-star-or-catch-all-routes.');
+      }
+      matcher = createRouteRecordMatcher(normalizedRecord, parent, options);
+      if (parent && path[0] === "/")
+        checkMissingParamsInAbsolutePath(matcher, parent);
+      if (originalRecord) {
+        originalRecord.alias.push(matcher);
+        {
+          checkSameParams(originalRecord, matcher);
+        }
+      } else {
+        originalMatcher = originalMatcher || matcher;
+        if (originalMatcher !== matcher)
+          originalMatcher.alias.push(matcher);
+        if (isRootAdd && record.name && !isAliasRecord(matcher))
+          removeRoute(record.name);
+      }
+      if (mainNormalizedRecord.children) {
+        const children = mainNormalizedRecord.children;
+        for (let i2 = 0; i2 < children.length; i2++) {
+          addRoute(children[i2], matcher, originalRecord && originalRecord.children[i2]);
+        }
+      }
+      originalRecord = originalRecord || matcher;
+      if (matcher.record.components && Object.keys(matcher.record.components).length || matcher.record.name || matcher.record.redirect) {
+        insertMatcher(matcher);
+      }
+    }
+    return originalMatcher ? () => {
+      removeRoute(originalMatcher);
+    } : noop;
+  }
+  function removeRoute(matcherRef) {
+    if (isRouteName(matcherRef)) {
+      const matcher = matcherMap.get(matcherRef);
+      if (matcher) {
+        matcherMap.delete(matcherRef);
+        matchers.splice(matchers.indexOf(matcher), 1);
+        matcher.children.forEach(removeRoute);
+        matcher.alias.forEach(removeRoute);
+      }
+    } else {
+      const index = matchers.indexOf(matcherRef);
+      if (index > -1) {
+        matchers.splice(index, 1);
+        if (matcherRef.record.name)
+          matcherMap.delete(matcherRef.record.name);
+        matcherRef.children.forEach(removeRoute);
+        matcherRef.alias.forEach(removeRoute);
+      }
+    }
+  }
+  function getRoutes() {
+    return matchers;
+  }
+  function insertMatcher(matcher) {
+    let i2 = 0;
+    while (i2 < matchers.length && comparePathParserScore(matcher, matchers[i2]) >= 0 && // Adding children with empty path should still appear before the parent
+    // https://github.com/vuejs/router/issues/1124
+    (matcher.record.path !== matchers[i2].record.path || !isRecordChildOf(matcher, matchers[i2])))
+      i2++;
+    matchers.splice(i2, 0, matcher);
+    if (matcher.record.name && !isAliasRecord(matcher))
+      matcherMap.set(matcher.record.name, matcher);
+  }
+  function resolve2(location2, currentLocation) {
+    let matcher;
+    let params = {};
+    let path;
+    let name;
+    if ("name" in location2 && location2.name) {
+      matcher = matcherMap.get(location2.name);
+      if (!matcher)
+        throw createRouterError(1, {
+          location: location2
+        });
+      {
+        const invalidParams = Object.keys(location2.params || {}).filter((paramName) => !matcher.keys.find((k2) => k2.name === paramName));
+        if (invalidParams.length) {
+          warn(`Discarded invalid param(s) "${invalidParams.join('", "')}" when navigating. See https://github.com/vuejs/router/blob/main/packages/router/CHANGELOG.md#414-2022-08-22 for more details.`);
+        }
+      }
+      name = matcher.record.name;
+      params = assign(
+        // paramsFromLocation is a new object
+        paramsFromLocation(
+          currentLocation.params,
+          // only keep params that exist in the resolved location
+          // TODO: only keep optional params coming from a parent record
+          matcher.keys.filter((k2) => !k2.optional).map((k2) => k2.name)
+        ),
+        // discard any existing params in the current location that do not exist here
+        // #1497 this ensures better active/exact matching
+        location2.params && paramsFromLocation(location2.params, matcher.keys.map((k2) => k2.name))
+      );
+      path = matcher.stringify(params);
+    } else if ("path" in location2) {
+      path = location2.path;
+      if (!path.startsWith("/")) {
+        warn(`The Matcher cannot resolve relative paths but received "${path}". Unless you directly called \`matcher.resolve("${path}")\`, this is probably a bug in vue-router. Please open an issue at https://github.com/vuejs/router/issues/new/choose.`);
+      }
+      matcher = matchers.find((m2) => m2.re.test(path));
+      if (matcher) {
+        params = matcher.parse(path);
+        name = matcher.record.name;
+      }
+    } else {
+      matcher = currentLocation.name ? matcherMap.get(currentLocation.name) : matchers.find((m2) => m2.re.test(currentLocation.path));
+      if (!matcher)
+        throw createRouterError(1, {
+          location: location2,
+          currentLocation
+        });
+      name = matcher.record.name;
+      params = assign({}, currentLocation.params, location2.params);
+      path = matcher.stringify(params);
+    }
+    const matched = [];
+    let parentMatcher = matcher;
+    while (parentMatcher) {
+      matched.unshift(parentMatcher.record);
+      parentMatcher = parentMatcher.parent;
+    }
+    return {
+      name,
+      path,
+      params,
+      matched,
+      meta: mergeMetaFields(matched)
+    };
+  }
+  routes.forEach((route) => addRoute(route));
+  return { addRoute, resolve: resolve2, removeRoute, getRoutes, getRecordMatcher };
+}
+function paramsFromLocation(params, keys) {
+  const newParams = {};
+  for (const key of keys) {
+    if (key in params)
+      newParams[key] = params[key];
+  }
+  return newParams;
+}
+function normalizeRouteRecord(record) {
+  return {
+    path: record.path,
+    redirect: record.redirect,
+    name: record.name,
+    meta: record.meta || {},
+    aliasOf: void 0,
+    beforeEnter: record.beforeEnter,
+    props: normalizeRecordProps(record),
+    children: record.children || [],
+    instances: {},
+    leaveGuards: /* @__PURE__ */ new Set(),
+    updateGuards: /* @__PURE__ */ new Set(),
+    enterCallbacks: {},
+    components: "components" in record ? record.components || null : record.component && { default: record.component }
+  };
+}
+function normalizeRecordProps(record) {
+  const propsObject = {};
+  const props = record.props || false;
+  if ("component" in record) {
+    propsObject.default = props;
+  } else {
+    for (const name in record.components)
+      propsObject[name] = typeof props === "object" ? props[name] : props;
+  }
+  return propsObject;
+}
+function isAliasRecord(record) {
+  while (record) {
+    if (record.record.aliasOf)
+      return true;
+    record = record.parent;
+  }
+  return false;
+}
+function mergeMetaFields(matched) {
+  return matched.reduce((meta, record) => assign(meta, record.meta), {});
+}
+function mergeOptions(defaults2, partialOptions) {
+  const options = {};
+  for (const key in defaults2) {
+    options[key] = key in partialOptions ? partialOptions[key] : defaults2[key];
+  }
+  return options;
+}
+function isSameParam(a2, b2) {
+  return a2.name === b2.name && a2.optional === b2.optional && a2.repeatable === b2.repeatable;
+}
+function checkSameParams(a2, b2) {
+  for (const key of a2.keys) {
+    if (!key.optional && !b2.keys.find(isSameParam.bind(null, key)))
+      return warn(`Alias "${b2.record.path}" and the original record: "${a2.record.path}" must have the exact same param named "${key.name}"`);
+  }
+  for (const key of b2.keys) {
+    if (!key.optional && !a2.keys.find(isSameParam.bind(null, key)))
+      return warn(`Alias "${b2.record.path}" and the original record: "${a2.record.path}" must have the exact same param named "${key.name}"`);
+  }
+}
+function checkChildMissingNameWithEmptyPath(mainNormalizedRecord, parent) {
+  if (parent && parent.record.name && !mainNormalizedRecord.name && !mainNormalizedRecord.path) {
+    warn(`The route named "${String(parent.record.name)}" has a child without a name and an empty path. Using that name won't render the empty path child so you probably want to move the name to the child instead. If this is intentional, add a name to the child route to remove the warning.`);
+  }
+}
+function checkMissingParamsInAbsolutePath(record, parent) {
+  for (const key of parent.keys) {
+    if (!record.keys.find(isSameParam.bind(null, key)))
+      return warn(`Absolute path "${record.record.path}" must have the exact same param named "${key.name}" as its parent "${parent.record.path}".`);
+  }
+}
+function isRecordChildOf(record, parent) {
+  return parent.children.some((child) => child === record || isRecordChildOf(record, child));
+}
+const HASH_RE = /#/g;
+const AMPERSAND_RE = /&/g;
+const SLASH_RE = /\//g;
+const EQUAL_RE = /=/g;
+const IM_RE = /\?/g;
+const PLUS_RE = /\+/g;
+const ENC_BRACKET_OPEN_RE = /%5B/g;
+const ENC_BRACKET_CLOSE_RE = /%5D/g;
+const ENC_CARET_RE = /%5E/g;
+const ENC_BACKTICK_RE = /%60/g;
+const ENC_CURLY_OPEN_RE = /%7B/g;
+const ENC_PIPE_RE = /%7C/g;
+const ENC_CURLY_CLOSE_RE = /%7D/g;
+const ENC_SPACE_RE = /%20/g;
+function commonEncode(text) {
+  return encodeURI("" + text).replace(ENC_PIPE_RE, "|").replace(ENC_BRACKET_OPEN_RE, "[").replace(ENC_BRACKET_CLOSE_RE, "]");
+}
+function encodeHash(text) {
+  return commonEncode(text).replace(ENC_CURLY_OPEN_RE, "{").replace(ENC_CURLY_CLOSE_RE, "}").replace(ENC_CARET_RE, "^");
+}
+function encodeQueryValue(text) {
+  return commonEncode(text).replace(PLUS_RE, "%2B").replace(ENC_SPACE_RE, "+").replace(HASH_RE, "%23").replace(AMPERSAND_RE, "%26").replace(ENC_BACKTICK_RE, "`").replace(ENC_CURLY_OPEN_RE, "{").replace(ENC_CURLY_CLOSE_RE, "}").replace(ENC_CARET_RE, "^");
+}
+function encodeQueryKey(text) {
+  return encodeQueryValue(text).replace(EQUAL_RE, "%3D");
+}
+function encodePath(text) {
+  return commonEncode(text).replace(HASH_RE, "%23").replace(IM_RE, "%3F");
+}
+function encodeParam(text) {
+  return text == null ? "" : encodePath(text).replace(SLASH_RE, "%2F");
+}
+function decode(text) {
+  try {
+    return decodeURIComponent("" + text);
+  } catch (err) {
+    warn(`Error decoding "${text}". Using original value`);
+  }
+  return "" + text;
+}
+function parseQuery(search2) {
+  const query = {};
+  if (search2 === "" || search2 === "?")
+    return query;
+  const hasLeadingIM = search2[0] === "?";
+  const searchParams = (hasLeadingIM ? search2.slice(1) : search2).split("&");
+  for (let i2 = 0; i2 < searchParams.length; ++i2) {
+    const searchParam = searchParams[i2].replace(PLUS_RE, " ");
+    const eqPos = searchParam.indexOf("=");
+    const key = decode(eqPos < 0 ? searchParam : searchParam.slice(0, eqPos));
+    const value = eqPos < 0 ? null : decode(searchParam.slice(eqPos + 1));
+    if (key in query) {
+      let currentValue = query[key];
+      if (!isArray(currentValue)) {
+        currentValue = query[key] = [currentValue];
+      }
+      currentValue.push(value);
+    } else {
+      query[key] = value;
+    }
+  }
+  return query;
+}
+function stringifyQuery(query) {
+  let search2 = "";
+  for (let key in query) {
+    const value = query[key];
+    key = encodeQueryKey(key);
+    if (value == null) {
+      if (value !== void 0) {
+        search2 += (search2.length ? "&" : "") + key;
+      }
+      continue;
+    }
+    const values = isArray(value) ? value.map((v2) => v2 && encodeQueryValue(v2)) : [value && encodeQueryValue(value)];
+    values.forEach((value2) => {
+      if (value2 !== void 0) {
+        search2 += (search2.length ? "&" : "") + key;
+        if (value2 != null)
+          search2 += "=" + value2;
+      }
+    });
+  }
+  return search2;
+}
+function normalizeQuery(query) {
+  const normalizedQuery = {};
+  for (const key in query) {
+    const value = query[key];
+    if (value !== void 0) {
+      normalizedQuery[key] = isArray(value) ? value.map((v2) => v2 == null ? null : "" + v2) : value == null ? value : "" + value;
+    }
+  }
+  return normalizedQuery;
+}
+const matchedRouteKey = Symbol("router view location matched");
+const viewDepthKey = Symbol("router view depth");
+const routerKey = Symbol("router");
+const routeLocationKey = Symbol("route location");
+const routerViewLocationKey = Symbol("router view location");
+function useCallbacks() {
+  let handlers2 = [];
+  function add2(handler) {
+    handlers2.push(handler);
+    return () => {
+      const i2 = handlers2.indexOf(handler);
+      if (i2 > -1)
+        handlers2.splice(i2, 1);
+    };
+  }
+  function reset() {
+    handlers2 = [];
+  }
+  return {
+    add: add2,
+    list: () => handlers2.slice(),
+    reset
+  };
+}
+function guardToPromiseFn(guard, to2, from, record, name) {
+  const enterCallbackArray = record && // name is defined if record is because of the function overload
+  (record.enterCallbacks[name] = record.enterCallbacks[name] || []);
+  return () => new Promise((resolve2, reject) => {
+    const next = (valid) => {
+      if (valid === false) {
+        reject(createRouterError(4, {
+          from,
+          to: to2
+        }));
+      } else if (valid instanceof Error) {
+        reject(valid);
+      } else if (isRouteLocation(valid)) {
+        reject(createRouterError(2, {
+          from: to2,
+          to: valid
+        }));
+      } else {
+        if (enterCallbackArray && // since enterCallbackArray is truthy, both record and name also are
+        record.enterCallbacks[name] === enterCallbackArray && typeof valid === "function") {
+          enterCallbackArray.push(valid);
+        }
+        resolve2();
+      }
+    };
+    const guardReturn = guard.call(record && record.instances[name], to2, from, canOnlyBeCalledOnce(next, to2, from));
+    let guardCall = Promise.resolve(guardReturn);
+    if (guard.length < 3)
+      guardCall = guardCall.then(next);
+    if (guard.length > 2) {
+      const message = `The "next" callback was never called inside of ${guard.name ? '"' + guard.name + '"' : ""}:
+${guard.toString()}
+. If you are returning a value instead of calling "next", make sure to remove the "next" parameter from your function.`;
+      if (typeof guardReturn === "object" && "then" in guardReturn) {
+        guardCall = guardCall.then((resolvedValue) => {
+          if (!next._called) {
+            warn(message);
+            return Promise.reject(new Error("Invalid navigation guard"));
+          }
+          return resolvedValue;
+        });
+      } else if (guardReturn !== void 0) {
+        if (!next._called) {
+          warn(message);
+          reject(new Error("Invalid navigation guard"));
+          return;
+        }
+      }
+    }
+    guardCall.catch((err) => reject(err));
+  });
+}
+function canOnlyBeCalledOnce(next, to2, from) {
+  let called = 0;
+  return function() {
+    if (called++ === 1)
+      warn(`The "next" callback was called more than once in one navigation guard when going from "${from.fullPath}" to "${to2.fullPath}". It should be called exactly one time in each navigation guard. This will fail in production.`);
+    next._called = true;
+    if (called === 1)
+      next.apply(null, arguments);
+  };
+}
+function extractComponentsGuards(matched, guardType, to2, from) {
+  const guards = [];
+  for (const record of matched) {
+    if (!record.components && !record.children.length) {
+      warn(`Record with path "${record.path}" is either missing a "component(s)" or "children" property.`);
+    }
+    for (const name in record.components) {
+      let rawComponent = record.components[name];
+      {
+        if (!rawComponent || typeof rawComponent !== "object" && typeof rawComponent !== "function") {
+          warn(`Component "${name}" in record with path "${record.path}" is not a valid component. Received "${String(rawComponent)}".`);
+          throw new Error("Invalid route component");
+        } else if ("then" in rawComponent) {
+          warn(`Component "${name}" in record with path "${record.path}" is a Promise instead of a function that returns a Promise. Did you write "import('./MyPage.vue')" instead of "() => import('./MyPage.vue')" ? This will break in production if not fixed.`);
+          const promise = rawComponent;
+          rawComponent = () => promise;
+        } else if (rawComponent.__asyncLoader && // warn only once per component
+        !rawComponent.__warnedDefineAsync) {
+          rawComponent.__warnedDefineAsync = true;
+          warn(`Component "${name}" in record with path "${record.path}" is defined using "defineAsyncComponent()". Write "() => import('./MyPage.vue')" instead of "defineAsyncComponent(() => import('./MyPage.vue'))".`);
+        }
+      }
+      if (guardType !== "beforeRouteEnter" && !record.instances[name])
+        continue;
+      if (isRouteComponent(rawComponent)) {
+        const options = rawComponent.__vccOpts || rawComponent;
+        const guard = options[guardType];
+        guard && guards.push(guardToPromiseFn(guard, to2, from, record, name));
+      } else {
+        let componentPromise = rawComponent();
+        if (!("catch" in componentPromise)) {
+          warn(`Component "${name}" in record with path "${record.path}" is a function that does not return a Promise. If you were passing a functional component, make sure to add a "displayName" to the component. This will break in production if not fixed.`);
+          componentPromise = Promise.resolve(componentPromise);
+        }
+        guards.push(() => componentPromise.then((resolved) => {
+          if (!resolved)
+            return Promise.reject(new Error(`Couldn't resolve component "${name}" at "${record.path}"`));
+          const resolvedComponent = isESModule(resolved) ? resolved.default : resolved;
+          record.components[name] = resolvedComponent;
+          const options = resolvedComponent.__vccOpts || resolvedComponent;
+          const guard = options[guardType];
+          return guard && guardToPromiseFn(guard, to2, from, record, name)();
+        }));
+      }
+    }
+  }
+  return guards;
+}
+function isRouteComponent(component) {
+  return typeof component === "object" || "displayName" in component || "props" in component || "__vccOpts" in component;
+}
+function useLink(props) {
+  const router = inject$1(routerKey);
+  const currentRoute = inject$1(routeLocationKey);
+  const route = computed$2(() => router.resolve(unref$1(props.to)));
+  const activeRecordIndex = computed$2(() => {
+    const { matched } = route.value;
+    const { length } = matched;
+    const routeMatched = matched[length - 1];
+    const currentMatched = currentRoute.matched;
+    if (!routeMatched || !currentMatched.length)
+      return -1;
+    const index = currentMatched.findIndex(isSameRouteRecord.bind(null, routeMatched));
+    if (index > -1)
+      return index;
+    const parentRecordPath = getOriginalPath(matched[length - 2]);
+    return (
+      // we are dealing with nested routes
+      length > 1 && // if the parent and matched route have the same path, this link is
+      // referring to the empty child. Or we currently are on a different
+      // child of the same parent
+      getOriginalPath(routeMatched) === parentRecordPath && // avoid comparing the child with its parent
+      currentMatched[currentMatched.length - 1].path !== parentRecordPath ? currentMatched.findIndex(isSameRouteRecord.bind(null, matched[length - 2])) : index
+    );
+  });
+  const isActive = computed$2(() => activeRecordIndex.value > -1 && includesParams(currentRoute.params, route.value.params));
+  const isExactActive = computed$2(() => activeRecordIndex.value > -1 && activeRecordIndex.value === currentRoute.matched.length - 1 && isSameRouteLocationParams(currentRoute.params, route.value.params));
+  function navigate(e2 = {}) {
+    if (guardEvent(e2)) {
+      return router[unref$1(props.replace) ? "replace" : "push"](
+        unref$1(props.to)
+        // avoid uncaught errors are they are logged anyway
+      ).catch(noop);
+    }
+    return Promise.resolve();
+  }
+  if (isBrowser) {
+    const instance = getCurrentInstance$1();
+    if (instance) {
+      const linkContextDevtools = {
+        route: route.value,
+        isActive: isActive.value,
+        isExactActive: isExactActive.value
+      };
+      instance.__vrl_devtools = instance.__vrl_devtools || [];
+      instance.__vrl_devtools.push(linkContextDevtools);
+      watchEffect(() => {
+        linkContextDevtools.route = route.value;
+        linkContextDevtools.isActive = isActive.value;
+        linkContextDevtools.isExactActive = isExactActive.value;
+      }, { flush: "post" });
+    }
+  }
+  return {
+    route,
+    href: computed$2(() => route.value.href),
+    isActive,
+    isExactActive,
+    navigate
+  };
+}
+const RouterLinkImpl = /* @__PURE__ */ defineComponent$1({
+  name: "RouterLink",
+  compatConfig: { MODE: 3 },
+  props: {
+    to: {
+      type: [String, Object],
+      required: true
+    },
+    replace: Boolean,
+    activeClass: String,
+    // inactiveClass: String,
+    exactActiveClass: String,
+    custom: Boolean,
+    ariaCurrentValue: {
+      type: String,
+      default: "page"
+    }
+  },
+  useLink,
+  setup(props, { slots }) {
+    const link = reactive$1(useLink(props));
+    const { options } = inject$1(routerKey);
+    const elClass = computed$2(() => ({
+      [getLinkClass(props.activeClass, options.linkActiveClass, "router-link-active")]: link.isActive,
+      // [getLinkClass(
+      //   props.inactiveClass,
+      //   options.linkInactiveClass,
+      //   'router-link-inactive'
+      // )]: !link.isExactActive,
+      [getLinkClass(props.exactActiveClass, options.linkExactActiveClass, "router-link-exact-active")]: link.isExactActive
+    }));
+    return () => {
+      const children = slots.default && slots.default(link);
+      return props.custom ? children : h$3("a", {
+        "aria-current": link.isExactActive ? props.ariaCurrentValue : null,
+        href: link.href,
+        // this would override user added attrs but Vue will still add
+        // the listener, so we end up triggering both
+        onClick: link.navigate,
+        class: elClass.value
+      }, children);
+    };
+  }
+});
+const RouterLink = RouterLinkImpl;
+function guardEvent(e2) {
+  if (e2.metaKey || e2.altKey || e2.ctrlKey || e2.shiftKey)
+    return;
+  if (e2.defaultPrevented)
+    return;
+  if (e2.button !== void 0 && e2.button !== 0)
+    return;
+  if (e2.currentTarget && e2.currentTarget.getAttribute) {
+    const target = e2.currentTarget.getAttribute("target");
+    if (/\b_blank\b/i.test(target))
+      return;
+  }
+  if (e2.preventDefault)
+    e2.preventDefault();
+  return true;
+}
+function includesParams(outer, inner) {
+  for (const key in inner) {
+    const innerValue = inner[key];
+    const outerValue = outer[key];
+    if (typeof innerValue === "string") {
+      if (innerValue !== outerValue)
+        return false;
+    } else {
+      if (!isArray(outerValue) || outerValue.length !== innerValue.length || innerValue.some((value, i2) => value !== outerValue[i2]))
+        return false;
+    }
+  }
+  return true;
+}
+function getOriginalPath(record) {
+  return record ? record.aliasOf ? record.aliasOf.path : record.path : "";
+}
+const getLinkClass = (propClass, globalClass, defaultClass) => propClass != null ? propClass : globalClass != null ? globalClass : defaultClass;
+const RouterViewImpl = /* @__PURE__ */ defineComponent$1({
+  name: "RouterView",
+  // #674 we manually inherit them
+  inheritAttrs: false,
+  props: {
+    name: {
+      type: String,
+      default: "default"
+    },
+    route: Object
+  },
+  // Better compat for @vue/compat users
+  // https://github.com/vuejs/router/issues/1315
+  compatConfig: { MODE: 3 },
+  setup(props, { attrs, slots }) {
+    warnDeprecatedUsage();
+    const injectedRoute = inject$1(routerViewLocationKey);
+    const routeToDisplay = computed$2(() => props.route || injectedRoute.value);
+    const injectedDepth = inject$1(viewDepthKey, 0);
+    const depth = computed$2(() => {
+      let initialDepth = unref$1(injectedDepth);
+      const { matched } = routeToDisplay.value;
+      let matchedRoute;
+      while ((matchedRoute = matched[initialDepth]) && !matchedRoute.components) {
+        initialDepth++;
+      }
+      return initialDepth;
+    });
+    const matchedRouteRef = computed$2(() => routeToDisplay.value.matched[depth.value]);
+    provide$1(viewDepthKey, computed$2(() => depth.value + 1));
+    provide$1(matchedRouteKey, matchedRouteRef);
+    provide$1(routerViewLocationKey, routeToDisplay);
+    const viewRef = ref$1();
+    watch$1(() => [viewRef.value, matchedRouteRef.value, props.name], ([instance, to2, name], [oldInstance, from, oldName]) => {
+      if (to2) {
+        to2.instances[name] = instance;
+        if (from && from !== to2 && instance && instance === oldInstance) {
+          if (!to2.leaveGuards.size) {
+            to2.leaveGuards = from.leaveGuards;
+          }
+          if (!to2.updateGuards.size) {
+            to2.updateGuards = from.updateGuards;
+          }
+        }
+      }
+      if (instance && to2 && // if there is no instance but to and from are the same this might be
+      // the first visit
+      (!from || !isSameRouteRecord(to2, from) || !oldInstance)) {
+        (to2.enterCallbacks[name] || []).forEach((callback) => callback(instance));
+      }
+    }, { flush: "post" });
+    return () => {
+      const route = routeToDisplay.value;
+      const currentName = props.name;
+      const matchedRoute = matchedRouteRef.value;
+      const ViewComponent = matchedRoute && matchedRoute.components[currentName];
+      if (!ViewComponent) {
+        return normalizeSlot(slots.default, { Component: ViewComponent, route });
+      }
+      const routePropsOption = matchedRoute.props[currentName];
+      const routeProps = routePropsOption ? routePropsOption === true ? route.params : typeof routePropsOption === "function" ? routePropsOption(route) : routePropsOption : null;
+      const onVnodeUnmounted = (vnode) => {
+        if (vnode.component.isUnmounted) {
+          matchedRoute.instances[currentName] = null;
+        }
+      };
+      const component = h$3(ViewComponent, assign({}, routeProps, attrs, {
+        onVnodeUnmounted,
+        ref: viewRef
+      }));
+      if (isBrowser && component.ref) {
+        const info = {
+          depth: depth.value,
+          name: matchedRoute.name,
+          path: matchedRoute.path,
+          meta: matchedRoute.meta
+        };
+        const internalInstances = isArray(component.ref) ? component.ref.map((r2) => r2.i) : [component.ref.i];
+        internalInstances.forEach((instance) => {
+          instance.__vrv_devtools = info;
+        });
+      }
+      return (
+        // pass the vnode to the slot as a prop.
+        // h and <component :is="..."> both accept vnodes
+        normalizeSlot(slots.default, { Component: component, route }) || component
+      );
+    };
+  }
+});
+function normalizeSlot(slot, data) {
+  if (!slot)
+    return null;
+  const slotContent = slot(data);
+  return slotContent.length === 1 ? slotContent[0] : slotContent;
+}
+const RouterView = RouterViewImpl;
+function warnDeprecatedUsage() {
+  const instance = getCurrentInstance$1();
+  const parentName = instance.parent && instance.parent.type.name;
+  const parentSubTreeType = instance.parent && instance.parent.subTree && instance.parent.subTree.type;
+  if (parentName && (parentName === "KeepAlive" || parentName.includes("Transition")) && typeof parentSubTreeType === "object" && parentSubTreeType.name === "RouterView") {
+    const comp = parentName === "KeepAlive" ? "keep-alive" : "transition";
+    warn(`<router-view> can no longer be used directly inside <transition> or <keep-alive>.
+Use slot props instead:
+
+<router-view v-slot="{ Component }">
+  <${comp}>
+    <component :is="Component" />
+  </${comp}>
+</router-view>`);
+  }
+}
+function formatRouteLocation(routeLocation, tooltip) {
+  const copy = assign({}, routeLocation, {
+    // remove variables that can contain vue instances
+    matched: routeLocation.matched.map((matched) => omit$1(matched, ["instances", "children", "aliasOf"]))
+  });
+  return {
+    _custom: {
+      type: null,
+      readOnly: true,
+      display: routeLocation.fullPath,
+      tooltip,
+      value: copy
+    }
+  };
+}
+function formatDisplay(display) {
+  return {
+    _custom: {
+      display
+    }
+  };
+}
+let routerId = 0;
+function addDevtools(app, router, matcher) {
+  if (router.__hasDevtools)
+    return;
+  router.__hasDevtools = true;
+  const id2 = routerId++;
+  setupDevtoolsPlugin({
+    id: "org.vuejs.router" + (id2 ? "." + id2 : ""),
+    label: "Vue Router",
+    packageName: "vue-router",
+    homepage: "https://router.vuejs.org",
+    logo: "https://router.vuejs.org/logo.png",
+    componentStateTypes: ["Routing"],
+    app
+  }, (api) => {
+    if (typeof api.now !== "function") {
+      console.warn("[Vue Router]: You seem to be using an outdated version of Vue Devtools. Are you still using the Beta release instead of the stable one? You can find the links at https://devtools.vuejs.org/guide/installation.html.");
+    }
+    api.on.inspectComponent((payload, ctx) => {
+      if (payload.instanceData) {
+        payload.instanceData.state.push({
+          type: "Routing",
+          key: "$route",
+          editable: false,
+          value: formatRouteLocation(router.currentRoute.value, "Current Route")
+        });
+      }
+    });
+    api.on.visitComponentTree(({ treeNode: node, componentInstance }) => {
+      if (componentInstance.__vrv_devtools) {
+        const info = componentInstance.__vrv_devtools;
+        node.tags.push({
+          label: (info.name ? `${info.name.toString()}: ` : "") + info.path,
+          textColor: 0,
+          tooltip: "This component is rendered by &lt;router-view&gt;",
+          backgroundColor: PINK_500
+        });
+      }
+      if (isArray(componentInstance.__vrl_devtools)) {
+        componentInstance.__devtoolsApi = api;
+        componentInstance.__vrl_devtools.forEach((devtoolsData) => {
+          let backgroundColor = ORANGE_400;
+          let tooltip = "";
+          if (devtoolsData.isExactActive) {
+            backgroundColor = LIME_500;
+            tooltip = "This is exactly active";
+          } else if (devtoolsData.isActive) {
+            backgroundColor = BLUE_600;
+            tooltip = "This link is active";
+          }
+          node.tags.push({
+            label: devtoolsData.route.path,
+            textColor: 0,
+            tooltip,
+            backgroundColor
+          });
+        });
+      }
+    });
+    watch$1(router.currentRoute, () => {
+      refreshRoutesView();
+      api.notifyComponentUpdate();
+      api.sendInspectorTree(routerInspectorId);
+      api.sendInspectorState(routerInspectorId);
+    });
+    const navigationsLayerId = "router:navigations:" + id2;
+    api.addTimelineLayer({
+      id: navigationsLayerId,
+      label: `Router${id2 ? " " + id2 : ""} Navigations`,
+      color: 4237508
+    });
+    router.onError((error, to2) => {
+      api.addTimelineEvent({
+        layerId: navigationsLayerId,
+        event: {
+          title: "Error during Navigation",
+          subtitle: to2.fullPath,
+          logType: "error",
+          time: api.now(),
+          data: { error },
+          groupId: to2.meta.__navigationId
+        }
+      });
+    });
+    let navigationId = 0;
+    router.beforeEach((to2, from) => {
+      const data = {
+        guard: formatDisplay("beforeEach"),
+        from: formatRouteLocation(from, "Current Location during this navigation"),
+        to: formatRouteLocation(to2, "Target location")
+      };
+      Object.defineProperty(to2.meta, "__navigationId", {
+        value: navigationId++
+      });
+      api.addTimelineEvent({
+        layerId: navigationsLayerId,
+        event: {
+          time: api.now(),
+          title: "Start of navigation",
+          subtitle: to2.fullPath,
+          data,
+          groupId: to2.meta.__navigationId
+        }
+      });
+    });
+    router.afterEach((to2, from, failure) => {
+      const data = {
+        guard: formatDisplay("afterEach")
+      };
+      if (failure) {
+        data.failure = {
+          _custom: {
+            type: Error,
+            readOnly: true,
+            display: failure ? failure.message : "",
+            tooltip: "Navigation Failure",
+            value: failure
+          }
+        };
+        data.status = formatDisplay("❌");
+      } else {
+        data.status = formatDisplay("✅");
+      }
+      data.from = formatRouteLocation(from, "Current Location during this navigation");
+      data.to = formatRouteLocation(to2, "Target location");
+      api.addTimelineEvent({
+        layerId: navigationsLayerId,
+        event: {
+          title: "End of navigation",
+          subtitle: to2.fullPath,
+          time: api.now(),
+          data,
+          logType: failure ? "warning" : "default",
+          groupId: to2.meta.__navigationId
+        }
+      });
+    });
+    const routerInspectorId = "router-inspector:" + id2;
+    api.addInspector({
+      id: routerInspectorId,
+      label: "Routes" + (id2 ? " " + id2 : ""),
+      icon: "book",
+      treeFilterPlaceholder: "Search routes"
+    });
+    function refreshRoutesView() {
+      if (!activeRoutesPayload)
+        return;
+      const payload = activeRoutesPayload;
+      let routes = matcher.getRoutes().filter((route) => !route.parent);
+      routes.forEach(resetMatchStateOnRouteRecord);
+      if (payload.filter) {
+        routes = routes.filter((route) => (
+          // save matches state based on the payload
+          isRouteMatching(route, payload.filter.toLowerCase())
+        ));
+      }
+      routes.forEach((route) => markRouteRecordActive(route, router.currentRoute.value));
+      payload.rootNodes = routes.map(formatRouteRecordForInspector);
+    }
+    let activeRoutesPayload;
+    api.on.getInspectorTree((payload) => {
+      activeRoutesPayload = payload;
+      if (payload.app === app && payload.inspectorId === routerInspectorId) {
+        refreshRoutesView();
+      }
+    });
+    api.on.getInspectorState((payload) => {
+      if (payload.app === app && payload.inspectorId === routerInspectorId) {
+        const routes = matcher.getRoutes();
+        const route = routes.find((route2) => route2.record.__vd_id === payload.nodeId);
+        if (route) {
+          payload.state = {
+            options: formatRouteRecordMatcherForStateInspector(route)
+          };
+        }
+      }
+    });
+    api.sendInspectorTree(routerInspectorId);
+    api.sendInspectorState(routerInspectorId);
+  });
+}
+function modifierForKey(key) {
+  if (key.optional) {
+    return key.repeatable ? "*" : "?";
+  } else {
+    return key.repeatable ? "+" : "";
+  }
+}
+function formatRouteRecordMatcherForStateInspector(route) {
+  const { record } = route;
+  const fields = [
+    { editable: false, key: "path", value: record.path }
+  ];
+  if (record.name != null) {
+    fields.push({
+      editable: false,
+      key: "name",
+      value: record.name
+    });
+  }
+  fields.push({ editable: false, key: "regexp", value: route.re });
+  if (route.keys.length) {
+    fields.push({
+      editable: false,
+      key: "keys",
+      value: {
+        _custom: {
+          type: null,
+          readOnly: true,
+          display: route.keys.map((key) => `${key.name}${modifierForKey(key)}`).join(" "),
+          tooltip: "Param keys",
+          value: route.keys
+        }
+      }
+    });
+  }
+  if (record.redirect != null) {
+    fields.push({
+      editable: false,
+      key: "redirect",
+      value: record.redirect
+    });
+  }
+  if (route.alias.length) {
+    fields.push({
+      editable: false,
+      key: "aliases",
+      value: route.alias.map((alias) => alias.record.path)
+    });
+  }
+  if (Object.keys(route.record.meta).length) {
+    fields.push({
+      editable: false,
+      key: "meta",
+      value: route.record.meta
+    });
+  }
+  fields.push({
+    key: "score",
+    editable: false,
+    value: {
+      _custom: {
+        type: null,
+        readOnly: true,
+        display: route.score.map((score) => score.join(", ")).join(" | "),
+        tooltip: "Score used to sort routes",
+        value: route.score
+      }
+    }
+  });
+  return fields;
+}
+const PINK_500 = 15485081;
+const BLUE_600 = 2450411;
+const LIME_500 = 8702998;
+const CYAN_400 = 2282478;
+const ORANGE_400 = 16486972;
+const DARK = 6710886;
+function formatRouteRecordForInspector(route) {
+  const tags = [];
+  const { record } = route;
+  if (record.name != null) {
+    tags.push({
+      label: String(record.name),
+      textColor: 0,
+      backgroundColor: CYAN_400
+    });
+  }
+  if (record.aliasOf) {
+    tags.push({
+      label: "alias",
+      textColor: 0,
+      backgroundColor: ORANGE_400
+    });
+  }
+  if (route.__vd_match) {
+    tags.push({
+      label: "matches",
+      textColor: 0,
+      backgroundColor: PINK_500
+    });
+  }
+  if (route.__vd_exactActive) {
+    tags.push({
+      label: "exact",
+      textColor: 0,
+      backgroundColor: LIME_500
+    });
+  }
+  if (route.__vd_active) {
+    tags.push({
+      label: "active",
+      textColor: 0,
+      backgroundColor: BLUE_600
+    });
+  }
+  if (record.redirect) {
+    tags.push({
+      label: typeof record.redirect === "string" ? `redirect: ${record.redirect}` : "redirects",
+      textColor: 16777215,
+      backgroundColor: DARK
+    });
+  }
+  let id2 = record.__vd_id;
+  if (id2 == null) {
+    id2 = String(routeRecordId++);
+    record.__vd_id = id2;
+  }
+  return {
+    id: id2,
+    label: record.path,
+    tags,
+    children: route.children.map(formatRouteRecordForInspector)
+  };
+}
+let routeRecordId = 0;
+const EXTRACT_REGEXP_RE = /^\/(.*)\/([a-z]*)$/;
+function markRouteRecordActive(route, currentRoute) {
+  const isExactActive = currentRoute.matched.length && isSameRouteRecord(currentRoute.matched[currentRoute.matched.length - 1], route.record);
+  route.__vd_exactActive = route.__vd_active = isExactActive;
+  if (!isExactActive) {
+    route.__vd_active = currentRoute.matched.some((match) => isSameRouteRecord(match, route.record));
+  }
+  route.children.forEach((childRoute) => markRouteRecordActive(childRoute, currentRoute));
+}
+function resetMatchStateOnRouteRecord(route) {
+  route.__vd_match = false;
+  route.children.forEach(resetMatchStateOnRouteRecord);
+}
+function isRouteMatching(route, filter) {
+  const found = String(route.re).match(EXTRACT_REGEXP_RE);
+  route.__vd_match = false;
+  if (!found || found.length < 3) {
+    return false;
+  }
+  const nonEndingRE = new RegExp(found[1].replace(/\$$/, ""), found[2]);
+  if (nonEndingRE.test(filter)) {
+    route.children.forEach((child) => isRouteMatching(child, filter));
+    if (route.record.path !== "/" || filter === "/") {
+      route.__vd_match = route.re.test(filter);
+      return true;
+    }
+    return false;
+  }
+  const path = route.record.path.toLowerCase();
+  const decodedPath = decode(path);
+  if (!filter.startsWith("/") && (decodedPath.includes(filter) || path.includes(filter)))
+    return true;
+  if (decodedPath.startsWith(filter) || path.startsWith(filter))
+    return true;
+  if (route.record.name && String(route.record.name).includes(filter))
+    return true;
+  return route.children.some((child) => isRouteMatching(child, filter));
+}
+function omit$1(obj, keys) {
+  const ret = {};
+  for (const key in obj) {
+    if (!keys.includes(key)) {
+      ret[key] = obj[key];
+    }
+  }
+  return ret;
+}
+function createRouter(options) {
+  const matcher = createRouterMatcher(options.routes, options);
+  const parseQuery$1 = options.parseQuery || parseQuery;
+  const stringifyQuery$1 = options.stringifyQuery || stringifyQuery;
+  const routerHistory = options.history;
+  if (!routerHistory)
+    throw new Error('Provide the "history" option when calling "createRouter()": https://next.router.vuejs.org/api/#history.');
+  const beforeGuards = useCallbacks();
+  const beforeResolveGuards = useCallbacks();
+  const afterGuards = useCallbacks();
+  const currentRoute = shallowRef(START_LOCATION_NORMALIZED);
+  let pendingLocation = START_LOCATION_NORMALIZED;
+  if (isBrowser && options.scrollBehavior && "scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+  const normalizeParams = applyToParams.bind(null, (paramValue) => "" + paramValue);
+  const encodeParams = applyToParams.bind(null, encodeParam);
+  const decodeParams = (
+    // @ts-expect-error: intentionally avoid the type check
+    applyToParams.bind(null, decode)
+  );
+  function addRoute(parentOrRoute, route) {
+    let parent;
+    let record;
+    if (isRouteName(parentOrRoute)) {
+      parent = matcher.getRecordMatcher(parentOrRoute);
+      record = route;
+    } else {
+      record = parentOrRoute;
+    }
+    return matcher.addRoute(record, parent);
+  }
+  function removeRoute(name) {
+    const recordMatcher = matcher.getRecordMatcher(name);
+    if (recordMatcher) {
+      matcher.removeRoute(recordMatcher);
+    } else {
+      warn(`Cannot remove non-existent route "${String(name)}"`);
+    }
+  }
+  function getRoutes() {
+    return matcher.getRoutes().map((routeMatcher) => routeMatcher.record);
+  }
+  function hasRoute(name) {
+    return !!matcher.getRecordMatcher(name);
+  }
+  function resolve2(rawLocation, currentLocation) {
+    currentLocation = assign({}, currentLocation || currentRoute.value);
+    if (typeof rawLocation === "string") {
+      const locationNormalized = parseURL(parseQuery$1, rawLocation, currentLocation.path);
+      const matchedRoute2 = matcher.resolve({ path: locationNormalized.path }, currentLocation);
+      const href2 = routerHistory.createHref(locationNormalized.fullPath);
+      {
+        if (href2.startsWith("//"))
+          warn(`Location "${rawLocation}" resolved to "${href2}". A resolved location cannot start with multiple slashes.`);
+        else if (!matchedRoute2.matched.length) {
+          warn(`No match found for location with path "${rawLocation}"`);
+        }
+      }
+      return assign(locationNormalized, matchedRoute2, {
+        params: decodeParams(matchedRoute2.params),
+        hash: decode(locationNormalized.hash),
+        redirectedFrom: void 0,
+        href: href2
+      });
+    }
+    let matcherLocation;
+    if ("path" in rawLocation) {
+      if ("params" in rawLocation && !("name" in rawLocation) && // @ts-expect-error: the type is never
+      Object.keys(rawLocation.params).length) {
+        warn(`Path "${rawLocation.path}" was passed with params but they will be ignored. Use a named route alongside params instead.`);
+      }
+      matcherLocation = assign({}, rawLocation, {
+        path: parseURL(parseQuery$1, rawLocation.path, currentLocation.path).path
+      });
+    } else {
+      const targetParams = assign({}, rawLocation.params);
+      for (const key in targetParams) {
+        if (targetParams[key] == null) {
+          delete targetParams[key];
+        }
+      }
+      matcherLocation = assign({}, rawLocation, {
+        params: encodeParams(targetParams)
+      });
+      currentLocation.params = encodeParams(currentLocation.params);
+    }
+    const matchedRoute = matcher.resolve(matcherLocation, currentLocation);
+    const hash2 = rawLocation.hash || "";
+    if (hash2 && !hash2.startsWith("#")) {
+      warn(`A \`hash\` should always start with the character "#". Replace "${hash2}" with "#${hash2}".`);
+    }
+    matchedRoute.params = normalizeParams(decodeParams(matchedRoute.params));
+    const fullPath = stringifyURL(stringifyQuery$1, assign({}, rawLocation, {
+      hash: encodeHash(hash2),
+      path: matchedRoute.path
+    }));
+    const href = routerHistory.createHref(fullPath);
+    {
+      if (href.startsWith("//")) {
+        warn(`Location "${rawLocation}" resolved to "${href}". A resolved location cannot start with multiple slashes.`);
+      } else if (!matchedRoute.matched.length) {
+        warn(`No match found for location with path "${"path" in rawLocation ? rawLocation.path : rawLocation}"`);
+      }
+    }
+    return assign({
+      fullPath,
+      // keep the hash encoded so fullPath is effectively path + encodedQuery +
+      // hash
+      hash: hash2,
+      query: (
+        // if the user is using a custom query lib like qs, we might have
+        // nested objects, so we keep the query as is, meaning it can contain
+        // numbers at `$route.query`, but at the point, the user will have to
+        // use their own type anyway.
+        // https://github.com/vuejs/router/issues/328#issuecomment-649481567
+        stringifyQuery$1 === stringifyQuery ? normalizeQuery(rawLocation.query) : rawLocation.query || {}
+      )
+    }, matchedRoute, {
+      redirectedFrom: void 0,
+      href
+    });
+  }
+  function locationAsObject(to2) {
+    return typeof to2 === "string" ? parseURL(parseQuery$1, to2, currentRoute.value.path) : assign({}, to2);
+  }
+  function checkCanceledNavigation(to2, from) {
+    if (pendingLocation !== to2) {
+      return createRouterError(8, {
+        from,
+        to: to2
+      });
+    }
+  }
+  function push(to2) {
+    return pushWithRedirect(to2);
+  }
+  function replace(to2) {
+    return push(assign(locationAsObject(to2), { replace: true }));
+  }
+  function handleRedirectRecord(to2) {
+    const lastMatched = to2.matched[to2.matched.length - 1];
+    if (lastMatched && lastMatched.redirect) {
+      const { redirect } = lastMatched;
+      let newTargetLocation = typeof redirect === "function" ? redirect(to2) : redirect;
+      if (typeof newTargetLocation === "string") {
+        newTargetLocation = newTargetLocation.includes("?") || newTargetLocation.includes("#") ? newTargetLocation = locationAsObject(newTargetLocation) : (
+          // force empty params
+          { path: newTargetLocation }
+        );
+        newTargetLocation.params = {};
+      }
+      if (!("path" in newTargetLocation) && !("name" in newTargetLocation)) {
+        warn(`Invalid redirect found:
+${JSON.stringify(newTargetLocation, null, 2)}
+ when navigating to "${to2.fullPath}". A redirect must contain a name or path. This will break in production.`);
+        throw new Error("Invalid redirect");
+      }
+      return assign({
+        query: to2.query,
+        hash: to2.hash,
+        // avoid transferring params if the redirect has a path
+        params: "path" in newTargetLocation ? {} : to2.params
+      }, newTargetLocation);
+    }
+  }
+  function pushWithRedirect(to2, redirectedFrom) {
+    const targetLocation = pendingLocation = resolve2(to2);
+    const from = currentRoute.value;
+    const data = to2.state;
+    const force = to2.force;
+    const replace2 = to2.replace === true;
+    const shouldRedirect = handleRedirectRecord(targetLocation);
+    if (shouldRedirect)
+      return pushWithRedirect(
+        assign(locationAsObject(shouldRedirect), {
+          state: typeof shouldRedirect === "object" ? assign({}, data, shouldRedirect.state) : data,
+          force,
+          replace: replace2
+        }),
+        // keep original redirectedFrom if it exists
+        redirectedFrom || targetLocation
+      );
+    const toLocation = targetLocation;
+    toLocation.redirectedFrom = redirectedFrom;
+    let failure;
+    if (!force && isSameRouteLocation(stringifyQuery$1, from, targetLocation)) {
+      failure = createRouterError(16, { to: toLocation, from });
+      handleScroll(
+        from,
+        from,
+        // this is a push, the only way for it to be triggered from a
+        // history.listen is with a redirect, which makes it become a push
+        true,
+        // This cannot be the first navigation because the initial location
+        // cannot be manually navigated to
+        false
+      );
+    }
+    return (failure ? Promise.resolve(failure) : navigate(toLocation, from)).catch((error) => isNavigationFailure(error) ? (
+      // navigation redirects still mark the router as ready
+      isNavigationFailure(
+        error,
+        2
+        /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */
+      ) ? error : markAsReady(error)
+    ) : (
+      // reject any unknown error
+      triggerError(error, toLocation, from)
+    )).then((failure2) => {
+      if (failure2) {
+        if (isNavigationFailure(
+          failure2,
+          2
+          /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */
+        )) {
+          if (
+            // we are redirecting to the same location we were already at
+            isSameRouteLocation(stringifyQuery$1, resolve2(failure2.to), toLocation) && // and we have done it a couple of times
+            redirectedFrom && // @ts-expect-error: added only in dev
+            (redirectedFrom._count = redirectedFrom._count ? (
+              // @ts-expect-error
+              redirectedFrom._count + 1
+            ) : 1) > 30
+          ) {
+            warn(`Detected a possibly infinite redirection in a navigation guard when going from "${from.fullPath}" to "${toLocation.fullPath}". Aborting to avoid a Stack Overflow.
+ Are you always returning a new location within a navigation guard? That would lead to this error. Only return when redirecting or aborting, that should fix this. This might break in production if not fixed.`);
+            return Promise.reject(new Error("Infinite redirect in navigation guard"));
+          }
+          return pushWithRedirect(
+            // keep options
+            assign({
+              // preserve an existing replacement but allow the redirect to override it
+              replace: replace2
+            }, locationAsObject(failure2.to), {
+              state: typeof failure2.to === "object" ? assign({}, data, failure2.to.state) : data,
+              force
+            }),
+            // preserve the original redirectedFrom if any
+            redirectedFrom || toLocation
+          );
+        }
+      } else {
+        failure2 = finalizeNavigation(toLocation, from, true, replace2, data);
+      }
+      triggerAfterEach(toLocation, from, failure2);
+      return failure2;
+    });
+  }
+  function checkCanceledNavigationAndReject(to2, from) {
+    const error = checkCanceledNavigation(to2, from);
+    return error ? Promise.reject(error) : Promise.resolve();
+  }
+  function runWithContext(fn2) {
+    const app = installedApps.values().next().value;
+    return app && typeof app.runWithContext === "function" ? app.runWithContext(fn2) : fn2();
+  }
+  function navigate(to2, from) {
+    let guards;
+    const [leavingRecords, updatingRecords, enteringRecords] = extractChangingRecords(to2, from);
+    guards = extractComponentsGuards(leavingRecords.reverse(), "beforeRouteLeave", to2, from);
+    for (const record of leavingRecords) {
+      record.leaveGuards.forEach((guard) => {
+        guards.push(guardToPromiseFn(guard, to2, from));
+      });
+    }
+    const canceledNavigationCheck = checkCanceledNavigationAndReject.bind(null, to2, from);
+    guards.push(canceledNavigationCheck);
+    return runGuardQueue(guards).then(() => {
+      guards = [];
+      for (const guard of beforeGuards.list()) {
+        guards.push(guardToPromiseFn(guard, to2, from));
+      }
+      guards.push(canceledNavigationCheck);
+      return runGuardQueue(guards);
+    }).then(() => {
+      guards = extractComponentsGuards(updatingRecords, "beforeRouteUpdate", to2, from);
+      for (const record of updatingRecords) {
+        record.updateGuards.forEach((guard) => {
+          guards.push(guardToPromiseFn(guard, to2, from));
+        });
+      }
+      guards.push(canceledNavigationCheck);
+      return runGuardQueue(guards);
+    }).then(() => {
+      guards = [];
+      for (const record of enteringRecords) {
+        if (record.beforeEnter) {
+          if (isArray(record.beforeEnter)) {
+            for (const beforeEnter of record.beforeEnter)
+              guards.push(guardToPromiseFn(beforeEnter, to2, from));
+          } else {
+            guards.push(guardToPromiseFn(record.beforeEnter, to2, from));
+          }
+        }
+      }
+      guards.push(canceledNavigationCheck);
+      return runGuardQueue(guards);
+    }).then(() => {
+      to2.matched.forEach((record) => record.enterCallbacks = {});
+      guards = extractComponentsGuards(enteringRecords, "beforeRouteEnter", to2, from);
+      guards.push(canceledNavigationCheck);
+      return runGuardQueue(guards);
+    }).then(() => {
+      guards = [];
+      for (const guard of beforeResolveGuards.list()) {
+        guards.push(guardToPromiseFn(guard, to2, from));
+      }
+      guards.push(canceledNavigationCheck);
+      return runGuardQueue(guards);
+    }).catch((err) => isNavigationFailure(
+      err,
+      8
+      /* ErrorTypes.NAVIGATION_CANCELLED */
+    ) ? err : Promise.reject(err));
+  }
+  function triggerAfterEach(to2, from, failure) {
+    afterGuards.list().forEach((guard) => runWithContext(() => guard(to2, from, failure)));
+  }
+  function finalizeNavigation(toLocation, from, isPush, replace2, data) {
+    const error = checkCanceledNavigation(toLocation, from);
+    if (error)
+      return error;
+    const isFirstNavigation = from === START_LOCATION_NORMALIZED;
+    const state = !isBrowser ? {} : history.state;
+    if (isPush) {
+      if (replace2 || isFirstNavigation)
+        routerHistory.replace(toLocation.fullPath, assign({
+          scroll: isFirstNavigation && state && state.scroll
+        }, data));
+      else
+        routerHistory.push(toLocation.fullPath, data);
+    }
+    currentRoute.value = toLocation;
+    handleScroll(toLocation, from, isPush, isFirstNavigation);
+    markAsReady();
+  }
+  let removeHistoryListener;
+  function setupListeners() {
+    if (removeHistoryListener)
+      return;
+    removeHistoryListener = routerHistory.listen((to2, _from, info) => {
+      if (!router.listening)
+        return;
+      const toLocation = resolve2(to2);
+      const shouldRedirect = handleRedirectRecord(toLocation);
+      if (shouldRedirect) {
+        pushWithRedirect(assign(shouldRedirect, { replace: true }), toLocation).catch(noop);
+        return;
+      }
+      pendingLocation = toLocation;
+      const from = currentRoute.value;
+      if (isBrowser) {
+        saveScrollPosition(getScrollKey(from.fullPath, info.delta), computeScrollPosition());
+      }
+      navigate(toLocation, from).catch((error) => {
+        if (isNavigationFailure(
+          error,
+          4 | 8
+          /* ErrorTypes.NAVIGATION_CANCELLED */
+        )) {
+          return error;
+        }
+        if (isNavigationFailure(
+          error,
+          2
+          /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */
+        )) {
+          pushWithRedirect(
+            error.to,
+            toLocation
+            // avoid an uncaught rejection, let push call triggerError
+          ).then((failure) => {
+            if (isNavigationFailure(
+              failure,
+              4 | 16
+              /* ErrorTypes.NAVIGATION_DUPLICATED */
+            ) && !info.delta && info.type === NavigationType.pop) {
+              routerHistory.go(-1, false);
+            }
+          }).catch(noop);
+          return Promise.reject();
+        }
+        if (info.delta) {
+          routerHistory.go(-info.delta, false);
+        }
+        return triggerError(error, toLocation, from);
+      }).then((failure) => {
+        failure = failure || finalizeNavigation(
+          // after navigation, all matched components are resolved
+          toLocation,
+          from,
+          false
+        );
+        if (failure) {
+          if (info.delta && // a new navigation has been triggered, so we do not want to revert, that will change the current history
+          // entry while a different route is displayed
+          !isNavigationFailure(
+            failure,
+            8
+            /* ErrorTypes.NAVIGATION_CANCELLED */
+          )) {
+            routerHistory.go(-info.delta, false);
+          } else if (info.type === NavigationType.pop && isNavigationFailure(
+            failure,
+            4 | 16
+            /* ErrorTypes.NAVIGATION_DUPLICATED */
+          )) {
+            routerHistory.go(-1, false);
+          }
+        }
+        triggerAfterEach(toLocation, from, failure);
+      }).catch(noop);
+    });
+  }
+  let readyHandlers = useCallbacks();
+  let errorHandlers = useCallbacks();
+  let ready;
+  function triggerError(error, to2, from) {
+    markAsReady(error);
+    const list = errorHandlers.list();
+    if (list.length) {
+      list.forEach((handler) => handler(error, to2, from));
+    } else {
+      {
+        warn("uncaught error during route navigation:");
+      }
+      console.error(error);
+    }
+    return Promise.reject(error);
+  }
+  function isReady() {
+    if (ready && currentRoute.value !== START_LOCATION_NORMALIZED)
+      return Promise.resolve();
+    return new Promise((resolve3, reject) => {
+      readyHandlers.add([resolve3, reject]);
+    });
+  }
+  function markAsReady(err) {
+    if (!ready) {
+      ready = !err;
+      setupListeners();
+      readyHandlers.list().forEach(([resolve3, reject]) => err ? reject(err) : resolve3());
+      readyHandlers.reset();
+    }
+    return err;
+  }
+  function handleScroll(to2, from, isPush, isFirstNavigation) {
+    const { scrollBehavior } = options;
+    if (!isBrowser || !scrollBehavior)
+      return Promise.resolve();
+    const scrollPosition = !isPush && getSavedScrollPosition(getScrollKey(to2.fullPath, 0)) || (isFirstNavigation || !isPush) && history.state && history.state.scroll || null;
+    return nextTick$1().then(() => scrollBehavior(to2, from, scrollPosition)).then((position) => position && scrollToPosition(position)).catch((err) => triggerError(err, to2, from));
+  }
+  const go2 = (delta) => routerHistory.go(delta);
+  let started;
+  const installedApps = /* @__PURE__ */ new Set();
+  const router = {
+    currentRoute,
+    listening: true,
+    addRoute,
+    removeRoute,
+    hasRoute,
+    getRoutes,
+    resolve: resolve2,
+    options,
+    push,
+    replace,
+    go: go2,
+    back: () => go2(-1),
+    forward: () => go2(1),
+    beforeEach: beforeGuards.add,
+    beforeResolve: beforeResolveGuards.add,
+    afterEach: afterGuards.add,
+    onError: errorHandlers.add,
+    isReady,
+    install(app) {
+      const router2 = this;
+      app.component("RouterLink", RouterLink);
+      app.component("RouterView", RouterView);
+      app.config.globalProperties.$router = router2;
+      Object.defineProperty(app.config.globalProperties, "$route", {
+        enumerable: true,
+        get: () => unref$1(currentRoute)
+      });
+      if (isBrowser && // used for the initial navigation client side to avoid pushing
+      // multiple times when the router is used in multiple apps
+      !started && currentRoute.value === START_LOCATION_NORMALIZED) {
+        started = true;
+        push(routerHistory.location).catch((err) => {
+          warn("Unexpected error when starting the router:", err);
+        });
+      }
+      const reactiveRoute = {};
+      for (const key in START_LOCATION_NORMALIZED) {
+        Object.defineProperty(reactiveRoute, key, {
+          get: () => currentRoute.value[key],
+          enumerable: true
+        });
+      }
+      app.provide(routerKey, router2);
+      app.provide(routeLocationKey, shallowReactive$1(reactiveRoute));
+      app.provide(routerViewLocationKey, currentRoute);
+      const unmountApp = app.unmount;
+      installedApps.add(app);
+      app.unmount = function() {
+        installedApps.delete(app);
+        if (installedApps.size < 1) {
+          pendingLocation = START_LOCATION_NORMALIZED;
+          removeHistoryListener && removeHistoryListener();
+          removeHistoryListener = null;
+          currentRoute.value = START_LOCATION_NORMALIZED;
+          started = false;
+          ready = false;
+        }
+        unmountApp();
+      };
+      if (isBrowser) {
+        addDevtools(app, router2, matcher);
+      }
+    }
+  };
+  function runGuardQueue(guards) {
+    return guards.reduce((promise, guard) => promise.then(() => runWithContext(guard)), Promise.resolve());
+  }
+  return router;
+}
+function extractChangingRecords(to2, from) {
+  const leavingRecords = [];
+  const updatingRecords = [];
+  const enteringRecords = [];
+  const len = Math.max(from.matched.length, to2.matched.length);
+  for (let i2 = 0; i2 < len; i2++) {
+    const recordFrom = from.matched[i2];
+    if (recordFrom) {
+      if (to2.matched.find((record) => isSameRouteRecord(record, recordFrom)))
+        updatingRecords.push(recordFrom);
+      else
+        leavingRecords.push(recordFrom);
+    }
+    const recordTo = to2.matched[i2];
+    if (recordTo) {
+      if (!from.matched.find((record) => isSameRouteRecord(record, recordTo))) {
+        enteringRecords.push(recordTo);
+      }
+    }
+  }
+  return [leavingRecords, updatingRecords, enteringRecords];
+}
+function useRouter() {
+  return inject$1(routerKey);
+}
+function useRoute() {
+  return inject$1(routeLocationKey);
+}
+function t(t2) {
+  return "object" == typeof t2 && null != t2 && 1 === t2.nodeType;
+}
+function e(t2, e2) {
+  return (!e2 || "hidden" !== t2) && "visible" !== t2 && "clip" !== t2;
+}
+function n$1(t2, n2) {
+  if (t2.clientHeight < t2.scrollHeight || t2.clientWidth < t2.scrollWidth) {
+    var r2 = getComputedStyle(t2, null);
+    return e(r2.overflowY, n2) || e(r2.overflowX, n2) || function(t3) {
+      var e2 = function(t4) {
+        if (!t4.ownerDocument || !t4.ownerDocument.defaultView)
+          return null;
+        try {
+          return t4.ownerDocument.defaultView.frameElement;
+        } catch (t5) {
+          return null;
+        }
+      }(t3);
+      return !!e2 && (e2.clientHeight < t3.scrollHeight || e2.clientWidth < t3.scrollWidth);
+    }(t2);
+  }
+  return false;
+}
+function r$1(t2, e2, n2, r2, i2, o2, l, d2) {
+  return o2 < t2 && l > e2 || o2 > t2 && l < e2 ? 0 : o2 <= t2 && d2 <= n2 || l >= e2 && d2 >= n2 ? o2 - t2 - r2 : l > e2 && d2 < n2 || o2 < t2 && d2 > n2 ? l - e2 + i2 : 0;
+}
+var i$2 = function(e2, i2) {
+  var o2 = window, l = i2.scrollMode, d2 = i2.block, f2 = i2.inline, h2 = i2.boundary, u2 = i2.skipOverflowHiddenElements, s = "function" == typeof h2 ? h2 : function(t2) {
+    return t2 !== h2;
+  };
+  if (!t(e2))
+    throw new TypeError("Invalid target");
+  for (var a2, c2, g = document.scrollingElement || document.documentElement, p2 = [], m2 = e2; t(m2) && s(m2); ) {
+    if ((m2 = null == (c2 = (a2 = m2).parentElement) ? a2.getRootNode().host || null : c2) === g) {
+      p2.push(m2);
+      break;
+    }
+    null != m2 && m2 === document.body && n$1(m2) && !n$1(document.documentElement) || null != m2 && n$1(m2, u2) && p2.push(m2);
+  }
+  for (var w = o2.visualViewport ? o2.visualViewport.width : innerWidth, v2 = o2.visualViewport ? o2.visualViewport.height : innerHeight, W2 = window.scrollX || pageXOffset, H2 = window.scrollY || pageYOffset, b2 = e2.getBoundingClientRect(), y = b2.height, E2 = b2.width, M2 = b2.top, V2 = b2.right, x2 = b2.bottom, I2 = b2.left, C2 = "start" === d2 || "nearest" === d2 ? M2 : "end" === d2 ? x2 : M2 + y / 2, R2 = "center" === f2 ? I2 + E2 / 2 : "end" === f2 ? V2 : I2, T2 = [], k2 = 0; k2 < p2.length; k2++) {
+    var B = p2[k2], D2 = B.getBoundingClientRect(), O2 = D2.height, X = D2.width, Y2 = D2.top, L2 = D2.right, S2 = D2.bottom, j2 = D2.left;
+    if ("if-needed" === l && M2 >= 0 && I2 >= 0 && x2 <= v2 && V2 <= w && M2 >= Y2 && x2 <= S2 && I2 >= j2 && V2 <= L2)
+      return T2;
+    var N2 = getComputedStyle(B), q = parseInt(N2.borderLeftWidth, 10), z2 = parseInt(N2.borderTopWidth, 10), A3 = parseInt(N2.borderRightWidth, 10), F2 = parseInt(N2.borderBottomWidth, 10), G2 = 0, J2 = 0, K2 = "offsetWidth" in B ? B.offsetWidth - B.clientWidth - q - A3 : 0, P3 = "offsetHeight" in B ? B.offsetHeight - B.clientHeight - z2 - F2 : 0, Q3 = "offsetWidth" in B ? 0 === B.offsetWidth ? 0 : X / B.offsetWidth : 0, U2 = "offsetHeight" in B ? 0 === B.offsetHeight ? 0 : O2 / B.offsetHeight : 0;
+    if (g === B)
+      G2 = "start" === d2 ? C2 : "end" === d2 ? C2 - v2 : "nearest" === d2 ? r$1(H2, H2 + v2, v2, z2, F2, H2 + C2, H2 + C2 + y, y) : C2 - v2 / 2, J2 = "start" === f2 ? R2 : "center" === f2 ? R2 - w / 2 : "end" === f2 ? R2 - w : r$1(W2, W2 + w, w, q, A3, W2 + R2, W2 + R2 + E2, E2), G2 = Math.max(0, G2 + H2), J2 = Math.max(0, J2 + W2);
+    else {
+      G2 = "start" === d2 ? C2 - Y2 - z2 : "end" === d2 ? C2 - S2 + F2 + P3 : "nearest" === d2 ? r$1(Y2, S2, O2, z2, F2 + P3, C2, C2 + y, y) : C2 - (Y2 + O2 / 2) + P3 / 2, J2 = "start" === f2 ? R2 - j2 - q : "center" === f2 ? R2 - (j2 + X / 2) + K2 / 2 : "end" === f2 ? R2 - L2 + A3 + K2 : r$1(j2, L2, X, q, A3 + K2, R2, R2 + E2, E2);
+      var Z2 = B.scrollLeft, $2 = B.scrollTop;
+      C2 += $2 - (G2 = Math.max(0, Math.min($2 + G2 / U2, B.scrollHeight - O2 / U2 + P3))), R2 += Z2 - (J2 = Math.max(0, Math.min(Z2 + J2 / Q3, B.scrollWidth - X / Q3 + K2)));
+    }
+    T2.push({ el: B, top: G2, left: J2 });
+  }
+  return T2;
+};
+function isOptionsObject(options) {
+  return options === Object(options) && Object.keys(options).length !== 0;
+}
+function defaultBehavior(actions, behavior) {
+  if (behavior === void 0) {
+    behavior = "auto";
+  }
+  var canSmoothScroll = "scrollBehavior" in document.body.style;
+  actions.forEach(function(_ref) {
+    var el2 = _ref.el, top = _ref.top, left = _ref.left;
+    if (el2.scroll && canSmoothScroll) {
+      el2.scroll({
+        top,
+        left,
+        behavior
+      });
+    } else {
+      el2.scrollTop = top;
+      el2.scrollLeft = left;
+    }
+  });
+}
+function getOptions(options) {
+  if (options === false) {
+    return {
+      block: "end",
+      inline: "nearest"
+    };
+  }
+  if (isOptionsObject(options)) {
+    return options;
+  }
+  return {
+    block: "start",
+    inline: "nearest"
+  };
+}
+function scrollIntoView(target, options) {
+  var isTargetAttached = target.isConnected || target.ownerDocument.documentElement.contains(target);
+  if (isOptionsObject(options) && typeof options.behavior === "function") {
+    return options.behavior(isTargetAttached ? i$2(target, options) : []);
+  }
+  if (!isTargetAttached) {
+    return;
+  }
+  var computeOptions = getOptions(options);
+  return defaultBehavior(i$2(target, computeOptions), computeOptions.behavior);
+}
+const voidElements = [
+  "area",
+  "base",
+  "br",
+  "col",
+  "embed",
+  "hr",
+  "img",
+  "input",
+  "keygen",
+  "link",
+  "meta",
+  "param",
+  "source",
+  "track",
+  "wbr"
+];
+const KEY_ESCAPE_REG = /[\s-.:|#@$£*%]/;
+const MAX_SINGLE_LINE_ARRAY_LENGTH = 3;
+function serializeJs(value) {
+  const seen = /* @__PURE__ */ new Set();
+  if (value === void 0) {
+    return "undefined";
+  }
+  if (value === null) {
+    return "null";
+  }
+  if (typeof value === "string") {
+    return `'${value}'`;
+  }
+  if (typeof value === "boolean") {
+    return value ? "true" : "false";
+  }
+  if (Array.isArray(value)) {
+    return printLines(arrayToSourceLines(value, seen));
+  }
+  if (typeof value === "object") {
+    return printLines(objectToSourceLines(value, seen));
+  }
+  if (value == null ? void 0 : value.__autoBuildingObject) {
+    return value;
+  }
+  if (typeof value === "function" && value.name) {
+    return value.name;
+  }
+  return value.toString();
+}
+function printLines(lines) {
+  return lines.map((line) => "  ".repeat(line.spaces) + line.line).join("\n");
+}
+function objectToSourceLines(object, seen, indentCount = 0) {
+  if (seen.has(object)) {
+    object = {};
+  } else {
+    seen.add(object);
+  }
+  return createLines(indentCount, (lines) => {
+    lines.push("{");
+    lines.push(...createLines(1, (lines2) => {
+      for (const key in object) {
+        const value = object[key];
+        let printedKey = key;
+        if (KEY_ESCAPE_REG.test(key)) {
+          printedKey = `'${printedKey}'`;
+        }
+        addLinesFromValue(lines2, value, `${printedKey}: `, ",", seen);
+      }
+    }));
+    lines.push("}");
+  });
+}
+function arrayToSourceLines(array, seen, indentCount = 0) {
+  if (seen.has(array)) {
+    array = [];
+  } else {
+    seen.add(array);
+  }
+  return createLines(indentCount, (lines) => {
+    const contentLines = createLines(1, (lines2) => {
+      for (const value of array) {
+        addLinesFromValue(lines2, value, "", ",", seen);
+      }
+    });
+    if (contentLines.length === 0) {
+      lines.push("[]");
+    } else if (contentLines.length <= MAX_SINGLE_LINE_ARRAY_LENGTH && !contentLines.some((line) => line.spaces > 1)) {
+      const [first] = contentLines;
+      first.line = contentLines.map(({ line }) => line.substring(0, line.length - 1)).join(", ");
+      first.line = `[${first.line}]`;
+      first.spaces--;
+      lines.push(first);
+    } else {
+      lines.push("[", ...contentLines, "]");
+    }
+  });
+}
+function createLines(indentCount, handler) {
+  const lines = [];
+  handler(lines);
+  return lines.map((line) => {
+    if (line.spaces != null) {
+      line.spaces += indentCount;
+      return line;
+    }
+    return { spaces: indentCount, line };
+  });
+}
+function addLinesFromValue(lines, value, before, after, seen) {
+  let result;
+  if (Array.isArray(value)) {
+    lines.push(...wrap(arrayToSourceLines(value, seen), before, after));
+    return;
+  } else if (value && typeof value === "object") {
+    lines.push(...wrap(objectToSourceLines(value, seen), before, after));
+    return;
+  } else if (typeof value === "string") {
+    result = value.includes("'") ? `\`${value}\`` : `'${value}'`;
+  } else if (typeof value === "undefined") {
+    result = "undefined";
+  } else if (value === null) {
+    result = "null";
+  } else if (typeof value === "boolean") {
+    result = value ? "true" : "false";
+  } else {
+    result = value;
+  }
+  lines.push(before + result + after);
+}
+function wrap(lines, before, after) {
+  lines[0].line = before + lines[0].line;
+  lines[lines.length - 1].line += after;
+  return lines;
+}
+function indent(lines, count2 = 1) {
+  return lines.map((line) => `${"  ".repeat(count2)}${line}`);
+}
+function unindent(code) {
+  const lines = code.split("\n");
+  let indentLevel = -1;
+  let indentText;
+  const linesToAnalyze = lines.filter((line) => line.trim().length > 0);
+  for (const line of linesToAnalyze) {
+    const match = /^\s*/.exec(line);
+    if (match && (indentLevel === -1 || indentLevel > match[0].length)) {
+      indentLevel = match[0].length;
+      indentText = match[0];
+    }
+  }
+  const result = [];
+  for (const line of lines) {
+    result.push(line.replace(indentText, ""));
+  }
+  return result.join("\n").trim();
+}
+function createAutoBuildingObject(format, specialKeysHandler, key = "", depth = 0) {
+  const cache2 = {};
+  if (depth > 32)
+    return { key, cache: cache2, target: {}, proxy: () => key };
+  const target = () => {
+    const k2 = key + "()";
+    return format ? format(k2) : k2;
+  };
+  const proxy = new Proxy(target, {
+    get(_3, p2) {
+      if (p2 === "__autoBuildingObject") {
+        return true;
+      }
+      if (p2 === "__autoBuildingObjectGetKey") {
+        return key;
+      }
+      if (specialKeysHandler) {
+        const fn2 = specialKeysHandler(target, p2);
+        if (fn2) {
+          return fn2();
+        }
+      }
+      if (p2 === "toString") {
+        const k2 = key + ".toString()";
+        return () => format ? format(k2) : k2;
+      }
+      if (p2 === Symbol.toPrimitive) {
+        return () => format ? format(key) : key;
+      }
+      if (!cache2[p2]) {
+        const childKey = key ? `${key}.${p2.toString()}` : p2.toString();
+        const child = createAutoBuildingObject(format, specialKeysHandler, childKey, depth + 1);
+        cache2[p2] = { key: childKey, ...child };
+      }
+      return cache2[p2].proxy;
+    },
+    apply(_3, thisArg, args) {
+      const k2 = `${key}(${args.join(", ")})`;
+      return format ? format(k2) : k2;
+    }
+  });
+  return {
+    key,
+    cache: cache2,
+    target,
+    proxy
+  };
+}
+function clone(data) {
+  try {
+    return structuredClone(data);
+  } catch (e2) {
+    console.warn(e2, `Fallback to JSON cloning`);
+    try {
+      return JSON.parse(JSON.stringify(data));
+    } catch (e3) {
+      console.error(e3);
+    }
+    return data;
+  }
+}
+function omit(data, keys) {
+  const copy = {};
+  for (const key in data) {
+    if (!keys.includes(key)) {
+      copy[key] = data[key];
+    }
+  }
+  return copy;
+}
+function applyState(target, state, override = false) {
+  for (const key in state) {
+    if (!override && target[key] && !key.startsWith("_h") && typeof target[key] === "object" && !Array.isArray(target[key])) {
+      Object.assign(target[key], state[key]);
+    } else {
+      target[key] = state[key];
+    }
+  }
+}
+const omitInheritStoryProps = [
+  "id",
+  "title",
+  "group",
+  "layout",
+  "variants",
+  "file",
+  "slots",
+  "lastSelectedVariant"
+];
+const clickEventType = function() {
+  return document.ontouchstart !== null ? "click" : "touchstart";
+};
+const UNIQUE_ID = "__vue_click_away__";
+const onMounted = function(el2, binding, vnode) {
+  onUnmounted(el2);
+  let vm = vnode.context;
+  let callback = binding.value;
+  let nextTick2 = false;
+  setTimeout(function() {
+    nextTick2 = true;
+  }, 0);
+  el2[UNIQUE_ID] = function(event) {
+    if ((!el2 || !el2.contains(event.target)) && callback && nextTick2 && typeof callback === "function") {
+      return callback.call(vm, event);
+    }
+  };
+  document.addEventListener(clickEventType(), el2[UNIQUE_ID], false);
+};
+const onUnmounted = function(el2) {
+  document.removeEventListener(clickEventType(), el2[UNIQUE_ID], false);
+  delete el2[UNIQUE_ID];
+};
+const onUpdated = function(el2, binding, vnode) {
+  if (binding.value === binding.oldValue) {
+    return;
+  }
+  onMounted(el2, binding, vnode);
+};
+const directive = {
+  mounted: onMounted,
+  updated: onUpdated,
+  unmounted: onUnmounted
 };
 var commonjsGlobal$1 = typeof globalThis !== "undefined" ? globalThis : typeof {} !== "undefined" ? {} : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var mainExports$1 = {};
@@ -45786,8 +52766,8 @@ function explainThemeScope(theme, scope, parentScopes) {
   return result;
 }
 const defaultElements = {
-  pre({ className, style, children }) {
-    return `<pre class="${className}" style="${style}">${children}</pre>`;
+  pre({ className, style: style2, children }) {
+    return `<pre class="${className}" style="${style2}">${children}</pre>`;
   },
   code({ children }) {
     return `<code>${children}</code>`;
@@ -45795,8 +52775,8 @@ const defaultElements = {
   line({ className, children }) {
     return `<span class="${className}">${children}</span>`;
   },
-  token({ style, children }) {
-    return `<span style="${style}">${children}</span>`;
+  token({ style: style2, children }) {
+    return `<span style="${style2}">${children}</span>`;
   }
 };
 function renderToHtml(lines, options = {}) {
@@ -47938,7 +54918,7 @@ const client = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   getTagName: Q
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  toRefs as $,
+  resolveDynamicComponent as $,
   pushScopeId as A,
   popScopeId as B,
   defineAsyncComponent$1 as C,
@@ -47955,66 +54935,68 @@ export {
   parseQuery as N,
   h$3 as O,
   applyState as P,
-  defineAsyncComponent as Q,
-  createRouter as R,
-  createWebHistory as S,
+  Comp1 as Q,
+  defineAsyncComponent as R,
+  createRouter as S,
   Transition as T,
-  createWebHashHistory as U,
-  useDark as V,
-  useToggle as W,
-  markRaw$1 as X,
-  watchEffect as Y,
-  mergeProps$1 as Z,
-  resolveDynamicComponent as _,
+  createWebHistory as U,
+  createWebHashHistory as V,
+  useDark as W,
+  useToggle as X,
+  markRaw$1 as Y,
+  watchEffect as Z,
+  mergeProps$1 as _,
   useRoute as a,
-  unindent as a0,
-  useRouter as a1,
-  useResizeObserver as a2,
-  nm as a3,
-  withModifiers as a4,
-  renderSlot as a5,
-  vModelText$1 as a6,
-  onUnmounted$2 as a7,
-  VTooltip as a8,
-  createStaticVNode as a9,
-  renderList as aA,
-  toDisplayString as aB,
-  createCommentVNode as aC,
-  computed as aD,
-  resolveComponent as aE,
+  toRefs as a0,
+  unindent as a1,
+  useRouter as a2,
+  useResizeObserver as a3,
+  nm as a4,
+  withModifiers as a5,
+  renderSlot$1 as a6,
+  vModelText$1 as a7,
+  onUnmounted$2 as a8,
+  VTooltip as a9,
+  Fragment as aA,
+  renderList as aB,
+  toDisplayString as aC,
+  createCommentVNode as aD,
+  createBlock as aE,
   withCtx as aF,
-  createVNode as aG,
-  useFocus as aH,
-  refDebounced as aI,
-  flexsearch_bundleExports as aJ,
-  client$1 as aK,
-  client as aL,
-  toRaw$1 as aa,
-  Dropdown as ab,
-  clone as ac,
-  omit as ad,
-  useTimeoutFn as ae,
-  onClickOutside as af,
-  nextTick$1 as ag,
-  om as ah,
-  Ug as ai,
-  Yg as aj,
-  Jg as ak,
-  shallowRef as al,
-  getHighlighter as am,
-  onBeforeUnmount$1 as an,
-  scrollIntoView as ao,
-  useMediaQuery as ap,
-  defineComponent as aq,
-  openBlock as ar,
-  createElementBlock as as,
-  createBaseVNode as at,
-  ref as au,
-  directive as av,
-  createBlock as aw,
-  normalizeClass as ax,
-  withDirectives as ay,
-  Fragment as az,
+  computed as aG,
+  resolveComponent as aH,
+  createVNode as aI,
+  useFocus as aJ,
+  refDebounced as aK,
+  flexsearch_bundleExports as aL,
+  client$1 as aM,
+  client as aN,
+  createStaticVNode as aa,
+  toRaw$1 as ab,
+  Dropdown as ac,
+  clone as ad,
+  omit as ae,
+  useTimeoutFn as af,
+  onClickOutside as ag,
+  nextTick$1 as ah,
+  om as ai,
+  Ug as aj,
+  Yg as ak,
+  Jg as al,
+  shallowRef as am,
+  getHighlighter as an,
+  onBeforeUnmount$1 as ao,
+  scrollIntoView as ap,
+  useMediaQuery as aq,
+  defineComponent as ar,
+  ref as as,
+  directive as at,
+  openBlock as au,
+  createElementBlock as av,
+  createBaseVNode as aw,
+  renderSlot as ax,
+  normalizeClass as ay,
+  withDirectives as az,
   createElementBlock$1 as b,
   computed$2 as c,
   defineComponent$1 as d,
