@@ -50,7 +50,7 @@ const __vitePreload = function preload(baseModule, deps, importerUrl) {
     }
   });
 };
-const Comp0 = defineAsyncComponent(() => __vitePreload(() => import("./usage.story-682f197f.js"), true ? ["assets/usage.story-682f197f.js","assets/vendor-dea00948.js"] : void 0));
+const Comp0 = defineAsyncComponent(() => __vitePreload(() => import("./usage.story-da7ba9cf.js"), true ? ["assets/usage.story-da7ba9cf.js","assets/vendor-dea00948.js"] : void 0));
 let files = [
   { "id": "src-stories-usage-story-vue", "path": ["usage"], "filePath": "src/stories/usage.story.vue", "story": { "id": "src-stories-usage-story-vue", "title": "usage", "layout": { "type": "single", "iframe": true }, "docsOnly": false, "variants": [{ "id": "_default", "title": "default" }] }, "supportPluginId": "vue3", "index": 0, component: Comp0, source: () => __vitePreload(() => import("./__resolved__virtual_story-source_src-stories-usage-story-vue-bb1742ac.js"), true ? [] : void 0) },
   { "id": "tailwind", "path": ["Tailwind"], "filePath": "/home/runner/work/vue-breadcrumbs-nav/vue-breadcrumbs-nav/node_modules/.histoire/plugins/builtin_tailwind-tokens/Tailwind.story.js", "story": { "id": "tailwind", "title": "Tailwind", "group": "design-system", "layout": { "type": "single", "iframe": false }, "icon": "mdi:tailwind", "docsOnly": false, "variants": [{ "id": "background-color", "title": "Background Color", "icon": "carbon:color-palette" }, { "id": "text-color", "title": "Text Color", "icon": "carbon:text-color" }, { "id": "border-color", "title": "Border Color", "icon": "carbon:color-palette" }, { "id": "padding", "title": "Padding", "icon": "carbon:area" }, { "id": "margin", "title": "Margin", "icon": "carbon:area" }, { "id": "font-size", "title": "Font Size", "icon": "carbon:text-font" }, { "id": "font-weight", "title": "Font Weight", "icon": "carbon:text-font" }, { "id": "font-family", "title": "Font Family", "icon": "carbon:text-font" }, { "id": "letter-spacing", "title": "Letter Spacing", "icon": "carbon:text-font" }, { "id": "line-height", "title": "Line Height", "icon": "carbon:text-font" }, { "id": "drop-shadow", "title": "Drop Shadow", "icon": "carbon:shape-except" }, { "id": "border-radius", "title": "Border Radius", "icon": "carbon:condition-wait-point" }, { "id": "border-width", "title": "Border Width", "icon": "carbon:checkbox" }, { "id": "width", "title": "Width", "icon": "carbon:pan-horizontal" }, { "id": "height", "title": "Height", "icon": "carbon:pan-vertical" }, { "id": "full-config", "title": "Full Config", "icon": "carbon:code" }] }, "supportPluginId": "vanilla", "index": 1, component: Comp1, source: () => __vitePreload(() => import("./__resolved__virtual_story-source_tailwind-86a5031c.js"), true ? [] : void 0) }
@@ -76,12 +76,12 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: () => __vitePreload(() => import("./HomeView.vue-97663efc.js"), true ? ["assets/HomeView.vue-97663efc.js","assets/vendor-dea00948.js"] : void 0)
+      component: () => __vitePreload(() => import("./HomeView.vue-f5737208.js"), true ? ["assets/HomeView.vue-f5737208.js","assets/vendor-dea00948.js"] : void 0)
     },
     {
       path: "/story/:storyId",
       name: "story",
-      component: () => __vitePreload(() => import("./StoryView.vue-f1d46d6f.js"), true ? ["assets/StoryView.vue-f1d46d6f.js","assets/vendor-dea00948.js","assets/MobileOverlay.vue2-a3f48aa2.js","assets/BaseEmpty.vue-20430cc8.js","assets/state-23f6a739.js"] : void 0)
+      component: () => __vitePreload(() => import("./StoryView.vue-a5cfb688.js"), true ? ["assets/StoryView.vue-a5cfb688.js","assets/vendor-dea00948.js","assets/MobileOverlay.vue2-46f39ecd.js","assets/BaseEmpty.vue-75fa2357.js","assets/state-cc5de6ee.js"] : void 0)
     }
   ]
 });
